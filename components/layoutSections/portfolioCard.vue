@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { type Project } from "~/assets/scripts/db";
+import { type Project, type Certificate } from "~/assets/scripts/db";
 import { inject } from 'vue'
 
 const props = defineProps<{
-  project: Project,
+  project: Project | Certificate,
   images: string[],
   widthClass: string,
-  horizontal?: boolean
+  heightClass: string,
+  horizontal?: boolean,
 }>();
 
 const CarouselBG = inject('CarouselBG')
@@ -16,23 +17,31 @@ import { useSettingsStore } from '~/stores/settings'
 const settings = useSettingsStore()
 
 const projectStart = computed(() => {
-  if (!props.project || !(props.project.startDate instanceof Date)) return '';
+  if (!props.project || 'awarded' in props.project) return '';
+  if (!(props.project.startDate instanceof Date)) return '';
   const month = settings.months[props.project.startDate.getMonth()]?.substring(0, 3) ?? '';
   return `${month} ${props.project.startDate.getFullYear()}`;
 });
 
 const projectEnd = computed(() => {
-  if (!props.project || !(props.project.endDate instanceof Date) || !(props.project.startDate instanceof Date)) return '';
+  if (!props.project || 'awarded' in props.project) return '';
+  if (!(props.project.endDate instanceof Date) || !(props.project.startDate instanceof Date)) return '';
   return props.project.endDate < props.project.startDate
     ? 'Present'
     : `${settings.months[props.project.endDate.getMonth()]?.substring(0, 3) ?? ''} ${props.project.endDate.getFullYear()}`;
+});
+
+const date = computed(() => {
+  if (props.project && 'awarded' in props.project) return `${settings.months[props.project.awarded.getMonth()]?.substring(0, 3) ?? ''} ${props.project.awarded.getFullYear()}`;
+  return projectStart.value + ' - ' + projectEnd.value
 });
 
 const imagesCarousel = useTemplateRef('imagesCarousel');
 var bg = Math.floor(Math.random() * 60);
 </script>
 <template>
-  <nuxt-link :to="'/project/' + project?.name.replaceAll(' ', '~')">
+  <nuxt-link
+    :to="(date.includes('-') ? '/project/' : '/certificate/') + project?.name.replaceAll(' ', '~')">
     <UCard
       class="opacity-80 cardShadow border border-[var(--ui-border)] m-4 hover:scale-105"
       :class="widthClass"
@@ -44,12 +53,12 @@ var bg = Math.floor(Math.random() * 60);
             {{ project?.name }}
           </span>
           <span class="text-xs ">
-            {{ projectStart }} - {{ projectEnd }}
+            {{ date }}
           </span>
         </div>
       </template>
 
-      <div class="h-60" :class="horizontal ? 'flex justify-between' : ''">
+      <div :class="(horizontal ? 'flex justify-between ' : '') + heightClass">
         <div
           class=" w-full dark:border-gray-600 !border-default border rounded-2xl "
           :class="horizontal ? 'h-full' : 'h-[70%]'">
