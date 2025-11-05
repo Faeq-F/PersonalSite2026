@@ -142,31 +142,38 @@ export const useMiddleNavbarItems = defineStore("middleNavbarItems", {
             active: false,
             children: [
               {
+                label: 'All Projects',
+                description: 'A collection of my (public) projects',
+                icon: 'i-lucide-square-kanban',
+                to: '/portfolio?certs=noCerts',
+                class: 'zLink'
+              },
+              {
+                label: 'All Certificates',
+                description: 'All my different certifications',
+                icon: 'i-lucide-file-badge',
+                to: '/portfolio?certs=onlyCerts',
+                class: 'zLink'
+              },
+              {
                 label: 'Quokka',
                 description: 'An extremely customizable keystroke launcher with plugins',
                 icon: 'i-lucide-paw-print',
-                to: '/about',
+                to: '/portfolio',
                 class: 'zLink'
               },
               {
                 label: 'Zarlasht',
                 icon: 'i-lucide-bow-arrow',
                 description: 'My dissertation; a concurrency-based game environment',
-                to: '/about',
+                to: '/portfolio',
                 class: 'zLink'
               },
               {
                 label: 'Muslim Guide',
                 description: 'Duas and Umrah, Hajj & Madinah Guides',
                 icon: 'i-lucide-moon-star',
-                to: '/about',
-                class: 'zLink'
-              },
-              {
-                label: 'WhatsApp Portable',
-                icon: 'i-lucide-messages-square',
-                description: 'A portable application to use WhatsApp',
-                to: '/about',
+                to: '/portfolio',
                 class: 'zLink'
               },
               {
@@ -174,15 +181,7 @@ export const useMiddleNavbarItems = defineStore("middleNavbarItems", {
                 icon: 'i-lucide-boxes',
                 description:
                   'A system for metadata-based organization of different assets',
-                to: '/about',
-                class: 'zLink'
-              },
-              {
-                label: 'ALSET',
-                icon: 'i-lucide-car-taxi-front',
-                description:
-                  'Track following robot using the EV3 kit, LeJOS and an Android phone',
-                to: '/about',
+                to: '/portfolio',
                 class: 'zLink'
               },
             ]
