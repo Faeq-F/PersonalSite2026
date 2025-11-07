@@ -2,7 +2,7 @@
   <UCard
     class="opacity-80 cardShadow border border-[var(--ui-border)] m-4 min-w-160">
     <template #header>
-      header
+      IT
     </template>
 
     <div class="h-10">

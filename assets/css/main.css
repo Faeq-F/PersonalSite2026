@@ -8,12 +8,12 @@
 @import "./maz-ui-variables.css";
 import 'maz-ui/styles'
 
-*{
+* {
   transition: 200ms all;
   scroll-behavior: smooth;
 }
 
-*{
+* {
   transition: 200ms all;
   scroll-behavior: smooth;
 }

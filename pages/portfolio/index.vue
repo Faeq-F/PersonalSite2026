@@ -164,10 +164,12 @@ onMounted(() => {
     </template>
 
     <template #content>
-      <MazAnimatedElement direction="right" :duration="1000">
+      <MazAnimatedElement direction="right" :duration="1000"
+        v-if="certsActive == 'noCerts' || certsActive == 'all'">
         <Card1 />
       </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000">
+      <MazAnimatedElement direction="left" :duration="1000"
+        v-if="certsActive == 'noCerts' || certsActive == 'all'">
         <Card2 />
       </MazAnimatedElement>
       <MazAnimatedElement direction="right" :duration="1000">
@@ -197,7 +199,8 @@ onMounted(() => {
       <MazAnimatedElement direction="left" :duration="1000">
         <Card11 />
       </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
+      <MazAnimatedElement direction="up" :duration="1000"
+        v-if="certsActive == 'onlyCerts' || certsActive == 'all'">
         <Card12 />
       </MazAnimatedElement>
       <MazAnimatedElement direction="right" :duration="1000">

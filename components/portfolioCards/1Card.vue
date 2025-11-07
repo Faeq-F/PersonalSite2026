@@ -18,5 +18,5 @@ const images = [
 
 <template>
   <PortfolioCard :project="project!" :images="images"
-    widthClass="min-w-230 max-w-230" horizontal />
+    widthClass="min-w-230 max-w-230" heightClass="h-60" horizontal />
 </template>
