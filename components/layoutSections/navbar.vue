@@ -30,27 +30,64 @@ function toggleTheme(theme: number) {
 
 const zarlashtTheme = ref(false);
 const aeonTheme = ref(false);
-const bgAnimation = ref(true);
+const mirageTheme = ref(false);
+const bgAnimation = ref(false);
+const disabledBgAnim = ref(true);
 
 watch(zarlashtTheme, (newVal) => {
   if (newVal) {
     aeonTheme.value = false
+    mirageTheme.value = false
     document.getElementsByTagName('html')[0].classList.add('zTheme')
+    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
   } else {
     document.getElementsByTagName('html')[0].classList.remove('zTheme')
+    checkDisableBgAnimation() ? setBgAnimDisabled() : disabledBgAnim.value = false
   }
 })
 
 watch(aeonTheme, (newVal) => {
   if (newVal) {
     zarlashtTheme.value = false
+    mirageTheme.value = false
     document.getElementsByTagName('html')[0].classList.add('aTheme')
+    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
     emit('aeon')
   } else {
     emit('aeon')
     document.getElementsByTagName('html')[0].classList.remove('aTheme')
+    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
   }
 })
+
+watch(mirageTheme, (newVal) => {
+  if (newVal) {
+    zarlashtTheme.value = false
+    aeonTheme.value = false
+    document.getElementsByTagName('html')[0].classList.add('mTheme')
+    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
+    // emit('aeon')
+  } else {
+    // emit('aeon')
+    document.getElementsByTagName('html')[0].classList.remove('mTheme')
+    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
+  }
+})
+
+const checkDisableBgAnimation = () =>
+  !document.getElementsByTagName('html')[0].classList.contains("zTheme") &&
+  !document.getElementsByTagName('html')[0].classList.contains("aTheme") &&
+  !document.getElementsByTagName('html')[0].classList.contains("mTheme")
+
+const setBgAnimDisabled = () => {
+  disabledBgAnim.value = true
+  bgAnimation.value = false
+}
+
+const setBgAnimEnabled = () => {
+  disabledBgAnim.value = false
+  bgAnimation.value = true
+}
 
 const themeItems = ref<NavigationMenuItem[][]>([
   [
@@ -86,12 +123,17 @@ const themeItems = ref<NavigationMenuItem[][]>([
   ]
 ])
 
-watch(bgAnimation, () => {
-  document.getElementById('fogWrap')!.classList.toggle('hidden')
-  document.getElementsByTagName('html')[0].classList.toggle('noAnim')
+watch(bgAnimation, (newValue) => {
   let videoBGelem = document.getElementById("video-bg-elem") as HTMLVideoElement;
-  if (videoBGelem.paused) videoBGelem.play();
-  else videoBGelem.pause();
+  if (newValue) {
+    document.getElementsByTagName('html')[0].classList.remove('noAnim')
+    document.getElementById('fogWrap')!.classList.remove('hidden')
+    videoBGelem.play();
+  } else {
+    document.getElementsByTagName('html')[0].classList.add('noAnim')
+    document.getElementById('fogWrap')!.classList.add('hidden')
+    videoBGelem.pause();
+  }
 })
 
 autoSetTheme()
@@ -257,9 +299,12 @@ watch(searchVal, (newSearch, _oldSearch) => {
               class="px-0.5 flex flex-col items-start justify-around !h-32 mt-0.5"
               id="themeControls">
               <USwitch v-model="bgAnimation" color="neutral" size="xs"
-                description="Background" label="Animating" />
+                description="Background" label="Animating"
+                :disabled="disabledBgAnim" />
               <USwitch v-model="aeonTheme" color="neutral" size="xs"
                 description="theme" label="Aeon" />
+              <USwitch v-model="mirageTheme" color="neutral" size="xs"
+                description="theme" label="Mirage" />
               <USwitch v-model="zarlashtTheme" color="neutral" size="xs"
                 description="theme" label="Zarlasht" />
             </div>
@@ -298,19 +343,23 @@ html.zTheme .zLink {
   border-radius: calc(var(--ui-radius) * 2) !important;
 }
 
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a,
 .zTheme #navbar .navbar .middleItems ul li a {
   background-color: #f6f7fa;
 }
 
+html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a,
 .dark.zTheme #navbar .navbar .middleItems ul li a {
   background-color: #0e0d0d;
 }
 
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/about"],
 html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/about"] {
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
 
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/cv"],
 html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/cv"] {
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;

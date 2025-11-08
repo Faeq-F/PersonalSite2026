@@ -175,7 +175,15 @@ html:not(.aTheme, .zTheme) #homeContentWrapper {
   color: #fff;
 }
 
-html.dark:not(.aTheme, .zTheme) #homeContentWrapper {
+html:not(.aTheme, .zTheme, .mTheme) #homeContentWrapper {
+  color: #222;
+}
+
+html.dark:not(.aTheme, .zTheme, .mTheme) #homeContentWrapper {
+  color: #eee;
+}
+
+html.dark.mTheme #homeContentWrapper {
   color: #222;
 }
 

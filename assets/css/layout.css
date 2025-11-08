@@ -28,6 +28,15 @@ html.dark:not(.zTheme) #vidBG{
   box-shadow: #00000014 0 5px 15px, #191c2133 0 15px 35px -5px, #ffffff12 0 0 0 1px;
 }
 
+html:not(.zTheme, .mTheme, .aTheme) #vidBG{
+  box-shadow: none;
+  border: #eee 1px solid;
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme) #vidBG{
+  border: #222 1px solid;
+}
+
 html.dark:not(.zTheme) #vidBG video{
   filter: grayscale(1) ;
 }
@@ -41,6 +50,10 @@ html:not(.zTheme) #vidBG video {
   filter: sepia(1) brightness(0.7) invert(1) ;
   transition: all 0.2s ease-in-out;
   display: block;
+}
+
+html:not(.mTheme, .aTheme, .zTheme) #vidBG video{
+  display: none;
 }
 
 #credits {
@@ -96,46 +109,35 @@ html.zTheme.dark #pageContent:has(#HomeSocialButtonGroup){
   background-image: url('/media/bgZthemeHomeDark.png');
 }
 
-html:not(.aTheme, .zTheme) #vidBG{
+html:not.mTheme #vidBG{
   border: none;
 	background-color: transparent !important;
 }
-
-/* html:not(.aTheme, .zTheme) body{
-  /* background-color: #ffffff65;
-  background-blend-mode:lighten;
-  background-image: url('/PersonalSite2025/media/theme1.webp');
-  width: 100vw;
-} */
 
 html.dark:not(.aTheme, .zTheme) body{
   background-color: #000;
 }
 
-html:not(.aTheme, .zTheme) #navbar .navbar {
+html:not(.zTheme, .mTheme, .aTheme) #navbar .navbar,
+html.mTheme #navbar .navbar {
   border: none;
   background-color: #00000000;
   box-shadow: none;
 }
-/*
-html:not(.aTheme, .zTheme) #credits{
-  color: #fff;
-  text-shadow: 1px 0px #000;
-} */
 
-html:not(.aTheme, .zTheme) .boxLink:hover,
-html:not(.aTheme, .zTheme) fieldset label,
-html:not(.aTheme, .zTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
-html:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel),
-html:not(.aTheme, .zTheme) .zLink,
-html:not(.aTheme, .zTheme) #navbar .navbar .middleItems ul li a:hover,
-html:not(.aTheme, .zTheme) .popoverContent,
-html:not(.aTheme, .zTheme) #navbar .navbar .homeNavSection,
-html:not(.aTheme, .zTheme) #navbar .navbar .themeNavSection,
-html:not(.aTheme, .zTheme) #navbar .navbar,
-html:not(.aTheme, .zTheme) .cardShadow,
-html:not(.aTheme, .zTheme) .glass-card,
-html:not(.aTheme, .zTheme) #HomeSocialButtonGroup {
+html.mTheme .boxLink:hover,
+html.mTheme fieldset label,
+html.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
+html.mTheme div[role="dialog"]:has(#searchPanel),
+html.mTheme .zLink,
+html.mTheme #navbar .navbar .middleItems ul li a:hover,
+html.mTheme .popoverContent,
+html.mTheme #navbar .navbar .homeNavSection,
+html.mTheme #navbar .navbar .themeNavSection,
+html.mTheme #navbar .navbar,
+html.mTheme .cardShadow,
+html.mTheme .glass-card,
+html.mTheme #HomeSocialButtonGroup {
 
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(50px);
@@ -172,19 +174,19 @@ html:not(.aTheme, .zTheme) #HomeSocialButtonGroup {
   }
 }
 
-html.dark:not(.aTheme, .zTheme) .boxLink:hover,
-html.dark:not(.aTheme, .zTheme) fieldset label,
-html.dark:not(.aTheme, .zTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
-html.dark:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel),
-html.dark:not(.aTheme, .zTheme) .zLink,
-html.dark:not(.aTheme, .zTheme) #navbar .navbar .middleItems ul li a:hover,
-html.dark:not(.aTheme, .zTheme) .popoverContent,
-html.dark:not(.aTheme, .zTheme) #navbar .navbar .homeNavSection,
-html.dark:not(.aTheme, .zTheme) #navbar .navbar .themeNavSection,
-html.dark:not(.aTheme, .zTheme) #navbar .navbar,
-html.dark:not(.aTheme, .zTheme) .cardShadow,
-html.dark:not(.aTheme, .zTheme) .glass-card,
-html.dark:not(.aTheme, .zTheme) #HomeSocialButtonGroup {
+html.dark.mTheme .boxLink:hover,
+html.dark.mTheme fieldset label,
+html.dark.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
+html.dark.mTheme div[role="dialog"]:has(#searchPanel),
+html.dark.mTheme .zLink,
+html.dark.mTheme #navbar .navbar .middleItems ul li a:hover,
+html.dark.mTheme .popoverContent,
+html.dark.mTheme #navbar .navbar .homeNavSection,
+html.dark.mTheme #navbar .navbar .themeNavSection,
+html.dark.mTheme #navbar .navbar,
+html.dark.mTheme .cardShadow,
+html.dark.mTheme .glass-card,
+html.dark.mTheme #HomeSocialButtonGroup {
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(0, 0, 0, 0.3);
   box-shadow:
@@ -237,20 +239,46 @@ html.dark:not(.aTheme, .zTheme) #HomeSocialButtonGroup button svg {
   }
 }
 
-html:not(.aTheme, .zTheme) #navbar .navbar {
+html.mTheme #navbar .navbar {
   border-radius: calc(var(--ui-radius) * 6);
 }
 
-html:not(.aTheme, .zTheme) #navbar .navbar .homeNavSection:hover {
+html.mTheme #navbar .navbar .homeNavSection:hover {
   scale: 1.04;
   transform: translateX(0.25rem);
 }
 
-html:not(.aTheme, .zTheme) #navbar .navbar .themeNavSection:hover {
+html.mTheme #navbar .navbar .themeNavSection:hover {
   scale: 1.04;
   transform: translateX(-0.25rem);
 }
 
 html:not(.aTheme, .zTheme) .varela{
   font-style: italic;
+}
+
+html:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
+html:not(.aTheme, .zTheme, .mTheme) fieldset label,
+html:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
+html:not(.aTheme, .zTheme, .mTheme) div[role="dialog"]:has(#searchPanel),
+html:not(.aTheme, .zTheme, .mTheme) .zLink,
+html:not(.aTheme, .zTheme, .mTheme) .popoverContent,
+html:not(.aTheme, .zTheme, .mTheme) .cardShadow,
+html:not(.aTheme, .zTheme, .mTheme) .glass-card{
+  background: rgb(255, 255, 255);
+  box-shadow: none;
+  border: #eee 1px solid;
+  border-radius: 1rem;
+}
+
+html.dark:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
+html.dark:not(.aTheme, .zTheme, .mTheme) fieldset label,
+html.dark:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
+html.dark:not(.aTheme, .zTheme, .mTheme) div[role="dialog"]:has(#searchPanel),
+html.dark:not(.aTheme, .zTheme, .mTheme) .zLink,
+html.dark:not(.aTheme, .zTheme, .mTheme) .popoverContent,
+html.dark:not(.aTheme, .zTheme, .mTheme) .cardShadow,
+html.dark:not(.aTheme, .zTheme, .mTheme) .glass-card{
+  background: rgb(0,0,0);
+  border: #222 1px solid;
 }

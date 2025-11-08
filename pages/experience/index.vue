@@ -195,7 +195,7 @@ onMounted(() => {
           ]" class="w-full mt-1 timeline" size="lg" :ui="{
             date: 'float-end ms-1 pr-4 timeLineDetail',
             description: 'px-3 mr-4 py-2 mt-2 rounded-md text-default cardShadow border border-[var(--ui-border)] bg-white dark:bg-black opacity-80',
-            separator: 'cardShadow border border-[var(--ui-border)] bg-white dark:bg-black brightness-200',
+            separator: 'cardShadow border border-[var(--ui-border)] bg-white dark:bg-black brightness-200 timelineSeparator',
             indicator: 'cardShadow border border-[var(--ui-border)] bg-white dark:bg-black opacity-80 timeLineDetail timeLineIcon',
           }">
           <template #date="{ item }">
@@ -241,12 +241,18 @@ onMounted(() => {
   transform: translateY(70px);
 }
 
-html:not(.aTheme, .zTheme) .timeline .timeLineDetail {
+html.mTheme .timeline .timeLineDetail {
   color: #fff;
 }
 
 html:not(.aTheme, .zTheme, .dark) .timeline .timeLineDetail.timeLineIcon {
   color: inherit;
+}
+
+html:not(.aTheme, .zTheme, .mTheme, .dark) .timeline .timelineSeparator {
+  background: #787878;
+  border-radius: 0;
+  width: 4px;
 }
 
 html:not(.aTheme, .zTheme) fieldset label {
