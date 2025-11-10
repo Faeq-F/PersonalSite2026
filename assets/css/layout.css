@@ -29,11 +29,16 @@ html.dark:not(.zTheme) #vidBG{
 }
 
 html:not(.zTheme, .mTheme, .aTheme) #vidBG{
-  box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border: #eee 1px solid;
 }
 
 html.dark:not(.zTheme, .mTheme, .aTheme) #vidBG{
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+  0 0 0 1px hsla(230, 13%, 9%, 0.075),
+  0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+  0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+  0 3.5px 6px hsla(230, 13%, 9%, 0.09);
   border: #222 1px solid;
 }
 
@@ -114,7 +119,7 @@ html:not.mTheme #vidBG{
 	background-color: transparent !important;
 }
 
-html.dark:not(.aTheme, .zTheme) body{
+html.dark.mTheme body{
   background-color: #000;
 }
 
@@ -266,7 +271,7 @@ html:not(.aTheme, .zTheme, .mTheme) .popoverContent,
 html:not(.aTheme, .zTheme, .mTheme) .cardShadow,
 html:not(.aTheme, .zTheme, .mTheme) .glass-card{
   background: rgb(255, 255, 255);
-  box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border: #eee 1px solid;
   border-radius: 1rem;
 }
@@ -279,6 +284,11 @@ html.dark:not(.aTheme, .zTheme, .mTheme) .zLink,
 html.dark:not(.aTheme, .zTheme, .mTheme) .popoverContent,
 html.dark:not(.aTheme, .zTheme, .mTheme) .cardShadow,
 html.dark:not(.aTheme, .zTheme, .mTheme) .glass-card{
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+     0 0 0 1px hsla(230, 13%, 9%, 0.075),
+     0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+     0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+     0 3.5px 6px hsla(230, 13%, 9%, 0.09);
   background: rgb(0,0,0);
   border: #222 1px solid;
 }

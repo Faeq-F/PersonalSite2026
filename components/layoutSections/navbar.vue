@@ -231,12 +231,12 @@ watch(searchVal, (newSearch, _oldSearch) => {
                       class="w-full p-2 pt-0 pr-1">
                       <nuxt-link :to="page.url">
                         <UButton :icon="page.icon" size="md" color="neutral"
-                          variant="soft" class="w-full zLink">
+                          variant="soft" class="w-full zLink ">
                           <USeparator orientation="vertical"
                             class="h-6 invert opacity-20 ml-1" />
                           <div class="w-full">
                             <div
-                              class="w-full text-left pl-1.5 flex items-center justify-between">
+                              class="w-full text-left pl-1.5 flex items-center justify-between ">
                               <span>
                                 {{ page.title }}
                               </span>
@@ -276,9 +276,9 @@ watch(searchVal, (newSearch, _oldSearch) => {
         <!-- Theme Switch -->
         <UNavigationMenu content-orientation="vertical" color="neutral"
           :items="themeItems" variant="link" trailing-icon=" " :ui="{
-            viewport: '-translate-y-46 -translate-x-4 min-h-34 max-h-34 pr-28 navView',
-            content: 'w-auto  ml-0.5',
-            childList: 'w-auto flex flex-col',
+            viewport: '-translate-y-50 -translate-x-4 min-h-36 max-h-36 pr-28 navView',
+            content: 'w-auto ml-0.5 max-h-full min-h-full overflow-hidden',
+            childList: 'h-[15vh] overflow-hidden',
             childLabel: 'w-full',
             childLinkIcon: 'mt-0.5',
             childLinkDescription: 'line-clamp-1',
@@ -295,8 +295,7 @@ watch(searchVal, (newSearch, _oldSearch) => {
               :class="bgAnimation ? 'animate-[spin_3s_linear_infinite]' : ''" />
           </template>
           <template #settings-content>
-            <div
-              class="px-0.5 flex flex-col items-start justify-around !h-32 mt-0.5"
+            <div class="px-0.5 flex flex-col items-start !h-full mt-2 gap-0.5"
               id="themeControls">
               <USwitch v-model="bgAnimation" color="neutral" size="xs"
                 description="Background" label="Animating"
@@ -343,14 +342,24 @@ html.zTheme .zLink {
   border-radius: calc(var(--ui-radius) * 2) !important;
 }
 
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .homeNavSection,
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .themeNavSection,
 html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a,
 .zTheme #navbar .navbar .middleItems ul li a {
   background-color: #f6f7fa;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
+html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .homeNavSection,
+html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .themeNavSection,
 html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a,
 .dark.zTheme #navbar .navbar .middleItems ul li a {
   background-color: #0e0d0d;
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
 }
 
 html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/about"],
@@ -369,17 +378,23 @@ html:not(.aTheme, .zTheme) #navbar .navbar .middleItems ul li a:not(.zLink) span
   font-style: italic;
 }
 
-/* html:not(.aTheme, .zTheme) #navbar .navbar .middleItems ul li a:not(.zLink, :hover) span {
-  color: #fff !important;
-} */
-
 html:not(.aTheme, .zTheme) #themeControls label,
 html:not(.aTheme, .zTheme) #themeControls p {
   font-size: 0.7rem !important;
 }
 
+html:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel) .zLink {
+  background-color: #f6f7fa;
+}
+
 html:not(.aTheme, .zTheme) button.zLink.zLinkTheme {
+  background-color: #fafafa;
   margin-left: -0.25rem !important;
   width: 6.25rem;
+}
+
+html.dark:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel) .zLink,
+html.dark:not(.aTheme, .zTheme) button.zLink.zLinkTheme {
+  background-color: #0e0d0d;
 }
 </style>

@@ -250,9 +250,8 @@ html:not(.aTheme, .zTheme, .dark) .timeline .timeLineDetail.timeLineIcon {
 }
 
 html:not(.aTheme, .zTheme, .mTheme, .dark) .timeline .timelineSeparator {
-  background: #787878;
-  border-radius: 0;
-  width: 4px;
+  box-shadow: rgb(0 0 0 / 22%) 0px 1px 3px 0px,
+    rgb(0 0 0 / 15%) 0px 1px 2px 0px;
 }
 
 html:not(.aTheme, .zTheme) fieldset label {

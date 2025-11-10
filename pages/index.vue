@@ -15,6 +15,13 @@ import linkedin from '~/components/icons/linkedin.vue'
             <p class="text-[2.3rem] varela">A software engineer</p>
           </MazAnimatedElement>
         </div>
+        <div class="mb-5">
+          <MazAnimatedElement direction="up" :duration="700" :delay="450">
+            <div id="ad" class="ml-5">
+              See my latest project:&nbsp;&nbsp;Quokka
+            </div>
+          </MazAnimatedElement>
+        </div>
         <div id="HomeSocialButtonGroup" class="">
           <MazAnimatedElement direction="right" :duration="700" :delay="600"
             class="inline">
@@ -193,5 +200,14 @@ html:not(.aTheme, .zTheme) #homeContentWrapper .homeTitle {
 
 html:not(.aTheme, .zTheme) #homeContentWrapper .homeTitle>p {
   padding-bottom: 0.5rem;
+}
+
+#ad {
+  --background: transparent;
+  --banner-background-color: #999;
+  background: linear-gradient(135deg, var(--background) 0%, var(--banner-background-color) 15%, var(--banner-background-color) 75%, var(--background) 100%);
+  border-radius: 2rem;
+  color: #fff;
+  text-align: center;
 }
 </style>
