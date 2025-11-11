@@ -1,0 +1,1 @@
+import{u as s,f as a,l as r,d as t}from"./DNl1-2Ul.js";import{y as o,c as l,t as n,x as i,o as c}from"./DBBeBrAR.js";const d=o({__name:"index",setup(m){let e=s(a(r(()=>t.skills.toArray())));return(p,u)=>(c(),l("div",null,n(i(e)),1))}});export{d as default};
