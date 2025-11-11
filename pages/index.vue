@@ -3,6 +3,9 @@ import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
 import stackoverflow from '~/components/icons/stackoverflow.vue'
 import github from '~/components/icons/github.vue'
 import linkedin from '~/components/icons/linkedin.vue'
+import Card1 from '~/components/portfolioCards/1Card.vue';
+
+const openAd = ref(false);
 </script>
 
 <template>
@@ -17,8 +20,10 @@ import linkedin from '~/components/icons/linkedin.vue'
         </div>
         <div class="mb-5">
           <MazAnimatedElement direction="up" :duration="700" :delay="450">
-            <div id="ad" class="ml-5">
-              See my latest project:&nbsp;&nbsp;Quokka
+            <div id="ad" class="text-center clickable w-7/12"
+              @click="openAd = true">
+              Featured work preview:&nbsp;&nbsp;<span
+                class="varela">Quokka</span>
             </div>
           </MazAnimatedElement>
         </div>
@@ -121,6 +126,12 @@ import linkedin from '~/components/icons/linkedin.vue'
       <UAlert title="This site is in development!" color="neutral"
         variant="outline" class="cardShadow w-96"
         description="Some content is not available" icon="i-lucide-wrench" />
+      <MazAnimatedElement direction="left" :duration="700" v-if="openAd">
+        <div
+          class="absolute -left-[35vw] h-96 w-[40vw] mr-52 mt-34 rounded-2xl bg-transparent">
+          <Card1 />
+        </div>
+      </MazAnimatedElement>
     </div>
   </div>
 </template>
@@ -202,12 +213,62 @@ html:not(.aTheme, .zTheme) #homeContentWrapper .homeTitle>p {
   padding-bottom: 0.5rem;
 }
 
+@property --adColor {
+  syntax: '<color>';
+  initial-value: #999999aa;
+  inherits: false;
+}
+
+@property --adColor1 {
+  syntax: '<color>';
+  initial-value: transparent;
+  inherits: false;
+}
+
+@property --adColor2 {
+  syntax: '<color>';
+  initial-value: #a45848aa;
+  inherits: false;
+}
+
 #ad {
-  --background: transparent;
-  --banner-background-color: #999;
-  background: linear-gradient(135deg, var(--background) 0%, var(--banner-background-color) 15%, var(--banner-background-color) 75%, var(--background) 100%);
+  background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor) 25%, var(--adColor) 75%, var(--adColor1) 100%);
   border-radius: 2rem;
+  margin-left: 0rem;
   color: #fff;
-  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  transition: --adColor1 0.5s, --adColor 0.5s;
+
+  &:hover {
+    background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor) 15%, var(--adColor) 85%, var(--adColor1) 100%);
+    --adColor1: #999999aa;
+    --adColor: transparent;
+    color: var(--adColor1);
+  }
+}
+
+html.dark:not(.mTheme) #ad:hover,
+html.mTheme #ad:hover {
+  color: #fff;
+}
+
+html.dark.mTheme #ad,
+html.dark.mTheme #ad:hover {
+  color: #000;
+}
+
+html.zTheme #ad:hover {
+  color: #314158;
+}
+
+html:not(.aTheme, .zTheme, .mTheme) #ad {
+  margin-left: 0.75rem;
+  background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor2) 25%, var(--adColor2) 75%, var(--adColor1) 100%);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor2) 15%, var(--adColor2) 85%, var(--adColor1) 100%);
+    --adColor1: #a45848aa;
+    --adColor2: transparent;
+  }
 }
 </style>

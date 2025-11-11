@@ -114,9 +114,38 @@ html.zTheme.dark #pageContent:has(#HomeSocialButtonGroup){
   background-image: url('/media/bgZthemeHomeDark.png');
 }
 
-html:not.mTheme #vidBG{
+html:not(.zTheme, .mTheme, .aTheme) #vidBG{
   border: none;
-	background-color: transparent !important;
+	background-color: #efece8  !important;
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme) #vidBG{
+	background-color: #1b172e  !important;
+}
+
+html:not(.zTheme, .mTheme, .aTheme) body{
+  background: #eaded2 !important;
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme) body{
+  background: #272048 !important;
+  /* #142236 */
+}
+
+html:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-default{
+  --ui-bg: #a45848 !important;
+  color: white;
+}
+html:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
+  --ui-bg-inverted: #a45848 !important;
+}
+html:not(.zTheme, .mTheme, .aTheme) .bg-primary{
+  --ui-primary: #a45848 !important;
+}
+html:not(.zTheme, .mTheme, .aTheme) .group-data-\[state\=active\]\:bg-primary {
+  &:is(:where(.group)[data-state="active"] *) {
+    --ui-primary: #a45848 !important;
+  }
 }
 
 html.dark.mTheme body{
