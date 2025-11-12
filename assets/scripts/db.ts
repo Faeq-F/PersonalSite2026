@@ -248,8 +248,8 @@ db.on('populate', () => {
     { name: "Redis", category: ['Databases', 'NoSQL'], experienceLevel: [] },
     { name: "Valkey", category: ['Databases', 'NoSQL'], experienceLevel: [] },
     { name: "Electron", category: ['Libraries & Frameworks'], experienceLevel: [] },
-    { name: "HTML5", category: ["Languages", 'Front-End Languages',], experienceLevel: [] },
-    { name: "CSS3", category: ["Languages", 'Style Sheet Languages', 'Front-End Languages',], experienceLevel: [] },
+    { name: "HTML", category: ["Languages", 'Front-End Languages',], experienceLevel: [] },
+    { name: "CSS", category: ["Languages", 'Style Sheet Languages', 'Front-End Languages',], experienceLevel: [] },
     { name: "Sass", category: ["Languages", 'Style Sheet Languages', 'Front-End Languages',], experienceLevel: [] },
     { name: "Jupyter", category: ['Data Science Tools',], experienceLevel: [] },
     { name: "LibreOffice", category: ['Office Suites'], experienceLevel: [] },
@@ -638,6 +638,60 @@ db.on('populate', () => {
 
   db.roles.bulkPut([
     {
+      id: 0, organization: ['The Heathland School'], name: "GCSEs",
+      type: 'education', category: [''],
+      startDate: new Date("September 2018"),
+      endDate: new Date("June 2020"),
+      description: 'Studied 10 GCSEs including; Computer Science (9), Mathematics (7), Physics (7), English (7), Biology (8)',
+      links: [''],
+      skills: [
+        'Python', 'JavaScript', 'LMC', 'SQL', 'Terminal', 'HTML', 'CSS',
+        'LibreOffice', "Microsoft Office", "Microsoft PowerPoint",
+        "Microsoft Word", "Microsoft Excel", "Microsoft OneNote",
+        "Microsoft Outlook", "Microsoft Access", "Microsoft Teams",
+        "Adobe Photoshop", "Adobe Illustrator", "Adobe Premier Pro",
+        "Adobe XD", "Adobe Acrobat Reader", "Blender", "GIMP", "Unity",
+        "Windows", "Linux", "Written Communication", "Clarity and Conciseness",
+        "Presenting", "Conflict Management / Resolution", "Giving and Receiving Feedback",
+        "Collaboration", "Constructive Feedback", "Respectfulness", "Responsibility",
+        "Critical Thinking", "Analytical", "Creativity", "Decision Making", "Research",
+        "Logical Reasoning", "Troubleshooting", "Accountability", "Initiative",
+        "Time Management", "Self-Motivation", "Discipline", "Integrity",
+        "Persistence", "Commitment to Excellence", "Visual Communication",
+        "Storytelling", "Imagination", "English", "Interpersonal",
+      ],
+      modules: [''], locations: [''], relatedActivities: [2]
+    },
+    {
+      id: 1, organization: [], name: "Quokka",
+      type: 'projects', category: [''],
+      startDate: new Date("January 2020"),
+      endDate: new Date("December 2019"),
+      description: 'A lightweight, customizable keystroke launcher in C#, C++, WPF and .NET. Enables diverse, flexible workflows via a plugin-driven design, enabling users to extend functionality according to unique needs. Accompanied by default plugins.',
+      links: [''],
+      skills: [
+        'C#', '.NET', 'WPF', 'XAML', 'JSON', 'Visual Studio', 'Git', 'GitHub', 'Markdown', 'Windows'
+      ], modules: [''], locations: [''], relatedActivities: [2]
+    },
+    {
+      id: 2, organization: ['The Heathland School'], name: "A-levels",
+      type: 'education', category: [''],
+      startDate: new Date("September 2020"),
+      endDate: new Date("June 2022"),
+      description: 'Studied 3 A-Levels; Computer Science (A), Mathematics (B), Physics (C)',
+      links: [''],
+      skills: [''],
+      modules: [''], locations: [''], relatedActivities: [0, 1]
+    },
+    {
+      id: 3, organization: ['Cisco'], name: "Pathway To Your Future Programme",
+      type: 'events', category: [''],
+      startDate: new Date("February 2022"),
+      endDate: new Date("February 2022"),
+      description: 'Gained insights into software design and development lifecycle during a one-week program, collaborating with a group of 4 professionals and completing a hands-on, self-led project.',
+      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: []
+    },
+    {
       id: 4, organization: ['The Heathland School'], name: "Volunteer Consultant (Computer Science)",
       type: 'volunteering', category: [''],
       startDate: new Date("September 2017"),
@@ -646,59 +700,27 @@ db.on('populate', () => {
       links: ['https://www.heathland.hounslow.sch.uk/'], skills: [''], modules: [], locations: ['TW4 5JD'], relatedActivities: [0, 2]
     },
     {
-      id: 0, organization: ['The Heathland School'], name: "GCSEs",
-      type: 'education', category: [''],
-      startDate: new Date("September 2018"),
-      endDate: new Date("June 2020"),
-      description: 'Studied 10 GCSEs including; Computer Science (9), Mathematics (7), Physics (7), English (7), Biology (8)',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
-    },
-    {
-      id: 1, organization: [], name: "Quokka",
-      type: 'projects', category: [''],
-      startDate: new Date("January 2020"),
-      endDate: new Date(),
-      description: 'A lightweight, customizable keystroke launcher in C#, C++, WPF and .NET. Enables diverse, flexible workflows via a plugin-driven design, enabling users to extend functionality according to unique needs. Accompanied by default plugins.',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
-    },
-    {
-      id: 2, organization: ['The Heathland School'], name: "A-levels",
-      type: 'education', category: [''],
-      startDate: new Date("September 2020"),
-      endDate: new Date("June 2022"),
-      description: 'Studied 3 A-Levels; Computer Science (A), Mathematics (B), Physics (C)',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
-    },
-    {
-      id: 3, organization: ['Cisco'], name: "Pathway To Your Future Programme",
-      type: 'events', category: [''],
-      startDate: new Date("February 2022"),
-      endDate: new Date("February 2022"),
-      description: 'Gained insights into software design and development lifecycle during a one-week program, collaborating with a group of 4 professionals and completing a hands-on, self-led project.',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
-    },
-    {
       id: 5, organization: [''], name: "BSc Hons. Computer Science (Software Engineering)", type: 'education',
       category: [''], startDate: new Date("September 2022"),
       endDate: new Date("July 2025"),
       description: 'With my dissertation on Concurrency-Based Game Environments, I studied several modules including; Software Engineering, Operating Systems, Databases, Software Design, Algorithms and Complexity, Symbolic AI',
-      links: [''], skills: [''], modules: [''], locations: ['TW20 0EX'], relatedActivities: [4]
+      links: [''], skills: [''], modules: [''], locations: ['TW20 0EX'], relatedActivities: []
     },
     {
       id: 6, organization: [''], name: "Royal Hackaway v6",
       type: 'events', category: [''],
       startDate: new Date("February 2023"),
       endDate: new Date("February 2023"),
-      description: '',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
+      description: 'Used Google MLKit to develop a Wordsearch solver for Android. After taking a picture of a word search in the app or providing one from your gallery, the app scans the word search, solves it and gives you the answer. The project allowed the team to learn how to use Google\'s mobile machine learning kit, OpenCV and OCR, and strengthen our skills in Java and Android Studio.',
+      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: []
     },
     {
       id: 7, organization: [''], name: "Royal Hackaway v7",
       type: 'events', category: [''],
       startDate: new Date("January 2024"),
       endDate: new Date("January 2024"),
-      description: '',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
+      description: 'Built a multi-project hub. We designed a mock landing page for the hackathon event itself, which featured a purposefully unintuitive \'sign-up\' form that acted as a fun puzzle. After solving that, the user was taken to a portal with a choice of three different mini-projects: a self-driving car game, a Jarvis-like assistant program, or a coloring game. The team had fun and learnt a lot, using Flask for the website, Tkinter for the coloring game, Pygame for the car game, and many online APIs for the assistant, all of which were new to us.',
+      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: []
     },
     {
       id: 8, organization: [''], name: "Computer Science Teaching Assistant",
@@ -706,17 +728,24 @@ db.on('populate', () => {
       startDate: new Date("September 2024"),
       endDate: new Date("July 2025"),
       description: 'Guided undergraduates in programming labs (Python, Java, SWI-Prolog), explaining complex programming concepts and advised with debugging and other practical exercises. Led weekly review sessions, assessed coursework, and gave feedback. Enhanced students\' problem - solving skills, fostering critical thinking, while strengthening technical expertise.',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
+      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: []
     },
     {
-      id: 9, organization: [''], name: "Royal Hackaway v8",
+      id: 9, organization: [''], name: "Make a Difference Day @ RHUL",
+      type: 'events', category: [''],
+      startDate: new Date("October 2024"),
+      endDate: new Date("October 2024"),
+      description: 'Volunteered with Screen Share UK, repairing laptops for distribution to refugees. This work involved hands-on hardware diagnostics, component replacement (e.g., batteries, hard drives), and OS re-installations.',
+      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: []
+    },
+    {
+      id: 10, organization: [''], name: "Royal Hackaway v8",
       type: 'events', category: [''],
       startDate: new Date("February 2025"),
       endDate: new Date("February 2025"),
-      description: 'Won 1st place for Verdn\'s Environmental Hack challenge at Royal Hackaway v8. Developed a tool to track LLM carbon footprints and auto- offset emissions via Verdn’s initiatives(e.g., tree-planting). Produced during a 48-hour hackathon (team of 3), demonstrating rapid full-stack development.',
-      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: [4]
+      description: 'Won 1st place for Verdn\'s Environmental Hack challenge at Royal Hackaway v8. Developed a tool to track LLM carbon footprints and auto-offset emissions via Verdn’s initiatives (e.g., tree-planting). Produced during a 48-hour hackathon (team of 3), demonstrating rapid full-stack development.',
+      links: [''], skills: [''], modules: [''], locations: [''], relatedActivities: []
     },
-    // todo add rest
   ])
 });
 
