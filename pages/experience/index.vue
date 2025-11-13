@@ -12,9 +12,15 @@ import { from } from "rxjs";
 import { useSettingsStore } from '~/stores/settings'
 const settings = useSettingsStore()
 const allRoles = useObservable<Role[] | undefined>(from(liveQuery(async () => await db.roles.toArray())));
+const skillsSelected = ref([]);
 
 const items = computed(() => {
   return allRoles.value?.filter((role) => {
+    if (skillsSelected.value.length > 0) {
+      if (!skillsSelected.value.some(r => role.skills.includes(r))) {
+        return false;
+      }
+    }
     return activeRole.value.includes(role.type);
   }).map((role) => ({
     date: `${settings.months[role.startDate.getMonth() ?? 0]?.substring(0, 3) ?? ''} ${role.startDate.getFullYear()}`,
@@ -59,75 +65,6 @@ const roles = ref<CheckboxGroupItem[]>([
 ])
 const activeRole = ref<CheckboxGroupValue[]>(['jobs', 'education', 'projects', 'volunteering', 'events'])
 
-const TagCatItems = ref([
-  {
-    type: 'label',
-    label: 'Fruits',
-  },
-  {
-    type: 'item',
-    label: 'Apple',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'item',
-    label: 'Banana',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'item',
-    label: 'Blueberry',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'item',
-    label: 'Grapes',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'item',
-    label: 'Pineapple',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    type: 'label',
-    label: 'Vegetables',
-  },
-  {
-    type: 'item',
-    label: 'Broccoli',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'item',
-    label: 'Carrot',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'item',
-    label: 'Courgette',
-    icon: 'i-lucide-circle-help'
-  },
-  {
-    type: 'item',
-    label: 'Leek',
-    icon: 'i-lucide-circle-help'
-  }
-] satisfies InputMenuItem[])
-const TagCatValue = ref()
-
-function onInputOpen(open: boolean) {
-  if (open) {
-    // make popup scrollable
-    setTimeout(() => {
-      document.querySelectorAll('[data-reka-popper-content-wrapper]')[0].setAttribute("data-lenis-prevent", "");
-    }, 100);
-  }
-}
-
 import { useRoute } from 'nuxt/app';
 const route = useRoute()
 
@@ -171,18 +108,12 @@ onMounted(() => {
           </template>
         </UCheckboxGroup>
       </MazAnimatedElement>
+    </template>
+
+    <template #left-panel-footer>
       <MazAnimatedElement direction="up" :duration="700" :delay="800">
-        <UInputMenu v-model="TagCatValue" :items="TagCatItems" multiple
-          placeholder="Select for tag cat" variant="soft"
-          style="--ui-primary: #4a5565" :icon="TagCatValue?.icon" :ui="{
-            trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200'
-          }" data-lenis-prevent class="mx-auto my-4 w-fit block"
-          @update:open="onInputOpen">
-          <template #tags-item-text="item">
-            <UIcon :name="item.item.icon as string" />
-            {{ item.item.label }}
-          </template>
-        </UInputMenu>
+        <SkillsInput
+          @change="(e) => skillsSelected = JSON.parse(JSON.stringify(e)).map((i: { type: string, label: string }) => i.label)" />
       </MazAnimatedElement>
     </template>
 

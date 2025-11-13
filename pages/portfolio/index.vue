@@ -3,6 +3,7 @@ import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
 import contentPanels from '~/components/layoutSections/contentPanels.vue';
 import type { InputMenuItem, TabsItem } from '@nuxt/ui'
 import { ref, provide } from 'vue';
+import SkillsInput from '~/components/skillsInput.vue';
 
 import Card1 from '~/components/portfolioCards/1Card.vue';
 import Card2 from '~/components/portfolioCards/2Card.vue';
@@ -77,39 +78,24 @@ const certsOptions = ref<TabsItem[]>([
 ])
 const certsActive = ref((route.query.certs as string) || 'all')
 
-function onInputOpen(open: boolean) {
-  if (open) {
-    // make popup scrollable
-    setTimeout(() => {
-      document.querySelectorAll('[data-reka-popper-content-wrapper]')[0].setAttribute("data-lenis-prevent", "");
-    }, 100);
+const contributorsOptions = ref<TabsItem[]>([
+  {
+    label: 'Solo',
+    icon: 'i-lucide-user',
+    value: 'onlySolo'
+  },
+  {
+    label: 'All',
+    icon: 'i-lucide-gallery-vertical-end',
+    value: 'all'
+  },
+  {
+    label: 'Team',
+    icon: 'i-lucide-users',
+    value: 'onlyTeam'
   }
-}
-
-import { liveQuery } from "dexie";
-import { useObservable } from "@vueuse/rxjs";
-import { from } from "rxjs";
-import { db, type SkillCategory, type Skill } from "~/assets/scripts/db";
-
-let items = useObservable<Skill[]>(from(liveQuery<Skill[]>(() => db.skills.toArray())))
-let categories = useObservable<SkillCategory[]>(from(liveQuery<SkillCategory[]>(() => db.skillCategories.toArray())))
-let tags = computed(() => {
-  let skills: InputMenuItem[] = []
-  categories.value?.forEach((category) => {
-    skills.push({
-      type: 'label',
-      label: category.name
-    })
-    let catItems = items.value?.filter((skill) => new Set(skill.category).intersection(new Set(category.subCategories)).size > 0 || skill.category.includes(category.name)) || [];
-    skills = skills.concat(catItems.map((item) => ({ type: 'item', label: item.name })) || [])
-    skills.push({
-      type: 'separator'
-    })
-  })
-  return new Set(skills).values().toArray();
-})
-const TagCatItems = ref(tags)
-const TagCatValue = ref()
+])
+const contributorsActive = ref((route.query.certs as string) || 'all')
 
 const CarouselBG = ref(true)
 const CarouselScroll = ref(true)
@@ -119,6 +105,13 @@ provide('CarouselScroll', CarouselScroll)
 onMounted(() => {
   CarouselBG.value = !document.getElementsByTagName('html')[0].classList.contains("zTheme")
 })
+
+
+import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+const df = new DateFormatter('en-US', {
+  dateStyle: 'medium'
+})
+const calendarVal = ref<{ start: CalendarDate | undefined, end: CalendarDate | undefined }>({ start: undefined, end: undefined })
 
 </script>
 
@@ -136,22 +129,49 @@ onMounted(() => {
     </template>
 
     <template #left-panel-content>
-      filters here
-      <MazAnimatedElement direction="up" :duration="700" :delay="700">
-        <UInputMenu v-model="TagCatValue" :items="TagCatItems" multiple
-          placeholder="Select for tag cat" variant="soft"
-          style="--ui-primary: #4a5565" :icon="TagCatValue?.icon" :ui="{
-            trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
-            content: 'popoverContent'
-          }" data-lenis-prevent class="mx-auto my-4 w-fit block"
-          @update:open="onInputOpen" open-on-focus />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="700" :delay="800">
-        <UTabs :content="false" :items="certsOptions" class="mx-auto w-fit"
-          style="--ui-primary: #4a5565" orientation="vertical"
-          v-model="certsActive"
-          :ui="{ trigger: 'self-start', label: 'dark:text-white', leadingIcon: 'dark:text-white' }" />
-      </MazAnimatedElement>
+      <div class="flex flex-col items-start">
+        <MazAnimatedElement direction="up" :duration="700" :delay="900">
+          <UTabs :content="false" :items="contributorsOptions"
+            class="mx-auto w-fit" style="--ui-primary: #4a5565"
+            v-model="contributorsActive"
+            :ui="{ trigger: 'self-start', label: 'dark:text-white', leadingIcon: 'dark:text-white' }" />
+        </MazAnimatedElement>
+        <MazAnimatedElement direction="up" :duration="700" :delay="700">
+          <SkillsInput
+            @change="(e) => console.log(JSON.parse(JSON.stringify(e)))" />
+        </MazAnimatedElement>
+        <MazAnimatedElement direction="up" :duration="700" :delay="800">
+          <UTabs :content="false" :items="certsOptions" class="mx-auto w-fit"
+            style="--ui-primary: #4a5565" orientation="vertical"
+            v-model="certsActive"
+            :ui="{ trigger: 'self-start', label: 'dark:text-white', leadingIcon: 'dark:text-white' }" />
+        </MazAnimatedElement>
+        <MazAnimatedElement direction="up" :duration="700" :delay="950"
+          class="flex justify-center mt-4">
+          <UPopover>
+            <UButton color="neutral" variant="soft" icon="i-lucide-calendar">
+              <template v-if="calendarVal.start">
+                <template v-if="calendarVal.end">
+                  {{ df.format(calendarVal.start.toDate(getLocalTimeZone())) }}
+                  -
+                  {{ df.format(calendarVal.end.toDate(getLocalTimeZone())) }}
+                </template>
+
+                <template v-else>
+                  {{ df.format(calendarVal.start.toDate(getLocalTimeZone())) }}
+                </template>
+              </template>
+              <template v-else>
+                Pick a date range
+              </template>
+            </UButton>
+            <template #content>
+              <UCalendar v-model="(calendarVal as any)" class="p-2"
+                color="primary" :number-of-months="2" range />
+            </template>
+          </UPopover>
+        </MazAnimatedElement>
+      </div>
     </template>
 
     <template #left-panel-footer>

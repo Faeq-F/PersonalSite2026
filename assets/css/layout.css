@@ -139,6 +139,35 @@ html:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-def
 html:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
   --ui-bg-inverted: #a45848 !important;
 }
+.hover\:not-data-\[selected\]\:bg-primary\/20 {
+  &:hover {
+    @media (hover: hover) {
+      &:not([data-selected]) {
+        --ui-primary: #a45848 !important;
+      }
+    }
+  }
+}
+.data-\[highlighted\]\:bg-primary\/20 {
+  &[data-highlighted] {
+    --ui-primary: #a45848 !important;
+  }
+}
+
+.data-today\:not-data-\[selected\]\:text-primary {
+  &[data-today] {
+    &:not(*[data-selected]) {
+      --ui-primary: #a45848 !important;
+    }
+  }
+}
+
+html:not(.zTheme, .mTheme, .aTheme) .data-\[selected\]\:bg-primary {
+  &[data-selected] {
+    --ui-primary: #a45848 !important;
+  }
+}
+html:not(.zTheme, .mTheme, .aTheme) .text-primary,
 html:not(.zTheme, .mTheme, .aTheme) .bg-primary{
   --ui-primary: #a45848 !important;
 }
@@ -162,7 +191,7 @@ html.mTheme #navbar .navbar {
 html.mTheme .boxLink:hover,
 html.mTheme fieldset label,
 html.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
-html.mTheme div[role="dialog"]:has(#searchPanel),
+html.mTheme div[role="dialog"],
 html.mTheme .zLink,
 html.mTheme #navbar .navbar .middleItems ul li a:hover,
 html.mTheme .popoverContent,
@@ -211,7 +240,7 @@ html.mTheme #HomeSocialButtonGroup {
 html.dark.mTheme .boxLink:hover,
 html.dark.mTheme fieldset label,
 html.dark.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
-html.dark.mTheme div[role="dialog"]:has(#searchPanel),
+html.dark.mTheme div[role="dialog"],
 html.dark.mTheme .zLink,
 html.dark.mTheme #navbar .navbar .middleItems ul li a:hover,
 html.dark.mTheme .popoverContent,
@@ -294,7 +323,7 @@ html:not(.aTheme, .zTheme) .varela{
 html:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
 html:not(.aTheme, .zTheme, .mTheme) fieldset label,
 html:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
-html:not(.aTheme, .zTheme, .mTheme) div[role="dialog"]:has(#searchPanel),
+html:not(.aTheme, .zTheme, .mTheme) div[role="dialog"],
 html:not(.aTheme, .zTheme, .mTheme) .zLink,
 html:not(.aTheme, .zTheme, .mTheme) .popoverContent,
 html:not(.aTheme, .zTheme, .mTheme) .cardShadow,
@@ -308,7 +337,7 @@ html:not(.aTheme, .zTheme, .mTheme) .glass-card{
 html.dark:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
 html.dark:not(.aTheme, .zTheme, .mTheme) fieldset label,
 html.dark:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
-html.dark:not(.aTheme, .zTheme, .mTheme) div[role="dialog"]:has(#searchPanel),
+html.dark:not(.aTheme, .zTheme, .mTheme) div[role="dialog"],
 html.dark:not(.aTheme, .zTheme, .mTheme) .zLink,
 html.dark:not(.aTheme, .zTheme, .mTheme) .popoverContent,
 html.dark:not(.aTheme, .zTheme, .mTheme) .cardShadow,
