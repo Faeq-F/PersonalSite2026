@@ -48,7 +48,7 @@ export default defineNuxtConfig({
   ],
   modules: [
     "lenis/nuxt",
-    "maz-ui/nuxt",
+    "@maz-ui/nuxt",
     "@nuxt/content",
     "@nuxt/eslint",
     "@nuxt/fonts",
@@ -58,6 +58,52 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@pinia/nuxt",
   ],
+  mazUi: {
+    theme: {
+      preset: 'maz-ui',
+      overrides: {
+        colors: {
+          light: {
+            primary: '0 0% 0%',
+            secondary: '266 100% 84%',
+            info: '215 100% 83%',
+            success: '130 51% 65%',
+            warning: '44 100% 47%',
+            destructive: '357 96% 58%',
+            muted: '0 0% 54%',
+            contrast: '0 0% 85%',
+          },
+          dark: {
+            primary: '0 0% 100%',
+            secondary: '266 100% 84%',
+            info: '215 100% 83%',
+            success: '130 51% 65%',
+            warning: '44 100% 47%',
+            destructive: '357 96% 58%',
+            muted: '0 0% 54%',
+            contrast: '210 8% 14%',
+          },
+        },
+      },
+      strategy: 'hybrid',
+      darkModeStrategy: 'class',
+    },
+    translations: {
+      locale: 'en',
+      fallbackLocale: 'en',
+    },
+    plugins: {
+      aos: true,
+      dialog: true,
+      toast: true,
+      wait: true,
+    },
+    directives: {
+      vTooltip: true,
+      vLazyImg: true,
+      vClickOutside: true,
+    },
+  },
   icon: {
     clientBundle: {
       icons: [],
