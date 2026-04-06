@@ -1,1 +1,0 @@
-import{aM as e}from"./DBBeBrAR.js";const r=e("settingsStore",{state:()=>({months:["January","February","March","April","May","June","July","August","September","October","November","December"]}),actions:{}});export{r as u};
