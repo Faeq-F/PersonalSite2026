@@ -6,10 +6,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   app: {
-    baseURL: "/PersonalSite2025/",
+    baseURL: "/PersonalSite2026/",
     buildAssetsDir: "assets",
     head: {
-      link: [{ rel: "icon", type: "image/svg", href: "/PersonalSite2025/favicon.png" }],
+      link: [{ rel: "icon", type: "image/svg", href: "/PersonalSite2026/favicon.png" }],
       title: "<Faeq />"
     },
     pageTransition: { name: 'page', mode: 'out-in' }

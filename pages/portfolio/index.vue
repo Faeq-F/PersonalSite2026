@@ -1,117 +1,275 @@
 <script lang="ts" setup>
 import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
 import contentPanels from '~/components/layoutSections/contentPanels.vue';
-import type { InputMenuItem, TabsItem } from '@nuxt/ui'
-import { ref, provide } from 'vue';
+import type { TabsItem } from '@nuxt/ui'
+import { ref, provide, computed } from 'vue';
 import SkillsInput from '~/components/skillsInput.vue';
-
-import Card1 from '~/components/portfolioCards/1Card.vue';
-import Card2 from '~/components/portfolioCards/2Card.vue';
-import Card3 from '~/components/portfolioCards/3Card.vue';
-import Card4 from '~/components/portfolioCards/4Card.vue';
-import Card5 from '~/components/portfolioCards/5Card.vue';
-import Card6 from '~/components/portfolioCards/6Card.vue';
-import Card7 from '~/components/portfolioCards/7Card.vue';
-import Card8 from '~/components/portfolioCards/8Card.vue';
-import Card9 from '~/components/portfolioCards/9Card.vue';
-import Card10 from '~/components/portfolioCards/10Card.vue';
-import Card11 from '~/components/portfolioCards/11Card.vue';
-import Card12 from '~/components/portfolioCards/12Card.vue';
-import Card13 from '~/components/portfolioCards/13Card.vue';
-import Card14 from '~/components/portfolioCards/14Card.vue';
-import Card15 from '~/components/portfolioCards/15Card.vue';
-import Card16 from '~/components/portfolioCards/16Card.vue';
-import Card17 from '~/components/portfolioCards/17Card.vue';
-import Card18 from '~/components/portfolioCards/18Card.vue';
-import Card19 from '~/components/portfolioCards/19Card.vue';
-import Card20 from '~/components/portfolioCards/20Card.vue';
-import Card21 from '~/components/portfolioCards/21Card.vue';
-import Card22 from '~/components/portfolioCards/22Card.vue';
-import Card23 from '~/components/portfolioCards/23Card.vue';
-import Card24 from '~/components/portfolioCards/24Card.vue';
-import Card25 from '~/components/portfolioCards/25Card.vue';
-import Card26 from '~/components/portfolioCards/26Card.vue';
-import Card27 from '~/components/portfolioCards/27Card.vue';
-import Card28 from '~/components/portfolioCards/28Card.vue';
-import Card29 from '~/components/portfolioCards/29Card.vue';
-import Card30 from '~/components/portfolioCards/30Card.vue';
-import Card31 from '~/components/portfolioCards/31Card.vue';
-import Card32 from '~/components/portfolioCards/32Card.vue';
-import Card33 from '~/components/portfolioCards/33Card.vue';
-import Card34 from '~/components/portfolioCards/34Card.vue';
-import Card35 from '~/components/portfolioCards/35Card.vue';
-import Card36 from '~/components/portfolioCards/36Card.vue';
-import Card37 from '~/components/portfolioCards/37Card.vue';
-import Card38 from '~/components/portfolioCards/38Card.vue';
-import Card39 from '~/components/portfolioCards/39Card.vue';
-import Card40 from '~/components/portfolioCards/40Card.vue';
-import Card41 from '~/components/portfolioCards/41Card.vue';
-import Card42 from '~/components/portfolioCards/42Card.vue';
-import Card43 from '~/components/portfolioCards/43Card.vue';
-import Card44 from '~/components/portfolioCards/44Card.vue';
-import Card45 from '~/components/portfolioCards/45Card.vue';
-import Card46 from '~/components/portfolioCards/46Card.vue';
-import Card47 from '~/components/portfolioCards/47Card.vue';
-import Card48 from '~/components/portfolioCards/48Card.vue';
-import Card49 from '~/components/portfolioCards/49Card.vue';
-import Card50 from '~/components/portfolioCards/50Card.vue';
 
 import { useRoute } from 'nuxt/app';
 const route = useRoute()
 
-const certsOptions = ref<TabsItem[]>([
+import { useSettingsStore } from '~/stores/settings'
+const settings = useSettingsStore()
+const { defaultColor, zarlashtTheme, aeonTheme, mirageTheme } = storeToRefs(settings)
+
+// Check if on default theme
+const isDefaultTheme = computed(() => !zarlashtTheme.value && !aeonTheme.value && !mirageTheme.value)
+
+// Portfolio data - all projects with their images and details
+const portfolioItems = ref([
   {
-    label: 'Only Certificates',
-    icon: 'i-lucide-file-badge',
-    value: 'onlyCerts'
+    id: 'quokka',
+    name: 'Quokka',
+    type: 'project',
+    images: [
+      'https://faeq-f.github.io/Quokka/media/AppScreenshots/AllApps.png',
+      '/PersonalSite2026/media/QuokkaLight.png',
+      'https://faeq-f.github.io/Quokka/media/AppScreenshots/AllApps.png',
+      '/PersonalSite2026/media/QuokkaLight.png',
+    ],
+    description: 'A collection of productivity applications',
+    skills: ['C#', 'WPF', 'XAML', '.NET'],
+    startDate: new Date('2023-01-01'),
+    endDate: new Date('2024-12-31'),
   },
   {
-    label: 'All Content',
-    icon: 'i-lucide-gallery-vertical-end',
-    value: 'all'
+    id: 'personal-site',
+    name: 'Personal Site 2025',
+    type: 'project',
+    images: [
+      '/PersonalSite2026/media/portfolio/site1.png',
+      '/PersonalSite2026/media/portfolio/site2.png',
+    ],
+    description: 'My personal portfolio website built with Nuxt 3',
+    skills: ['Vue.js', 'Nuxt', 'TypeScript', 'Tailwind CSS'],
+    startDate: new Date('2024-01-01'),
+    endDate: new Date('2024-03-31'),
   },
   {
-    label: 'No Certificates',
-    icon: 'i-lucide-square-kanban',
-    value: 'noCerts'
-  }
+    id: 'bsc-degree',
+    name: 'BSc Hons. Computer Science (Software Engineering)',
+    type: 'certificate',
+    images: [
+      '/PersonalSite2026/media/portfolio/Faeq Faisal Certificate front side.jpg',
+      '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 1.png',
+      '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 2.png'
+    ],
+    description: 'First Class Honours degree from the University of Westminster',
+    skills: ['Software Engineering', 'Computer Science'],
+    awarded: new Date('2024-07-01'),
+  },
+  // Add more items as needed - placeholders for the rest
+  {
+    id: 'project-2',
+    name: 'E-Commerce Platform',
+    type: 'project',
+    images: [
+      'https://picsum.photos/400/600?random=1',
+      'https://picsum.photos/400/300?random=2',
+    ],
+    description: 'Full-stack e-commerce solution with payment integration',
+    skills: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+    startDate: new Date('2023-06-01'),
+    endDate: new Date('2023-12-31'),
+  },
+  {
+    id: 'project-3',
+    name: 'AI Chat Assistant',
+    type: 'project',
+    images: [
+      'https://picsum.photos/400/500?random=3',
+      'https://picsum.photos/400/400?random=4',
+      'https://picsum.photos/400/350?random=5',
+    ],
+    description: 'Conversational AI powered by OpenAI GPT',
+    skills: ['Python', 'FastAPI', 'OpenAI', 'WebSocket'],
+    startDate: new Date('2024-01-01'),
+    endDate: new Date('2024-06-30'),
+  },
+  {
+    id: 'project-4',
+    name: 'Mobile Fitness App',
+    type: 'project',
+    images: [
+      'https://picsum.photos/400/700?random=6',
+      'https://picsum.photos/400/450?random=7',
+    ],
+    description: 'Cross-platform fitness tracking application',
+    skills: ['React Native', 'Firebase', 'HealthKit'],
+    startDate: new Date('2023-03-01'),
+    endDate: new Date('2023-08-31'),
+  },
+  {
+    id: 'project-5',
+    name: 'Data Visualization Dashboard',
+    type: 'project',
+    images: [
+      'https://picsum.photos/400/550?random=8',
+      'https://picsum.photos/400/380?random=9',
+      'https://picsum.photos/400/420?random=10',
+    ],
+    description: 'Real-time analytics dashboard with D3.js',
+    skills: ['D3.js', 'Vue.js', 'PostgreSQL', 'WebSocket'],
+    startDate: new Date('2023-09-01'),
+    endDate: new Date('2024-02-29'),
+  },
+  {
+    id: 'project-6',
+    name: 'Blockchain Wallet',
+    type: 'project',
+    images: [
+      'https://picsum.photos/400/480?random=11',
+      'https://picsum.photos/400/520?random=12',
+    ],
+    description: 'Secure cryptocurrency wallet with multi-sig support',
+    skills: ['Solidity', 'Web3.js', 'React', 'Ethereum'],
+    startDate: new Date('2022-11-01'),
+    endDate: new Date('2023-05-31'),
+  },
+  {
+    id: 'project-7',
+    name: 'Video Streaming Platform',
+    type: 'project',
+    images: [
+      'https://picsum.photos/400/640?random=13',
+      'https://picsum.photos/400/360?random=14',
+      'https://picsum.photos/400/400?random=15',
+    ],
+    description: 'Netflix-like streaming service with adaptive bitrate',
+    skills: ['AWS', 'FFmpeg', 'Node.js', 'React'],
+    startDate: new Date('2023-07-01'),
+    endDate: new Date('2024-01-31'),
+  },
+  {
+    id: 'project-8',
+    name: 'IoT Home Automation',
+    type: 'project',
+    images: [
+      'https://picsum.photos/400/580?random=16',
+      'https://picsum.photos/400/440?random=17',
+    ],
+    description: 'Smart home system with voice control integration',
+    skills: ['Raspberry Pi', 'MQTT', 'Python', 'Alexa Skills'],
+    startDate: new Date('2022-08-01'),
+    endDate: new Date('2023-02-28'),
+  },
 ])
-const certsActive = ref((route.query.certs as string) || 'all')
 
-const contributorsOptions = ref<TabsItem[]>([
-  {
-    label: 'Solo',
-    icon: 'i-lucide-user',
-    value: 'onlySolo'
-  },
-  {
-    label: 'All',
-    icon: 'i-lucide-gallery-vertical-end',
-    value: 'all'
-  },
-  {
-    label: 'Team',
-    icon: 'i-lucide-users',
-    value: 'onlyTeam'
-  }
-])
-const contributorsActive = ref((route.query.certs as string) || 'all')
-
-const CarouselBG = ref(true)
-const CarouselScroll = ref(true)
-provide('CarouselBG', CarouselBG)
-provide('CarouselScroll', CarouselScroll)
-
-onMounted(() => {
-  CarouselBG.value = !document.getElementsByTagName('html')[0].classList.contains("zTheme")
+// Flatten all images for waterfall layout
+const filteredItems = computed(() => {
+  return portfolioItems.value.flatMap(item =>
+    item.images.map((image, index) => ({
+      ...item,
+      imageIndex: index,
+      imageUrl: image,
+      uniqueId: `${item.id}-${index}`
+    }))
+  )
 })
-
 
 import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 const df = new DateFormatter('en-US', {
   dateStyle: 'medium'
 })
 const calendarVal = ref<{ start: CalendarDate | undefined, end: CalendarDate | undefined }>({ start: undefined, end: undefined })
+
+// Helper functions for formatting dates
+const formatDate = (item: any) => {
+  if (item.type === 'certificate' && item.awarded) {
+    const month = settings.months[item.awarded.getMonth()]?.substring(0, 3) ?? ''
+    return `${month} ${item.awarded.getFullYear()}`
+  }
+  if (item.startDate && item.endDate) {
+    const startMonth = settings.months[item.startDate.getMonth()]?.substring(0, 3) ?? ''
+    const endMonth = settings.months[item.endDate.getMonth()]?.substring(0, 3) ?? ''
+    const endYear = item.endDate < item.startDate ? 'Present' : `${endMonth} ${item.endDate.getFullYear()}`
+    return `${startMonth} ${item.startDate.getFullYear()} - ${endYear}`
+  }
+  return ''
+}
+
+// Determine bento grid span class based on index pattern
+const getBentoClass = (index: number): string => {
+  // Create a varied pattern: some wide, some tall, some both, some normal
+  const pattern = index % 10
+  switch (pattern) {
+    case 0:
+    case 5:
+      return 'span-2-cols' // Wide
+    case 2:
+    case 7:
+      return 'span-2-rows' // Tall
+    case 4:
+      return 'span-both' // Large (2x2)
+    default:
+      return '' // Normal (1x1)
+  }
+}
+
+// Mutex for popovers - only one popup can be "opening" at a time
+const activePopupId = ref<string | null>(null)
+const popupOpenStates = ref<Record<string, boolean>>({})
+
+// Delay constants
+const POPUP_OPEN_DELAY = 150 // ms before opening
+const POPUP_CLOSE_DELAY = 100 // ms before closing
+
+// Set up hover handlers with mutex
+const handleMouseEnter = (itemId: string) => {
+  // Clear any existing timeout for this item
+  if (popupTimeouts[itemId]) {
+    clearTimeout(popupTimeouts[itemId])
+  }
+
+  // If another popup is opening or open, don't open this one immediately
+  if (activePopupId.value && activePopupId.value !== itemId) {
+    // Close the other popup first
+    popupOpenStates.value[activePopupId.value] = false
+  }
+
+  // Set this as the active popup
+  activePopupId.value = itemId
+
+  // Open after delay
+  popupTimeouts[itemId] = setTimeout(() => {
+    popupOpenStates.value[itemId] = true
+  }, POPUP_OPEN_DELAY)
+}
+
+const handleMouseLeave = (itemId: string) => {
+  if (popupTimeouts[itemId]) {
+    clearTimeout(popupTimeouts[itemId])
+  }
+
+  popupTimeouts[itemId] = setTimeout(() => {
+    popupOpenStates.value[itemId] = false
+    if (activePopupId.value === itemId) {
+      activePopupId.value = null
+    }
+  }, POPUP_CLOSE_DELAY)
+}
+
+// Track timeouts
+const popupTimeouts: Record<string, ReturnType<typeof setTimeout>> = {}
+
+// UTabs filter options and state
+const contributorsOptions = ref<TabsItem[]>([
+  { label: 'All', value: 'all', icon: 'i-lucide-gallery-vertical-end' },
+  { label: 'Solo', value: 'solo', icon: 'i-lucide-user' },
+  { label: 'Team', value: 'team', icon: 'i-lucide-users' }
+])
+const contributorsActive = ref('all')
+
+const certsOptions = ref<TabsItem[]>([
+  { label: 'All', icon: 'i-lucide-gallery-vertical-end', value: 'all' },
+  { label: 'Projects', icon: 'i-lucide-square-kanban', value: 'project' },
+  { label: 'Certificates', icon: 'i-lucide-file-badge', value: 'certificate' }
+])
+const certsActive = ref('all')
+
+// Carousel settings
+const CarouselBG = ref(true)
+const CarouselScroll = ref(true)
 
 </script>
 
@@ -175,169 +333,166 @@ const calendarVal = ref<{ start: CalendarDate | undefined, end: CalendarDate | u
     </template>
 
     <template #left-panel-footer>
-      <div class=" flex items-start justify-between flex-col gap-4">
-        <USwitch v-model="CarouselBG" color="neutral"
+      <div class=" flex items-start justify-between flex-col gap-4"
+        :style="isDefaultTheme ? { '--ui-primary': `hsl(${defaultColor.h}, ${defaultColor.s}%, ${defaultColor.l}%)` } : {}">
+        <USwitch v-model="CarouselBG"
+          :color="isDefaultTheme ? 'primary' : 'neutral'"
           label="Carousel Backgrounds" size="sm" />
-        <USwitch v-model="CarouselScroll" color="neutral" size="sm"
+        <USwitch v-model="CarouselScroll"
+          :color="isDefaultTheme ? 'primary' : 'neutral'" size="sm"
           description="(on hover)" label="Carousel Scrolling" />
       </div>
     </template>
 
     <template #content>
-      <MazAnimatedElement direction="right" :duration="1000"
-        v-if="certsActive == 'noCerts' || certsActive == 'all'">
-        <Card1 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000"
-        v-if="certsActive == 'noCerts' || certsActive == 'all'">
-        <Card2 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="right" :duration="1000">
-        <Card3 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card4 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000">
-        <Card5 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="right" :duration="1000">
-        <Card6 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card7 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000">
-        <Card8 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="right" :duration="1000">
-        <Card9 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card10 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000">
-        <Card11 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000"
-        v-if="certsActive == 'onlyCerts' || certsActive == 'all'">
-        <Card12 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="right" :duration="1000">
-        <Card13 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card14 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="down" :duration="1000">
-        <Card15 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000">
-        <Card16 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="right" :duration="1000">
-        <Card17 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000">
-        <Card18 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="right" :duration="1000">
-        <Card19 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="left" :duration="1000">
-        <Card20 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card21 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card22 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card23 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card24 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card25 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card26 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card27 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card28 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card29 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card30 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card31 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card32 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card33 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card34 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card35 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card36 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card37 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card38 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card39 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card40 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card41 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card42 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card43 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card44 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card45 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card46 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card47 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card48 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card49 />
-      </MazAnimatedElement>
-      <MazAnimatedElement direction="up" :duration="1000">
-        <Card50 />
-      </MazAnimatedElement>
+      <!-- Bento/Brick Grid Layout -->
+      <div class="bento-grid p-4">
+        <div v-for="(item, index) in filteredItems" :key="item.uniqueId"
+          :class="['bento-item', getBentoClass(index)]"
+          @mouseenter="handleMouseEnter(item.uniqueId)"
+          @mouseleave="handleMouseLeave(item.uniqueId)">
+          <UPopover mode="hover" :ui="{ content: 'w-80 p-0' }"
+            class="w-full h-full" :open="popupOpenStates[item.uniqueId]"
+            :open-delay="0" :close-delay="0"
+            @update:open="(val: boolean) => popupOpenStates[item.uniqueId] = val">
+            <template #default>
+              <div
+                class="relative group cursor-pointer overflow-hidden rounded-xl w-full h-full bg-[var(--ui-bg)] cardShadow">
+                <img :src="item.imageUrl" :alt="item.name"
+                  class="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy" />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
+                  <div class="absolute bottom-0 left-0 right-0 p-3">
+                    <p class="text-white font-bold text-sm truncate">{{
+                      item.name }}</p>
+                    <p class="text-white/80 text-xs">{{ formatDate(item) }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <template #content>
+              <UCard class="border-0 shadow-none">
+                <template #header>
+                  <div class="flex justify-between items-start gap-2">
+                    <div>
+                      <h3 class="font-bold text-lg varela">{{ item.name }}
+                      </h3>
+                      <p class="text-xs text-muted">{{ formatDate(item) }}</p>
+                    </div>
+                    <UBadge
+                      :color="item.type === 'certificate' ? 'warning' : 'primary'"
+                      variant="soft" size="xs">
+                      {{ item.type === 'certificate' ? 'Certificate' :
+                        'Project' }}
+                    </UBadge>
+                  </div>
+                </template>
+
+                <p class="text-sm text-muted mb-3">{{ item.description }}</p>
+
+                <div class="flex flex-wrap gap-1">
+                  <span v-for="skill in item.skills.slice(0, 6)" :key="skill"
+                    class="text-xs px-2 py-1 rounded-full bg-[var(--ui-bg-elevated)]">
+                    {{ skill }}
+                  </span>
+                  <span v-if="item.skills.length > 6"
+                    class="text-xs px-2 py-1 text-muted">
+                    +{{ item.skills.length - 6 }}
+                  </span>
+                </div>
+
+                <template #footer>
+                  <nuxt-link
+                    :to="(item.type === 'project' ? '/project/' : '/certificate/') + item.name.replaceAll(' ', '~')">
+                    <UButton variant="soft" color="primary" size="sm"
+                      class="w-full" trailing-icon="i-lucide-arrow-right">
+                      View {{ item.type === 'project' ? 'Project' :
+                        'Certificate' }}
+                    </UButton>
+                  </nuxt-link>
+                </template>
+              </UCard>
+            </template>
+          </UPopover>
+        </div>
+      </div>
     </template>
 
   </contentPanels>
 </template>
+
+<style scoped>
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  grid-auto-flow: dense;
+  gap: 1rem;
+}
+
+.bento-item {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.bento-item.span-2-cols {
+  grid-column: span 2;
+}
+
+.bento-item.span-2-rows {
+  grid-row: span 2;
+}
+
+.bento-item.span-both {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+@media (max-width: 1200px) {
+  .bento-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 180px;
+  }
+
+  .bento-item.span-2-cols {
+    grid-column: span 2;
+  }
+
+  .bento-item.span-both {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 150px;
+  }
+
+  .bento-item.span-2-cols,
+  .bento-item.span-both {
+    grid-column: span 2;
+  }
+
+  .bento-item.span-2-rows,
+  .bento-item.span-both {
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 200px;
+  }
+
+  .bento-item.span-2-cols,
+  .bento-item.span-both {
+    grid-column: span 1;
+  }
+}
+</style>

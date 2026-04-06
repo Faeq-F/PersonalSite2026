@@ -39,7 +39,8 @@ html.dark:not(.zTheme, .mTheme, .aTheme) #vidBG{
   0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
   0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
   0 3.5px 6px hsla(230, 13%, 9%, 0.09);
-  border: #222 1px solid;
+  border: none;
+  background: hsl(calc(var(--primary-hue, 10) + 240.43), 33.33%, 13.53%) !important;
 }
 
 html.dark:not(.zTheme) #vidBG video{
@@ -116,64 +117,118 @@ html.zTheme.dark #pageContent:has(#HomeSocialButtonGroup){
 
 html:not(.zTheme, .mTheme, .aTheme) #vidBG{
   border: none;
-	background-color: #efece8  !important;
+  background: hsl(var(--primary-hue, 25), 17.95%, 92.35%);
 }
 
-html.dark:not(.zTheme, .mTheme, .aTheme) #vidBG{
-	background-color: #1b172e  !important;
+/* Default theme primary color - uses HSL from store */
+html:not(.aTheme, .zTheme, .mTheme) {
+  --primary-color: hsl(var(--primary-hue, 10), var(--primary-sat, 39%), var(--primary-lit, 46%));
+  --ui-primary: var(--primary-color);
+}
+
+html.dark:not(.aTheme, .zTheme, .mTheme) {
+  --primary-color: hsl(calc(var(--primary-hue, 10) + 240), var(--primary-sat, 39%), var(--primary-lit, 46%));
+  --ui-primary: var(--primary-color);
 }
 
 html:not(.zTheme, .mTheme, .aTheme) body{
-  background: #eaded2 !important;
+  background: hsl(var(--primary-hue, 25), 36.36%, 87%)
 }
 
 html.dark:not(.zTheme, .mTheme, .aTheme) body{
-  background: #272048 !important;
-  /* #142236 */
+  background: hsl(calc(var(--primary-hue, 10) + 240.5), 38.46%, 20.39%);
 }
 
 html:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-default{
-  --ui-bg: #a45848 !important;
+  --ui-bg: var(--primary-color);
   color: white;
 }
-html:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
-  --ui-bg-inverted: #a45848 !important;
+
+html.dark:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-default{
+  --ui-bg: var(--primary-color);
 }
+
+html:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
+  --ui-bg-inverted: var(--primary-color);
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
+  --ui-bg-inverted: var(--primary-color);
+}
+
 .hover\:not-data-\[selected\]\:bg-primary\/20 {
   &:hover {
     @media (hover: hover) {
       &:not([data-selected]) {
-        --ui-primary: #a45848 !important;
+        --ui-primary: var(--primary-color);
       }
     }
   }
 }
 .data-\[highlighted\]\:bg-primary\/20 {
   &[data-highlighted] {
-    --ui-primary: #a45848 !important;
+    --ui-primary: var(--primary-color);
   }
 }
 
 .data-today\:not-data-\[selected\]\:text-primary {
   &[data-today] {
     &:not(*[data-selected]) {
-      --ui-primary: #a45848 !important;
+      --ui-primary: var(--primary-color);
     }
   }
 }
 
 html:not(.zTheme, .mTheme, .aTheme) .data-\[selected\]\:bg-primary {
   &[data-selected] {
-    --ui-primary: #a45848 !important;
+    --ui-primary: var(--primary-color);
   }
 }
 html:not(.zTheme, .mTheme, .aTheme) .text-primary,
 html:not(.zTheme, .mTheme, .aTheme) .bg-primary{
-  --ui-primary: #a45848 !important;
+  --ui-primary: var(--primary-color);
 }
 html:not(.zTheme, .mTheme, .aTheme) .group-data-\[state\=active\]\:bg-primary {
   &:is(:where(.group)[data-state="active"] *) {
-    --ui-primary: #a45848 !important;
+    --ui-primary: var(--primary-color);
+  }
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme) .hover\:not-data-\[selected\]\:bg-primary\/20 {
+  &:hover {
+    @media (hover: hover) {
+      &:not([data-selected]) {
+        --ui-primary: var(--primary-color);
+      }
+    }
+  }
+}
+html.dark:not(.zTheme, .mTheme, .aTheme) .data-\[highlighted\]\:bg-primary\/20 {
+  &[data-highlighted] {
+    --ui-primary: var(--primary-color);
+  }
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme) .data-today\:not-data-\[selected\]\:text-primary {
+  &[data-today] {
+    &:not(*[data-selected]) {
+      --ui-primary: var(--primary-color);
+    }
+  }
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme) .data-\[selected\]\:bg-primary {
+  &[data-selected] {
+    --ui-primary: var(--primary-color);
+  }
+}
+html.dark:not(.zTheme, .mTheme, .aTheme) .text-primary,
+html.dark:not(.zTheme, .mTheme, .aTheme) .bg-primary{
+  --ui-primary: var(--primary-color);
+}
+html.dark:not(.zTheme, .mTheme, .aTheme) .group-data-\[state\=active\]\:bg-primary {
+  &:is(:where(.group)[data-state="active"] *) {
+    --ui-primary: var(--primary-color);
   }
 }
 
@@ -268,6 +323,49 @@ html.dark.mTheme #HomeSocialButtonGroup {
       inset 0 1px 0 rgba(255, 255, 255, 0.5),
       inset 0 -1px 0 rgba(255, 255, 255, 0.1),
       inset 0 0 8px 4px rgba(0, 0, 0, 0.4);
+  }
+}
+
+html.aTheme .cardShadow,
+html.zTheme .cardShadow {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 2px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.8),
+        transparent);
+  }
+}
+
+html.dark.aTheme .cardShadow,
+html.dark.zTheme .cardShadow {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 2px 1px rgba(255, 255, 255, 0.1);
+
+  &::before {
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.8), transparent);
   }
 }
 

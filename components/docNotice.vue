@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Color } from 'maz-ui/components/MazCardSpotlight';
 import { computed } from 'vue';
 
 const props = defineProps({ type: String })
@@ -27,7 +26,7 @@ const outlineColor = computed(() => {
 
 </script>
 <template>
-  <MazCardSpotlight class="m-2" :color="outlineColor as Color">
+  <MazCardSpotlight class="m-2" :color="outlineColor as string">
     <div class="flex items-center">
       <UIcon :name="icon" class="!size-5 min-w-5"
         :style="`color: ${iconColor};`" />

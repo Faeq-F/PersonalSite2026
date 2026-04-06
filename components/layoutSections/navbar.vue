@@ -1,95 +1,54 @@
 <script setup lang="ts">
+import Fuse from 'fuse.js'
+import { computed, watch, onMounted, ref, nextTick } from 'vue'
 import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
 import type { NavigationMenuItem } from '@nuxt/ui'
-import { onMounted, ref, watch } from 'vue';
 import { useMiddleNavbarItems } from '~/stores/navbar'
+import { useSettingsStore } from '~/stores/settings'
 const middleItems = useMiddleNavbarItems()
-
-import { useThemeHandler } from 'maz-ui'
+const settings = useSettingsStore()
 
 const emit = defineEmits(['aeon'])
 
 const {
-  setDarkTheme,
-  setLightTheme,
-  setSystemTheme,
-  autoSetTheme
-} = useThemeHandler({
-  watchChanges: true,
-})
+  isDark,
+  toggleDarkMode,
+  colorMode
+} = useTheme()
 
 function toggleTheme(theme: number) {
   if (theme == 1) {
-    setLightTheme()
+    colorMode.value = 'light'
   } else if (theme == 0) {
-    setDarkTheme()
+    colorMode.value = 'dark'
   } else {
-    setSystemTheme()
+    colorMode.value = 'auto'
   }
 }
 
-const zarlashtTheme = ref(false);
-const aeonTheme = ref(false);
-const mirageTheme = ref(false);
-const bgAnimation = ref(false);
-const disabledBgAnim = ref(true);
+// Use store state
+const { zarlashtTheme, aeonTheme, mirageTheme, bgAnimation, defaultColor } = storeToRefs(settings)
+const disabledBgAnim = computed(() => !zarlashtTheme.value && !aeonTheme.value && !mirageTheme.value)
 
-watch(zarlashtTheme, (newVal) => {
-  if (newVal) {
-    aeonTheme.value = false
-    mirageTheme.value = false
-    document.getElementsByTagName('html')[0].classList.add('zTheme')
-    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
-  } else {
-    document.getElementsByTagName('html')[0].classList.remove('zTheme')
-    checkDisableBgAnimation() ? setBgAnimDisabled() : disabledBgAnim.value = false
-  }
-})
-
-watch(aeonTheme, (newVal) => {
-  if (newVal) {
-    zarlashtTheme.value = false
-    mirageTheme.value = false
-    document.getElementsByTagName('html')[0].classList.add('aTheme')
-    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
-    emit('aeon')
-  } else {
-    emit('aeon')
-    document.getElementsByTagName('html')[0].classList.remove('aTheme')
-    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
-  }
-})
-
-watch(mirageTheme, (newVal) => {
-  if (newVal) {
-    zarlashtTheme.value = false
-    aeonTheme.value = false
-    document.getElementsByTagName('html')[0].classList.add('mTheme')
-    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
-    // emit('aeon')
-  } else {
-    // emit('aeon')
-    document.getElementsByTagName('html')[0].classList.remove('mTheme')
-    checkDisableBgAnimation() ? setBgAnimDisabled() : setBgAnimEnabled()
-  }
-})
-
-const checkDisableBgAnimation = () =>
-  !document.getElementsByTagName('html')[0].classList.contains("zTheme") &&
-  !document.getElementsByTagName('html')[0].classList.contains("aTheme") &&
-  !document.getElementsByTagName('html')[0].classList.contains("mTheme")
-
-const setBgAnimDisabled = () => {
-  disabledBgAnim.value = true
-  bgAnimation.value = false
+function resetColor() {
+  settings.setDefaultColor({ h: 10, s: 39, l: 46 })
 }
 
-const setBgAnimEnabled = () => {
-  disabledBgAnim.value = false
-  bgAnimation.value = true
-}
+const isDefaultTheme = computed(() => !zarlashtTheme.value && !aeonTheme.value && !mirageTheme.value)
 
-const themeItems = ref<NavigationMenuItem[][]>([
+// Turn off bg animation when default theme is active, enable when switching FROM default
+let previousWasDefault = true
+watch(isDefaultTheme, (isDefault) => {
+  if (isDefault) {
+    bgAnimation.value = false
+  } else if (previousWasDefault) {
+    // Switched FROM default TO a theme - auto-enable
+    bgAnimation.value = true
+  }
+  previousWasDefault = isDefault
+})
+
+const modeItems = ref<NavigationMenuItem[][]>([
   [
     {
       icon: 'i-lucide-sun-moon',
@@ -114,7 +73,12 @@ const themeItems = ref<NavigationMenuItem[][]>([
           class: 'zLink zLinkTheme'
         },
       ]
-    },
+    }
+  ]
+])
+
+const settingsItems = ref<NavigationMenuItem[][]>([
+  [
     {
       icon: 'i-lucide-cog',
       label: '',
@@ -125,6 +89,7 @@ const themeItems = ref<NavigationMenuItem[][]>([
 
 watch(bgAnimation, (newValue) => {
   let videoBGelem = document.getElementById("video-bg-elem") as HTMLVideoElement;
+  if (!videoBGelem) return
   if (newValue) {
     document.getElementsByTagName('html')[0].classList.remove('noAnim')
     document.getElementById('fogWrap')!.classList.remove('hidden')
@@ -134,9 +99,7 @@ watch(bgAnimation, (newValue) => {
     document.getElementById('fogWrap')!.classList.add('hidden')
     videoBGelem.pause();
   }
-})
-
-autoSetTheme()
+}, { immediate: false })
 
 //temp
 const pages = [
@@ -184,7 +147,6 @@ const pages = [
   }
 ]
 
-import Fuse from 'fuse.js'
 const searchVal = ref('')
 const searchedPages = ref(pages)
 const fuse = new Fuse(pages, {
@@ -198,6 +160,20 @@ watch(searchVal, (newSearch, _oldSearch) => {
     searchedPages.value = fuse.search(newSearch).map((result) => result.item);
   }
 })
+
+// Watch for color changes to update CSS variables
+watch(defaultColor, (newColor) => {
+  document.documentElement.style.setProperty('--primary-hue', newColor.h.toString())
+  document.documentElement.style.setProperty('--primary-sat', newColor.s + '%')
+  document.documentElement.style.setProperty('--primary-lit', newColor.l + '%')
+}, { deep: true })
+
+// Initialize CSS variables on mount
+onMounted(() => {
+  document.documentElement.style.setProperty('--primary-hue', defaultColor.value.h.toString())
+  document.documentElement.style.setProperty('--primary-sat', defaultColor.value.s + '%')
+  document.documentElement.style.setProperty('--primary-lit', defaultColor.value.l + '%')
+})
 </script>
 
 <template>
@@ -209,7 +185,7 @@ watch(searchVal, (newSearch, _oldSearch) => {
         class="flex items-center">
         <div
           class="flex items-center bg-[#f6f7fa] dark:bg-[#0e0d0d] rounded-full px-3 ml-1.5 h-8 transition-all ease-in-out duration-200 homeNavSection">
-          <nuxt-link to="/" class="contents">
+          <nuxt-link to="/home" class="contents">
             <UIcon name="i-lucide-home"
               class="!size-4.5 hover:text-black dark:hover:text-white text-muted mx-2 my-1.5" />
           </nuxt-link>
@@ -272,43 +248,107 @@ watch(searchVal, (newSearch, _oldSearch) => {
           }" />
       </MazAnimatedElement>
       <MazAnimatedElement direction="left" :delay="900" :duration="700"
-        class="relative flex w-auto justify-end">
-        <!-- Theme Switch -->
-        <UNavigationMenu content-orientation="vertical" color="neutral"
-          :items="themeItems" variant="link" trailing-icon=" " :ui="{
-            viewport: '-translate-y-50 -translate-x-4 min-h-36 max-h-36 pr-28 navView',
-            content: 'w-auto ml-0.5 max-h-full min-h-full overflow-hidden',
-            childList: 'h-[15vh] overflow-hidden',
-            childLabel: 'w-full',
-            childLinkIcon: 'mt-0.5',
-            childLinkDescription: 'line-clamp-1',
-            childLink: '-mt-0.25 bg-white hover:bg-gray-100 dark:bg-[var(--ui-bg)] dark:hover:bg-gray-800 rounded-lg',
-          }"
-          class="relative flex w-auto justify-end bg-[#f6f7fa] dark:bg-[#0e0d0d] rounded-full px-3 mr-1.5 h-8 transition-all ease-in-out duration-200 themeNavSection">
-          <template #item="{ item }">
-            <UIcon :name="item.icon!" class="!size-4.5 " />
-          </template>
-          <template #settings="{ item }: { item: NavigationMenuItem }">
-            <USeparator orientation="vertical"
-              class="h-4 mx-4 -ml-0.5 invert opacity-20" />
-            <UIcon :name="item.icon!" class="!size-4.5"
-              :class="bgAnimation ? 'animate-[spin_3s_linear_infinite]' : ''" />
-          </template>
-          <template #settings-content>
-            <div class="px-0.5 flex flex-col items-start !h-full mt-2 gap-0.5"
-              id="themeControls">
-              <USwitch v-model="bgAnimation" color="neutral" size="xs"
-                description="Background" label="Animating"
-                :disabled="disabledBgAnim" />
-              <USwitch v-model="aeonTheme" color="neutral" size="xs"
-                description="theme" label="Aeon" />
-              <USwitch v-model="mirageTheme" color="neutral" size="xs"
-                description="theme" label="Mirage" />
-              <USwitch v-model="zarlashtTheme" color="neutral" size="xs"
-                description="theme" label="Zarlasht" />
-            </div>
-          </template>
-        </UNavigationMenu>
+        class="relative flex w-auto justify-end ">
+        <div
+          class="relative flex w-auto justify-end bg-[#f6f7fa] dark:bg-[#0e0d0d] rounded-full h-8 transition-all ease-in-out duration-200 themeNavSection mr-1.5">
+          <!-- Mode Switch (Light/Dark/System) -->
+          <UNavigationMenu content-orientation="vertical" color="neutral"
+            :items="modeItems" variant="link" trailing-icon=" " :ui="{
+              viewport: '-translate-y-50 -translate-x-4 min-h-36 max-h-36 pr-28 navView',
+              content: 'w-auto ml-0.5 max-h-full min-h-full overflow-hidden',
+              childList: 'h-[15vh] overflow-hidden',
+              childLabel: 'w-full',
+              childLinkIcon: 'mt-0.5',
+              childLinkDescription: 'line-clamp-1',
+              childLink: '-mt-0.25 bg-white hover:bg-gray-100 dark:bg-[var(--ui-bg)] dark:hover:bg-gray-800 rounded-lg',
+            }"
+            class="relative flex w-auto justify-end bg-transparent dark:bg-[#0e0d0d] rounded-full rounded-r-none px-3 h-8 transition-all ease-in-out duration-200  !shadow-none">
+            <template #item="{ item }">
+              <UIcon :name="item.icon!" class="!size-4.5" />
+            </template>
+          </UNavigationMenu>
+          <!-- Settings -->
+          <UNavigationMenu content-orientation="vertical" color="neutral"
+            :items="settingsItems" variant="link" trailing-icon=" " :ui="{
+              viewport: '-translate-y-50 -translate-x-4 min-h-36 max-h-36 pr-64 navView',
+              content: 'w-auto ml-0.5 max-h-full min-h-full overflow-hidden',
+              childList: 'h-[15vh] overflow-hidden',
+              childLabel: 'w-full',
+              childLinkIcon: 'mt-0.5',
+              childLinkDescription: 'line-clamp-1',
+              childLink: '-mt-0.25 bg-white hover:bg-gray-100 dark:bg-[var(--ui-bg)] dark:hover:bg-gray-800 rounded-lg',
+            }"
+            class="relative flex w-auto justify-end bg-transparent dark:bg-[#0e0d0d] rounded-full rounded-l-none px-3 h-8 transition-all ease-in-out duration-200 !shadow-none">
+            <template #item="{ item }">
+              <UIcon :name="item.icon!" class="!size-4.5 " />
+            </template>
+            <template #settings="{ item }: { item: NavigationMenuItem }">
+              <USeparator orientation="vertical"
+                class="h-4 mx-4 -ml-6 invert opacity-20" />
+              <UIcon :name="item.icon!" class="!size-4.5"
+                :class="bgAnimation ? 'animate-[spin_3s_linear_infinite]' : ''" />
+            </template>
+            <template #settings-content>
+              <div class="pl-2 flex !h-full mt-2 gap-0.5" id="themeControls">
+                <div class="flex flex-col gap-0.5 mx-1">
+                  <!-- Vertical HSL Sliders -->
+                  <div
+                    class="flex flex-row items-center justify-center gap-3 w-full transition-opacity duration-300"
+                    :class="{ 'opacity-50': !isDefaultTheme }">
+                    <!-- Hue -->
+                    <div class="flex flex-col items-center gap-1">
+                      <USlider v-model="defaultColor.h" :min="0" :max="360"
+                        :step="1" orientation="vertical" color="neutral"
+                        :disabled="!isDefaultTheme" class="h-20" size="xs" />
+                      <UIcon name="i-lucide-palette" class="text-sm" />
+                    </div>
+                    <!-- Saturation -->
+                    <div class="flex flex-col items-center gap-1">
+                      <USlider v-model="defaultColor.s" :min="0" :max="100"
+                        :step="1" orientation="vertical" color="neutral"
+                        :disabled="!isDefaultTheme" class="h-20" size="xs" />
+                      <UIcon name="i-lucide-droplet" class="text-sm" />
+                    </div>
+                    <!-- Lightness -->
+                    <div class="flex flex-col items-center gap-1">
+                      <USlider v-model="defaultColor.l" :min="0" :max="100"
+                        :step="1" orientation="vertical" color="neutral"
+                        :disabled="!isDefaultTheme" class="h-20" size="xs" />
+                      <UIcon name="i-lucide-sun" class="text-sm" />
+                    </div>
+                  </div>
+                  <!-- Reset Button -->
+                  <UButton variant="soft" size="xs" color="neutral"
+                    @click="resetColor" trailing-icon="i-lucide-rotate-ccw"
+                    class="w-full my-1 transition-opacity duration-300"
+                    :disabled="defaultColor.h === 10 && defaultColor.s === 39 && defaultColor.l === 46 || !isDefaultTheme"
+                    :class="{ 'opacity-50': !isDefaultTheme }">
+                    <p class="w-full text-center pr-0.5">Reset Color</p>
+                  </UButton>
+                </div>
+                <USeparator orientation="vertical"
+                  class="self-center h-[7rem] mx-3" />
+                <!-- Theme Switches -->
+                <div class="flex flex-col items-start gap-0.5">
+                  <USwitch v-model="bgAnimation" color="neutral" size="xs"
+                    description="Background" label="Animating"
+                    :disabled="disabledBgAnim" />
+                  <USwitch :model-value="aeonTheme"
+                    @update:model-value="settings.setAeonTheme" color="neutral"
+                    size="xs" description="theme" label="Aeon" />
+                  <USwitch :model-value="mirageTheme"
+                    @update:model-value="settings.setMirageTheme"
+                    color="neutral" size="xs" description="theme"
+                    label="Mirage" />
+                  <USwitch :model-value="zarlashtTheme"
+                    @update:model-value="settings.setZarlashtTheme"
+                    color="neutral" size="xs" description="theme"
+                    label="Zarlasht" />
+                </div>
+              </div>
+            </template>
+          </UNavigationMenu>
+        </div>
       </MazAnimatedElement>
     </div>
   </MazAnimatedElement>
@@ -362,14 +402,14 @@ html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a,
     0 3.5px 6px hsla(230, 13%, 9%, 0.09);
 }
 
-html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/about"],
-html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/about"] {
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/about"],
+html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/about"] {
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
 
-html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/cv"],
-html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2025/cv"] {
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/cv"],
+html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/cv"] {
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
 }

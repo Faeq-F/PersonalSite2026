@@ -6,7 +6,7 @@
 @import "@nuxt/ui";
 @import "./layout.css";
 @import "./maz-ui-variables.css";
-import 'maz-ui/styles'
+@import 'maz-ui/styles';
 
 * {
   transition: 200ms all;
@@ -51,7 +51,7 @@ body{
 
 @font-face {
   font-family: 'requiemregular';
-  src: url(\PersonalSite2025\fonts\requiem\Requiem.ttf);
+  src: url(\PersonalSite2026\fonts\requiem\Requiem.ttf);
 }
 
 .outfit,
@@ -191,7 +191,7 @@ span[role="slider"].ring-inverted {
 textarea,
 label,
 html {
-  cursor: url(/PersonalSite2025/cursors/light-Point.cur),
+  cursor: url(/PersonalSite2026/cursors/light-Point.cur),
     auto !important;
 }
 
@@ -201,20 +201,20 @@ button,
 input,
 #credits,
 a {
-  cursor: url(/PersonalSite2025/cursors/light-Click.cur),
+  cursor: url(/PersonalSite2026/cursors/light-Click.cur),
     auto !important;
 }
 
 button[disabled],
 .stepper button {
-  cursor: url(/PersonalSite2025/cursors/light-Point.cur),
+  cursor: url(/PersonalSite2026/cursors/light-Point.cur),
   auto !important;
 }
 
 .dark textarea,
 .dark label,
 html.dark {
-  cursor: url(/PersonalSite2025/cursors/dark-Point.cur),
+  cursor: url(/PersonalSite2026/cursors/dark-Point.cur),
     auto !important;
 }
 
@@ -224,13 +224,13 @@ html.dark {
 .dark input,
 .dark #credits,
 .dark a {
-  cursor: url(/PersonalSite2025/cursors/dark-Click.cur),
+  cursor: url(/PersonalSite2026/cursors/dark-Click.cur),
     auto !important;
 }
 
 .dark button[disabled],
 .dark .stepper button {
-  cursor: url(/PersonalSite2025/cursors/dark-Point.cur),
+  cursor: url(/PersonalSite2026/cursors/dark-Point.cur),
   auto !important;
 }
 

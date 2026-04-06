@@ -115,6 +115,8 @@ var bg = Math.floor(Math.random() * 60);
 </template>
 
 <style lang="scss">
+@use 'sass:math';
+
 @keyframes fadeInBG {
   0% {
     opacity: 0
@@ -126,9 +128,9 @@ var bg = Math.floor(Math.random() * 60);
 }
 
 @for $num from 0 through 60 {
-  $color1: rgba(random(100)+155, random(100)+155, random(100)+155, random(3)+2);
-  $color2: rgba(random(100)+155, random(100)+155, random(100)+155, random(3)+2);
-  $rotation: random(360);
+  $color1: rgba(math.random(100)+155, math.random(100)+155, math.random(100)+155, math.random(3)+2);
+  $color2: rgba(math.random(100)+155, math.random(100)+155, math.random(100)+155, math.random(3)+2);
+  $rotation: math.random(360);
 
   .carouselContainerBG-#{$num} {
     background-image: linear-gradient(#{$rotation}deg, $color1, $color2);

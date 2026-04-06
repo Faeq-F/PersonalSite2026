@@ -4,7 +4,7 @@ import { VuePDF, usePDF } from '@tato30/vue-pdf'
 import '@tato30/vue-pdf/style.css'
 import { ref, watch } from 'vue'
 
-const { pdf, pages } = usePDF('/PersonalSite2025/cv.pdf')
+const { pdf, pages } = usePDF('/PersonalSite2026/cv.pdf')
 
 const scale = ref(0.95)
 

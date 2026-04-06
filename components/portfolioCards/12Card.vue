@@ -9,9 +9,9 @@ import { from } from "rxjs";
 const project = useObservable<Certificate | undefined>(from(liveQuery(async () => await db.certificates.get('BSc Hons. Computer Science (Software Engineering)'))));
 
 const images = [
-  '/PersonalSite2025/media/portfolio/Faeq Faisal Certificate front side.jpg',
-  '/PersonalSite2025/media/portfolio/Faeq Faisal Transcript page 1.png',
-  '/PersonalSite2025/media/portfolio/Faeq Faisal Transcript page 2.png'
+  '/PersonalSite2026/media/portfolio/Faeq Faisal Certificate front side.jpg',
+  '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 1.png',
+  '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 2.png'
 ]
 </script>
 

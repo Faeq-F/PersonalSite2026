@@ -1,135 +1,232 @@
 <script setup lang="ts">
 import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
-import stackoverflow from '~/components/icons/stackoverflow.vue'
-import github from '~/components/icons/github.vue'
-import linkedin from '~/components/icons/linkedin.vue'
-import Card1 from '~/components/portfolioCards/1Card.vue';
+import type { TabsItem } from '@nuxt/ui'
+import { useSettingsStore } from '~/stores/settings'
 
-const openAd = ref(false);
+const router = useRouter()
+const settings = useSettingsStore()
+
+const {
+  isDark,
+  toggleDarkMode,
+  colorMode
+} = useTheme()
+
+// Use store state
+const { zarlashtTheme, aeonTheme, mirageTheme, bgAnimation, defaultColor } = storeToRefs(settings)
+
+const selectedMode = ref<'light' | 'dark' | 'system'>('system')
+const selectedTheme = ref('default')
+
+const themeTabs = ref<TabsItem[]>([
+  { label: 'Default', value: 'default' },
+  { label: 'Aeon', value: 'aeon' },
+  { label: 'Mirage', value: 'mirage' },
+  { label: 'Zarlasht', value: 'zarlasht' }
+])
+
+watch(selectedTheme, (newVal) => {
+  if (newVal === 'default') {
+    settings.clearThemes()
+  } else if (newVal === 'aeon') {
+    settings.setAeonTheme(true)
+  } else if (newVal === 'mirage') {
+    settings.setMirageTheme(true)
+  } else if (newVal === 'zarlasht') {
+    settings.setZarlashtTheme(true)
+  }
+})
+
+// Watch for dark/light mode changes
+watch(selectedMode, (newMode) => {
+  colorMode.value = newMode
+})
+
+// Sync theme tabs with store state
+watch([zarlashtTheme, aeonTheme, mirageTheme], ([z, a, m]) => {
+  if (z) selectedTheme.value = 'zarlasht'
+  else if (a) selectedTheme.value = 'aeon'
+  else if (m) selectedTheme.value = 'mirage'
+  else selectedTheme.value = 'default'
+})
+
+// Track if we're on default theme for bg animation logic
+const isDefaultTheme = computed(() => !zarlashtTheme.value && !aeonTheme.value && !mirageTheme.value)
+
+// Calculate primary color with dark mode offset
+const primaryColorStyle = computed(() => {
+  if (selectedTheme.value !== 'default') return {}
+  const isDark = selectedMode.value === 'dark' || (selectedMode.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const hue = isDark ? defaultColor.value.h + 240 : defaultColor.value.h
+  return { '--ui-primary': `hsl(${hue}, ${defaultColor.value.s}%, ${defaultColor.value.l}%)` }
+})
+
+// Turn off bg animation when default theme is active, enable when switching FROM default
+let previousWasDefault = true
+watch(isDefaultTheme, (isDefault) => {
+  if (isDefault) {
+    bgAnimation.value = false
+  } else if (previousWasDefault) {
+    // Switched FROM default TO a theme - auto-enable
+    bgAnimation.value = true
+  }
+  previousWasDefault = isDefault
+})
+
+function enterSite() {
+  router.push('/home')
+}
+
+// Reset color to default #a45848
+function resetColor() {
+  settings.setDefaultColor({ h: 10, s: 39, l: 46 })
+}
+
+// Sync initial theme state with HTML classes
+onMounted(() => {
+  settings.syncFromHtml()
+  const html = document.documentElement
+  if (html.classList.contains('zTheme')) {
+    selectedTheme.value = 'zarlasht'
+  } else if (html.classList.contains('aTheme')) {
+    selectedTheme.value = 'aeon'
+  } else if (html.classList.contains('mTheme')) {
+    selectedTheme.value = 'mirage'
+  }
+  // Initialize CSS variables
+  document.documentElement.style.setProperty('--primary-hue', defaultColor.value.h.toString())
+  document.documentElement.style.setProperty('--primary-sat', defaultColor.value.s + '%')
+  document.documentElement.style.setProperty('--primary-lit', defaultColor.value.l + '%')
+})
+
+// Watch for color changes to update CSS variables
+watch(defaultColor, (newColor) => {
+  document.documentElement.style.setProperty('--primary-hue', newColor.h.toString())
+  document.documentElement.style.setProperty('--primary-sat', newColor.s + '%')
+  document.documentElement.style.setProperty('--primary-lit', newColor.l + '%')
+}, { deep: true })
+
+// Actually control background animation
+watch(bgAnimation, (newValue) => {
+  const videoBGelem = document.getElementById('video-bg-elem') as HTMLVideoElement
+  const fogWrap = document.getElementById('fogWrap')
+  if (!videoBGelem) return
+  if (newValue) {
+    document.documentElement.classList.remove('noAnim')
+    fogWrap?.classList.remove('hidden')
+    videoBGelem.play()
+  } else {
+    document.documentElement.classList.add('noAnim')
+    fogWrap?.classList.add('hidden')
+    videoBGelem.pause()
+  }
+})
+
+// Update CSS variable when default color changes
+watch(defaultColor, (newColor) => {
+  document.documentElement.style.setProperty('--primary-hue', newColor.h.toString())
+}, { immediate: true, deep: true })
 </script>
 
 <template>
-  <div class="p-8 h-full w-full flex">
-    <div class="flex flex-col justify-center pl-8 h-full w-full">
-      <div class="flex flex-col w-fit" id="homeContentWrapper">
-        <div class="font-bold mb-5 homeTitle" style="line-height: 1;">
-          <p class="text-[4rem] varela">Hello, I'm Faeq</p>
-          <MazAnimatedElement direction="up" :duration="700" :delay="300">
-            <p class="text-[2.3rem] varela">A software engineer</p>
-          </MazAnimatedElement>
+  <div
+    class="welcome-container h-screen w-screen flex items-center justify-center p-8">
+    <div
+      class="cardShadow p-16 max-w-lg w-full h-[34rem] flex-col flex justify-between">
+      <!-- Welcome Title -->
+      <MazAnimatedElement direction="up" :duration="800" :delay="100">
+        <div class="text-center mb-12">
+          <h1 class="text-6xl font-bold varela">Welcome</h1>
         </div>
-        <div class="mb-5">
-          <MazAnimatedElement direction="up" :duration="700" :delay="450">
-            <div id="ad" class="text-center clickable w-7/12"
-              @click="openAd = true">
-              Featured work preview:&nbsp;&nbsp;<span
-                class="varela">Quokka</span>
+      </MazAnimatedElement>
+
+      <!-- Theme Selection -->
+      <MazAnimatedElement direction="up" :duration="700" :delay="300">
+        <div class="mb-2" :style="primaryColorStyle">
+          <h2 class="text-sm outfit tracking-wider mb-1">
+            Pick your aesthetic
+          </h2>
+          <UTabs :content="false" :items="themeTabs" v-model="selectedTheme"
+            :color="selectedTheme === 'default' ? 'primary' : 'neutral'"
+            class="w-full theme-tabs" orientation="horizontal"
+            :ui="{ list: 'grid grid-cols-4 gap-2', trigger: 'theme-tab-trigger' }">
+          </UTabs>
+        </div>
+      </MazAnimatedElement>
+
+      <!-- Light/Dark Mode -->
+      <MazAnimatedElement direction="up" :duration="700" :delay="700">
+        <div :style="primaryColorStyle">
+          <UTabs :content="false" :items="[
+            { label: 'Auto', icon: 'i-lucide-laptop', value: 'system' },
+            { label: 'Light', icon: 'i-lucide-sun', value: 'light' },
+            { label: 'Dark', icon: 'i-lucide-moon', value: 'dark' }
+          ]" v-model="selectedMode" class="w-full" color="neutral"
+            :ui="{ list: 'grid grid-cols-3 gap-2' }" />
+
+          <!-- Color Pickers & BG Animation Toggle -->
+          <Transition name="fade" mode="out-in">
+            <div v-if="selectedTheme === 'default'" key="sliders"
+              class="mt-2 space-y-2">
+              <!-- Hue -->
+              <div
+                class="flex items-center justify-between p-2 rounded-lg bg-elevated">
+                <div class="flex items-center gap-2">
+                  <UIcon name="i-lucide-palette" class="text-lg" />
+                  <span class="text-sm font-medium">Hue</span>
+                </div>
+                <USlider v-model="defaultColor.h" :min="0" :max="360" :step="1"
+                  class="w-24" size="sm" color="neutral" />
+              </div>
+              <!-- Saturation -->
+              <div
+                class="flex items-center justify-between p-2 rounded-lg bg-elevated">
+                <div class="flex items-center gap-2">
+                  <UIcon name="i-lucide-droplets" class="text-lg" />
+                  <span class="text-sm font-medium">Saturation</span>
+                </div>
+                <USlider v-model="defaultColor.s" :min="0" :max="100" :step="1"
+                  class="w-24" size="sm" color="neutral" />
+              </div>
+              <!-- Lightness -->
+              <div
+                class="flex items-center justify-between p-2 rounded-lg bg-elevated">
+                <div class="flex items-center gap-2">
+                  <UIcon name="i-lucide-sun" class="text-lg" />
+                  <span class="text-sm font-medium">Lightness</span>
+                </div>
+                <USlider v-model="defaultColor.l" :min="0" :max="100" :step="1"
+                  class="w-24" size="sm" color="neutral" />
+              </div>
+              <!-- Reset Button -->
+              <UButton variant="soft" size="xs" color="neutral"
+                @click="resetColor" trailing-icon="i-lucide-rotate-ccw"
+                class="w-full"
+                :disabled="defaultColor.h === 10 && defaultColor.s === 39 && defaultColor.l === 46"
+                :class="{ 'opacity-50': defaultColor.h === 10 && defaultColor.s === 39 && defaultColor.l === 46 }">
+                <p class="w-full text-center">Reset Color</p>
+              </UButton>
             </div>
-          </MazAnimatedElement>
+            <div v-else key="bgAnim"
+              class="mt-2 flex items-center bg-elevated justify-between p-3 rounded-lg">
+              <div class="flex items-center gap-2">
+                <UIcon name="i-lucide-play-circle" class="text-lg " />
+                <span class="text-sm font-medium">Background Animation</span>
+              </div>
+              <USwitch v-model="bgAnimation" color="neutral" size="sm" />
+            </div>
+          </Transition>
         </div>
-        <div id="HomeSocialButtonGroup" class="">
-          <MazAnimatedElement direction="right" :duration="700" :delay="600"
-            class="inline">
-            <a href="mailto:faeqfaisal@hotmail.co.uk" target="_blank">
-              <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-                <button
-                  class="lg:inline-flex hidden items-center gap-2 pr-4 py-2 rounded-full  text-current justify-center mr-3 pl-4 w-16 ml-1">
-                  <UIcon name="i-lucide-mail"
-                    class="!size-5 contrast-0 hover:contrast-100  transition-all ease-in-out duration-200" />
-                </button>
-                <template #content>
-                  <p class="p-1 text-sm">Email</p>
-                </template>
-              </UPopover>
-            </a>
-          </MazAnimatedElement>
-          <MazAnimatedElement direction="right" :duration="700" :delay="700"
-            class="inline">
-            <a href="https://linkedin.com/in/faeq" target="_blank">
-              <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-                <button
-                  class="lg:inline-flex hidden items-center gap-2 pr-4 py-2 rounded-full  text-current justify-center mr-3 pl-4 w-16">
-                  <linkedin
-                    class="grayscale contrast-0 hover:contrast-100 hover:grayscale-0 transition-all ease-in-out duration-200 size-5 dark:hover:grayscale dark:hover:invert dark:hover:contrast-300" />
-                </button>
-                <template #content>
-                  <p class="p-1 text-sm">LinkedIn</p>
-                </template>
-              </UPopover>
-            </a>
-          </MazAnimatedElement>
-          <MazAnimatedElement direction="right" :duration="700" :delay="800"
-            class="inline">
-            <a href="https://github.com/Faeq-F" target="_blank">
-              <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-                <button
-                  class="lg:inline-flex hidden items-center gap-2 pr-4 py-2 rounded-full  text-current justify-center mr-3 w-16 pl-4">
-                  <github
-                    class="contrast-0 hover:contrast-100 transition-all ease-in-out duration-200 size-5 dark:hover:invert-100" />
-                </button>
-                <template #content>
-                  <p class="p-1 text-sm">GitHub</p>
-                </template>
-              </UPopover>
-            </a>
-          </MazAnimatedElement>
-          <MazAnimatedElement direction="right" :duration="700" :delay="900"
-            class="inline">
-            <a href="http://stackoverflow.com/users/13165763/faeq"
-              target="_blank">
-              <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-                <button
-                  class="lg:inline-flex hidden items-center gap-2 pr-4 py-2 rounded-full  text-current justify-center mr-3 w-16 pl-4">
-                  <stackoverflow
-                    class="grayscale hover:grayscale-0 transition-all ease-in-out duration-200 size-5" />
-                </button>
-                <template #content>
-                  <p class="p-1 text-sm">StackOverflow</p>
-                </template>
-              </UPopover>
-            </a>
-          </MazAnimatedElement>
-          <MazAnimatedElement direction="right" :duration="700" :delay="1000"
-            class="inline">
-            <a href="sms:+447775901092?&amp;body=Hello%Faeq," target="_blank">
-              <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-                <button
-                  class="lg:inline-flex hidden items-center gap-2 pr-4 py-2 rounded-full  text-current justify-center mr-3 w-16 pl-4">
-                  <UIcon name="i-lucide-message-square-text"
-                    class="!size-5 contrast-0 hover:contrast-100  transition-all ease-in-out duration-200" />
-                </button>
-                <template #content>
-                  <p class="p-1 text-sm">SMS</p>
-                </template>
-              </UPopover>
-            </a>
-          </MazAnimatedElement>
-          <MazAnimatedElement direction="right" :duration="700" :delay="1100"
-            class="inline">
-            <a href="https://cal.com/Faeq-F" target="_blank">
-              <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-                <button
-                  class="lg:inline-flex hidden items-center gap-2 py-2 rounded-full  text-current justify-center mr-3 w-9 ">
-                  <UIcon name="i-lucide-calendar-plus-2"
-                    class="!size-5 contrast-0 hover:contrast-100  transition-all ease-in-out duration-200" />
-                </button>
-                <template #content>
-                  <p class="p-1 text-sm">Book a meeting</p>
-                </template>
-              </UPopover>
-            </a>
-          </MazAnimatedElement>
-        </div>
-      </div>
-    </div>
-    <div>
-      <UAlert title="This site is in development!" color="neutral"
-        variant="outline" class="cardShadow w-96"
-        description="Some content is not available" icon="i-lucide-wrench" />
-      <MazAnimatedElement direction="left" :duration="700" v-if="openAd">
-        <div
-          class="absolute -left-[35vw] h-96 w-[40vw] mr-52 mt-34 rounded-2xl bg-transparent">
-          <Card1 />
+      </MazAnimatedElement>
+      <USeparator class="w-11/12 self-center my-3" />
+      <!-- Enter Button -->
+      <MazAnimatedElement direction="up" :duration="700" :delay="1100">
+        <div class="contents" :style="primaryColorStyle">
+          <UButton trailing-icon="i-lucide-arrow-right" @click="enterSite"
+            class="w-full justify-center"
+            :color="selectedTheme === 'default' ? 'primary' : 'neutral'">
+            <span class="text-lg">Enter</span>
+          </UButton>
         </div>
       </MazAnimatedElement>
     </div>
@@ -137,138 +234,15 @@ const openAd = ref(false);
 </template>
 
 <style>
-#HomeSocialButtonGroup button {
-  transition: all;
-  transition-duration: .2s;
-  border-style: solid;
-  color: #212126;
+/* Fade transition for color pickers */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.zTheme #HomeSocialButtonGroup button {
-  background: #fff;
-}
-
-.aTheme #HomeSocialButtonGroup button {
-  box-shadow: #00000014 0 5px 15px, #191c2133 0 15px 35px -5px, #00000012 0 0 0 1px;
-  background: #fff;
-}
-
-.dark #HomeSocialButtonGroup button {
-  color: #deded9;
-}
-
-.dark.zTheme #HomeSocialButtonGroup button {
-  background: #000;
-}
-
-.dark.aTheme #HomeSocialButtonGroup button {
-  background: #000;
-  box-shadow: #ffffff14 0 5px 15px, #e6e3de33 0 15px 35px -5px, #ffffff12 0 0 0 1px;
-}
-
-.zTheme .homeTitle {
-  word-spacing: 0.5rem;
-  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
-}
-
-.dark.zTheme .homeTitle {
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
-
-html:not(.aTheme, .zTheme) .popoverContent {
-  padding: 0.25rem;
-}
-
-html:not(.aTheme, .zTheme) .homeTitle {
-  font-weight: 600;
-  font-style: italic;
-}
-
-html:not(.aTheme, .zTheme) #homeContentWrapper {
-  padding: 2rem;
-  margin-left: 6rem;
-  background-position: center;
-  background-size: cover;
-  border-radius: 16px;
-  color: #fff;
-}
-
-html:not(.aTheme, .zTheme, .mTheme) #homeContentWrapper {
-  color: #222;
-}
-
-html.dark:not(.aTheme, .zTheme, .mTheme) #homeContentWrapper {
-  color: #eee;
-}
-
-html.dark.mTheme #homeContentWrapper {
-  color: #222;
-}
-
-html:not(.aTheme, .zTheme) #homeContentWrapper .homeTitle {
-  padding-left: 1rem;
-}
-
-html:not(.aTheme, .zTheme) #homeContentWrapper .homeTitle>p {
-  padding-bottom: 0.5rem;
-}
-
-@property --adColor {
-  syntax: '<color>';
-  initial-value: #999999aa;
-  inherits: false;
-}
-
-@property --adColor1 {
-  syntax: '<color>';
-  initial-value: transparent;
-  inherits: false;
-}
-
-@property --adColor2 {
-  syntax: '<color>';
-  initial-value: #a45848aa;
-  inherits: false;
-}
-
-#ad {
-  background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor) 25%, var(--adColor) 75%, var(--adColor1) 100%);
-  border-radius: 2rem;
-  margin-left: 0rem;
-  color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-  transition: --adColor1 0.5s, --adColor 0.5s;
-
-  &:hover {
-    background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor) 15%, var(--adColor) 85%, var(--adColor1) 100%);
-    --adColor1: #999999aa;
-    --adColor: transparent;
-    color: var(--adColor1);
-  }
-}
-
-html.dark:not(.mTheme) #ad:hover,
-html.mTheme #ad:hover {
-  color: #fff;
-}
-
-html.dark.mTheme #ad,
-html.dark.mTheme #ad:hover {
-  color: #000;
-}
-
-html.zTheme #ad:hover {
-  color: #314158;
-}
-
-html:not(.aTheme, .zTheme, .mTheme) #ad {
-  margin-left: 0.75rem;
-  background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor2) 25%, var(--adColor2) 75%, var(--adColor1) 100%);
-
-  &:hover {
-    background: linear-gradient(135deg, var(--adColor1) 0%, var(--adColor2) 15%, var(--adColor2) 85%, var(--adColor1) 100%);
-    --adColor1: #a45848aa;
-    --adColor2: transparent;
-  }
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-5px);
 }
 </style>

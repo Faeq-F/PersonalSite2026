@@ -10,9 +10,9 @@ const project = useObservable<Project | undefined>(from(liveQuery(async () => aw
 
 const images = [
   'https://faeq-f.github.io/Quokka/media/AppScreenshots/AllApps.png',
-  '/PersonalSite2025/media/QuokkaLight.png',
+  '/PersonalSite2026/media/QuokkaLight.png',
   'https://faeq-f.github.io/Quokka/media/AppScreenshots/AllApps.png',
-  '/PersonalSite2025/media/QuokkaLight.png',
+  '/PersonalSite2026/media/QuokkaLight.png',
 ]
 </script>
 

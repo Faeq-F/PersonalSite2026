@@ -1,3 +1,3 @@
-# Personal Site 2025
+# Personal Site 2026
 
 My personal website (current)

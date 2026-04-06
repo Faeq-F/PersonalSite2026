@@ -1,12 +1,42 @@
 <script setup>
 import navbar from '~/components/layoutSections/navbar.vue'
 import Credits from '~/components/layoutSections/credits.vue'
+import { useSettingsStore } from '~/stores/settings'
+import { watch, onMounted, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 const route = useRoute()
+const settings = useSettingsStore()
 
-const aeon = ref(false);
+const { aeonTheme, bgAnimation } = storeToRefs(settings)
+
+// Sync video playback with bgAnimation state
+watch(bgAnimation, (newValue) => {
+  const video = document.getElementById("video-bg-elem")
+  if (!video) return
+  if (newValue) {
+    video.play()
+  } else {
+    video.pause()
+  }
+})
+
+// Sync video when theme changes (element swaps)
+watch(aeonTheme, async () => {
+  await nextTick()
+  const video = document.getElementById("video-bg-elem")
+  if (!video) return
+  if (bgAnimation.value) {
+    video.play()
+  } else {
+    video.pause()
+  }
+})
 
 onMounted(async () => {
-  document.getElementById("video-bg-elem").play();
+  const video = document.getElementById("video-bg-elem")
+  if (bgAnimation.value) {
+    video?.play()
+  }
 })
 
 </script>
@@ -15,12 +45,12 @@ onMounted(async () => {
   <div class="h-full w-full rounded-3xl" id="bodyPanel">
 
     <div id="vidBG" class="border-default rounded-none border border-accent">
-      <video autoplay loop disablePictureInPicture muted id="video-bg-elem"
-        class="h-full w-full" v-if="aeon">
+      <video loop disablePictureInPicture muted id="video-bg-elem"
+        class="h-full w-full" v-if="aeonTheme">
         <source src="/media/bg.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <video autoplay loop disablePictureInPicture muted id="video-bg-elem"
+      <video loop disablePictureInPicture muted id="video-bg-elem"
         class="h-full w-full" v-else>
         <source src="/media/bgTheme.mp4" type="video/mp4">
         Your browser does not support the video tag.
@@ -39,12 +69,14 @@ onMounted(async () => {
           </div>
         </transition>
       </div>
-      <navbar @aeon="aeon = !aeon" />
+      <navbar v-if="route.path !== '/'"
+        @aeon="settings.setAeonTheme(!aeonTheme)" />
     </div>
 
   </div>
-  <UDrawer direction="bottom" title="Credits" description="Thank you!" inset
-    :handle="false" :ui="{ content: 'rounded-3xl' }">
+  <UDrawer v-if="route.path !== '/'" direction="bottom" title="Credits"
+    description="Thank you!" inset :handle="false"
+    :ui="{ content: 'rounded-3xl' }">
     <div id="credits" class="hover:underline">
       Made with ❤️ by Faeq &copy;</div>
 
