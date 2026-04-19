@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { useSettingsStore } from '~/stores/settings'
 
+const settings = useSettingsStore()
+
+// Initialize theme on app mount
+onMounted(() => {
+  settings.initTheme()
+})
 </script>
 <template>
   <UApp>
