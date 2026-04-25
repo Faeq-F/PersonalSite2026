@@ -33,7 +33,17 @@ html:not(.zTheme, .mTheme, .aTheme) #vidBG{
   border: #eee 1px solid;
 }
 
-html.dark:not(.zTheme, .mTheme, .aTheme) #vidBG{
+html.dark:not(.zTheme, .mTheme, .aTheme, .petalTheme) #vidBG{
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+  0 0 0 1px hsla(230, 13%, 9%, 0.075),
+  0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+  0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+  0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+  border: none;
+  background: #000 !important;
+}
+
+html.dark.petalTheme #vidBG{
   box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
   0 0 0 1px hsla(230, 13%, 9%, 0.075),
   0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
@@ -73,6 +83,10 @@ html:not(.mTheme, .aTheme, .zTheme) #vidBG video{
   z-index: 999;
 }
 
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme, .dark) #credits{
+color: #fff;
+}
+
 #pageContent {
   position: absolute;
   top: 0;
@@ -104,55 +118,178 @@ html.zTheme.dark #vidBG {
   border-color: #cebea7; /* Inverted border color */
 }
 
-html.zTheme #pageContent:has(#HomeSocialButtonGroup){
-  background-image: url('/media/bgZthemeHome.png');
-  background-size:cover;
-  background-repeat:no-repeat;
-  background-position:right;
+/* Home page background fade using ::before pseudo-element */
+html.zTheme #pageContent::before,
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) #pageContent::before,
+html.petalTheme #pageContent::before,
+html.mTheme #pageContent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+  z-index: -1;
 }
 
-html.zTheme.dark #pageContent:has(#HomeSocialButtonGroup){
+/* zTheme home background */
+html.zTheme #pageContent::before {
+  background-image: url('/media/bgZthemeHome.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+html.zTheme.dark #pageContent::before {
   background-image: url('/media/bgZthemeHomeDark.png');
 }
 
-html:not(.zTheme, .mTheme, .aTheme) #vidBG{
+html.zTheme #pageContent:has(#HomeSocialButtonGroup)::before {
+  opacity: 1;
+}
+
+/* Default theme home background */
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) #pageContent::before {
+  background-image: url("/media/fabio-jock-51U-PW1y3ts-unsplash_white-swan-on-water.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-position-x: 150%;
+}
+
+html.dark:not(.zTheme, .mTheme, .aTheme, .petalTheme) #pageContent::before {
+  background-image: url("/media/no-background_fabio-jock-51U-PW1y3ts-unsplash_white-swan-on-water.png");
+}
+
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) #pageContent:has(#HomeSocialButtonGroup)::before {
+  opacity: 1;
+}
+
+/* petalTheme home background */
+html.petalTheme #pageContent::before {
+  background-image: url("/media/fabio-jock-51U-PW1y3ts-unsplash_white-swan-on-water.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-position-x: 150%;
+}
+
+html.petalTheme.dark #pageContent::before {
+  background-image: url("/media/no-background_fabio-jock-51U-PW1y3ts-unsplash_white-swan-on-water.png");
+}
+
+html.petalTheme #pageContent:has(#HomeSocialButtonGroup)::before {
+  opacity: 1;
+}
+
+/* mTheme home background */
+html.mTheme #pageContent::before {
+  background-image: url("/media/glass-window-with-white-wooden-frame_jules-marchioni-HnX-JyF8cx8-unsplash.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: 70%;
+}
+
+html.mTheme #pageContent:has(#HomeSocialButtonGroup)::before {
+  opacity: 1;
+  background-position: center;
+  background-position-x: 70%;
+}
+
+html.mTheme body{
+  background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("/media/jason-leung-Rp17qQr9q8w-unsplash_Geometric-light-patterns-on-a-blue-surface.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position-x: 70%;
+}
+
+html.mTheme.dark body{
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("/media/jason-leung-Rp17qQr9q8w-unsplash_Geometric-light-patterns-on-a-blue-surface.jpg");
+}
+
+html.mTheme.dark #pageContent .homeTitle{
+  color: #596d6d;
+  text-shadow: -1px -1px 0 #20363a, 1px -1px 0 #20363a, -1px 1px 0 #20363a, 1px 1px 0 #20363a;
+}
+
+html.mTheme #pageContent{
+  clip-path: inset(1rem round 1.5rem);
+}
+
+html.mTheme #vidBG {
+  opacity: 0.5;
+}
+
+html.petalTheme #vidBG {
   border: none;
   background: hsl(var(--primary-hue, 25), 17.95%, 92.35%);
 }
 
-/* Default theme primary color - uses HSL from store */
-html:not(.aTheme, .zTheme, .mTheme) {
+html:not(.zTheme, .mTheme, .aTheme) #vidBG {
+  border: none;
+  background: #ffffff;
+}
+
+/* Petal theme primary color - uses HSL from store */
+html.petalTheme {
   --primary-color: hsl(var(--primary-hue, 10), var(--primary-sat, 39%), var(--primary-lit, 46%));
   --ui-primary: var(--primary-color);
 }
 
-html.dark:not(.aTheme, .zTheme, .mTheme) {
+html.dark.petalTheme {
   --primary-color: hsl(calc(var(--primary-hue, 10) + 240), var(--primary-sat, 39%), var(--primary-lit, 46%));
   --ui-primary: var(--primary-color);
 }
 
-html:not(.zTheme, .mTheme, .aTheme) body{
+/* Default theme primary color - fixed color, no sliders */
+html:not(.petalTheme) {
+  --primary-color: #4a5568;
+  --ui-primary: var(--primary-color);
+}
+
+html.dark:not(.petalTheme) {
+  --primary-color: #a0aec0;
+  --ui-primary: var(--primary-color);
+}
+
+html.petalTheme body {
   background: hsl(var(--primary-hue, 25), 36.36%, 87%)
 }
 
-html.dark:not(.zTheme, .mTheme, .aTheme) body{
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) body {
+  background: #ffffff
+}
+
+html.dark.petalTheme body {
   background: hsl(calc(var(--primary-hue, 10) + 240.5), 38.46%, 20.39%);
 }
 
-html:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-default{
+html.dark:not(.zTheme, .mTheme, .aTheme, .petalTheme) body {
+  background: #000000
+}
+
+html.petalTheme div[role="dialog"]:has(#searchPanel) .bg-default,
+html:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-default {
   --ui-bg: var(--primary-color);
   color: white;
 }
 
-html.dark:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-default{
+html.dark.petalTheme div[role="dialog"]:has(#searchPanel) .bg-default,
+html.dark:not(.zTheme, .mTheme, .aTheme) div[role="dialog"]:has(#searchPanel) .bg-default {
   --ui-bg: var(--primary-color);
 }
 
-html:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
+html.petalTheme .bg-inverted,
+html:not(.zTheme, .mTheme, .aTheme) .bg-inverted {
   --ui-bg-inverted: var(--primary-color);
 }
 
-html.dark:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
+html.dark.petalTheme .bg-inverted,
+html.dark:not(.zTheme, .mTheme, .aTheme) .bg-inverted {
   --ui-bg-inverted: var(--primary-color);
 }
 
@@ -179,21 +316,26 @@ html.dark:not(.zTheme, .mTheme, .aTheme) .bg-inverted{
   }
 }
 
+html.petalTheme .data-\[selected\]\:bg-primary,
 html:not(.zTheme, .mTheme, .aTheme) .data-\[selected\]\:bg-primary {
   &[data-selected] {
     --ui-primary: var(--primary-color);
   }
 }
+html.petalTheme .text-primary,
+html.petalTheme .bg-primary,
 html:not(.zTheme, .mTheme, .aTheme) .text-primary,
-html:not(.zTheme, .mTheme, .aTheme) .bg-primary{
+html:not(.zTheme, .mTheme, .aTheme) .bg-primary {
   --ui-primary: var(--primary-color);
 }
+html.petalTheme .group-data-\[state\=active\]\:bg-primary,
 html:not(.zTheme, .mTheme, .aTheme) .group-data-\[state\=active\]\:bg-primary {
   &:is(:where(.group)[data-state="active"] *) {
     --ui-primary: var(--primary-color);
   }
 }
 
+html.dark.petalTheme .hover\:not-data-\[selected\]\:bg-primary\/20,
 html.dark:not(.zTheme, .mTheme, .aTheme) .hover\:not-data-\[selected\]\:bg-primary\/20 {
   &:hover {
     @media (hover: hover) {
@@ -203,12 +345,14 @@ html.dark:not(.zTheme, .mTheme, .aTheme) .hover\:not-data-\[selected\]\:bg-prima
     }
   }
 }
+html.dark.petalTheme .data-\[highlighted\]\:bg-primary\/20,
 html.dark:not(.zTheme, .mTheme, .aTheme) .data-\[highlighted\]\:bg-primary\/20 {
   &[data-highlighted] {
     --ui-primary: var(--primary-color);
   }
 }
 
+html.dark.petalTheme .data-today\:not-data-\[selected\]\:text-primary,
 html.dark:not(.zTheme, .mTheme, .aTheme) .data-today\:not-data-\[selected\]\:text-primary {
   &[data-today] {
     &:not(*[data-selected]) {
@@ -217,27 +361,28 @@ html.dark:not(.zTheme, .mTheme, .aTheme) .data-today\:not-data-\[selected\]\:tex
   }
 }
 
+html.dark.petalTheme .data-\[selected\]\:bg-primary,
 html.dark:not(.zTheme, .mTheme, .aTheme) .data-\[selected\]\:bg-primary {
   &[data-selected] {
     --ui-primary: var(--primary-color);
   }
 }
+html.dark.petalTheme .text-primary,
+html.dark.petalTheme .bg-primary,
 html.dark:not(.zTheme, .mTheme, .aTheme) .text-primary,
-html.dark:not(.zTheme, .mTheme, .aTheme) .bg-primary{
+html.dark:not(.zTheme, .mTheme, .aTheme) .bg-primary {
   --ui-primary: var(--primary-color);
 }
+html.dark.petalTheme .group-data-\[state\=active\]\:bg-primary,
 html.dark:not(.zTheme, .mTheme, .aTheme) .group-data-\[state\=active\]\:bg-primary {
   &:is(:where(.group)[data-state="active"] *) {
     --ui-primary: var(--primary-color);
   }
 }
 
-html.dark.mTheme body{
-  background-color: #000;
-}
-
-html:not(.zTheme, .mTheme, .aTheme) #navbar .navbar,
-html.mTheme #navbar .navbar {
+html.petalTheme #navbar .navbar,
+html.mTheme #navbar .navbar,
+html:not(.zTheme, .mTheme, .aTheme) #navbar .navbar {
   border: none;
   background-color: #00000000;
   box-shadow: none;
@@ -247,7 +392,7 @@ html.mTheme .boxLink:hover,
 html.mTheme fieldset label,
 html.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
 html.mTheme div[role="dialog"],
-html.mTheme .zLink,
+html.mTheme .themeLink,
 html.mTheme #navbar .navbar .middleItems ul li a:hover,
 html.mTheme .popoverContent,
 html.mTheme #navbar .navbar .homeNavSection,
@@ -296,7 +441,7 @@ html.dark.mTheme .boxLink:hover,
 html.dark.mTheme fieldset label,
 html.dark.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
 html.dark.mTheme div[role="dialog"],
-html.dark.mTheme .zLink,
+html.dark.mTheme .themeLink,
 html.dark.mTheme #navbar .navbar .middleItems ul li a:hover,
 html.dark.mTheme .popoverContent,
 html.dark.mTheme #navbar .navbar .homeNavSection,
@@ -326,6 +471,7 @@ html.dark.mTheme #HomeSocialButtonGroup {
   }
 }
 
+html.aTheme .boxLink:hover,
 html.aTheme .cardShadow,
 html.zTheme .cardShadow {
   background: rgba(255, 255, 255, 0.4);
@@ -354,6 +500,7 @@ html.zTheme .cardShadow {
   }
 }
 
+html.dark.aTheme .boxLink:hover,
 html.dark.aTheme .cardShadow,
 html.dark.zTheme .cardShadow {
   background: rgba(0, 0, 0, 0.4);
@@ -369,14 +516,31 @@ html.dark.zTheme .cardShadow {
   }
 }
 
+/* Aeon theme navbar - solid opaque background */
+html.aTheme #navbar .navbar {
+  background: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  border: #eee 1px solid;
+}
+
+html.dark.aTheme #navbar .navbar {
+  background: rgb(0, 0, 0);
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+  border: #222 1px solid;
+}
+
 html:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel),
 html:not(.aTheme, .zTheme) .navbar div[data-state="open"]:has(div[data-state="open"]) {
-  background-color: #ffffffce;
+  background-color: #ffffff;
 }
 
 html.dark:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel),
 html.dark:not(.aTheme, .zTheme) .navbar div[data-state="open"]:has(div[data-state="open"]) {
-  background-color: #000000ce;
+  background-color: #000000;
 }
 
 html:not(.aTheme, .zTheme) #HomeSocialButtonGroup {
@@ -413,33 +577,29 @@ html.mTheme #navbar .navbar .themeNavSection:hover {
   scale: 1.04;
   transform: translateX(-0.25rem);
 }
-
-html:not(.aTheme, .zTheme) .varela{
-  font-style: italic;
-}
-
-html:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
-html:not(.aTheme, .zTheme, .mTheme) fieldset label,
-html:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
-html:not(.aTheme, .zTheme, .mTheme) div[role="dialog"],
-html:not(.aTheme, .zTheme, .mTheme) .zLink,
-html:not(.aTheme, .zTheme, .mTheme) .popoverContent,
-html:not(.aTheme, .zTheme, .mTheme) .cardShadow,
-html:not(.aTheme, .zTheme, .mTheme) .glass-card{
+html.petalTheme .boxLink:hover,
+html.petalTheme fieldset label,
+html.petalTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
+html.petalTheme div[role="dialog"],
+html.petalTheme .themeLink,
+html.petalTheme .popoverContent,
+html.petalTheme .cardShadow,
+html.petalTheme .glass-card {
   background: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border: #eee 1px solid;
   border-radius: 1rem;
+  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
 }
 
-html.dark:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
-html.dark:not(.aTheme, .zTheme, .mTheme) fieldset label,
-html.dark:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
-html.dark:not(.aTheme, .zTheme, .mTheme) div[role="dialog"],
-html.dark:not(.aTheme, .zTheme, .mTheme) .zLink,
-html.dark:not(.aTheme, .zTheme, .mTheme) .popoverContent,
-html.dark:not(.aTheme, .zTheme, .mTheme) .cardShadow,
-html.dark:not(.aTheme, .zTheme, .mTheme) .glass-card{
+html.dark.petalTheme .boxLink:hover,
+html.dark.petalTheme fieldset label,
+html.dark.petalTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
+html.dark.petalTheme div[role="dialog"],
+html.dark.petalTheme .themeLink,
+html.dark.petalTheme .popoverContent,
+html.dark.petalTheme .cardShadow,
+html.dark.petalTheme .glass-card {
   box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
      0 0 0 1px hsla(230, 13%, 9%, 0.075),
      0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
@@ -447,4 +607,155 @@ html.dark:not(.aTheme, .zTheme, .mTheme) .glass-card{
      0 3.5px 6px hsla(230, 13%, 9%, 0.09);
   background: rgb(0,0,0);
   border: #222 1px solid;
+  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+}
+
+html:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
+html:not(.aTheme, .zTheme, .mTheme) fieldset label,
+html:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
+html:not(.aTheme, .zTheme, .mTheme) div[role="dialog"],
+html:not(.aTheme, .zTheme, .mTheme) .themeLink,
+html:not(.aTheme, .zTheme, .mTheme) .popoverContent,
+html:not(.aTheme, .zTheme, .mTheme) .cardShadow,
+html:not(.aTheme, .zTheme, .mTheme) .glass-card {
+  background: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  border: #eee 1px solid;
+  border-radius: 1rem;
+  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+}
+
+html.dark:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
+html.dark:not(.aTheme, .zTheme, .mTheme) fieldset label,
+html.dark:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
+html.dark:not(.aTheme, .zTheme, .mTheme) div[role="dialog"],
+html.dark:not(.aTheme, .zTheme, .mTheme) .themeLink,
+html.dark:not(.aTheme, .zTheme, .mTheme) .popoverContent,
+html.dark:not(.aTheme, .zTheme, .mTheme) .cardShadow,
+html.dark:not(.aTheme, .zTheme, .mTheme) .glass-card {
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+     0 0 0 1px hsla(230, 13%, 9%, 0.075),
+     0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+     0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+     0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+  background: rgb(0,0,0);
+  border: #222 1px solid;
+  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+}
+
+/*=-------------------------------------------------------------------
+//== Navbar styles with CSS variables for Petal/Default themes ==//
+
+/* Zarlasht theme navbar */
+.zTheme #navbar {
+  backdrop-filter: blur(6px) !important;
+}
+
+.zTheme #navbar .navbar {
+  border: 1px solid color-mix(in oklab, #000 15%, transparent);
+  background-color: color-mix(in oklab, #000 10%, transparent);
+}
+
+.dark.zTheme #navbar .navbar {
+  border: 1px solid color-mix(in oklab, #fff 15%, transparent) !important;
+  background-color: color-mix(in oklab, #fff 15%, transparent) !important;
+}
+
+/* Home/Search nav sections - Petal theme */
+html.petalTheme #navbar .navbar .homeNavSection {
+  background-color: #fff;
+}
+
+html.dark.petalTheme #navbar .navbar .homeNavSection {
+  background-color: #000;
+}
+
+/* Home/Search nav sections - Default theme */
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .homeNavSection {
+  background-color: #fff;
+}
+
+html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .homeNavSection {
+  background-color: #000;
+}
+
+/* Theme nav section - Petal theme */
+html.petalTheme #navbar .navbar .themeNavSection {
+  background-color: #fff;
+}
+
+html.dark.petalTheme #navbar .navbar .themeNavSection {
+  background-color: #000;
+}
+
+/* Theme nav section - Default theme */
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .themeNavSection {
+  background-color: #fff;
+}
+
+html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .themeNavSection {
+  background-color: #000;
+}
+
+/* Middle nav links - Petal theme */
+html.petalTheme #navbar .navbar .middleItems ul li a {
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+html.dark.petalTheme #navbar .navbar .middleItems ul li a {
+  background-color: #000;
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+}
+
+/* Middle nav links - Default theme */
+html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a {
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a {
+  background-color: #000;
+  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+}
+
+/* Italic text for nav items */
+html.petalTheme #navbar .navbar .middleItems ul li a:not(.themeLink) span,
+html:not(.aTheme, .zTheme) #navbar .navbar .middleItems ul li a:not(.themeLink) span {
+  font-style: italic;
+}
+
+/* Search panel styling */
+html.petalTheme div[role="dialog"]:has(#searchPanel) .themeLink,
+html:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel) .themeLink {
+  background-color: hsl(var(--primary-hue, 10), calc(var(--primary-sat, 39) * 0.5%), 97%);
+}
+
+html.dark.petalTheme div[role="dialog"]:has(#searchPanel) .themeLink,
+html.dark:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel) .themeLink {
+  background-color: hsl(var(--primary-hue, 10), calc(var(--primary-sat, 39) * 0.5%), 8%);
+}
+
+html.aTheme #navbar .navbar .homeNavSection,
+html.aTheme #navbar .navbar .themeNavSection {
+  background: #eee;
+  border: #ddd 1px solid;
+}
+
+html.dark.aTheme #navbar .navbar .homeNavSection,
+html.dark.aTheme #navbar .navbar .themeNavSection {
+  background: #111;
+  border: #222 1px solid;
+}
+
+html.aTheme #navbar .navbar .middleItems div.absolute ul li a:hover {
+  background-color: #eee;
 }
