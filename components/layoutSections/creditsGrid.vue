@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from './creditsButton.vue'
+import Button from '~/components/layoutSections/CreditsButton.vue'
 
 interface Item {
   url: string
@@ -78,11 +78,10 @@ const Rows = [
                 : rowIndex === 0 && itemIndex === 3 ? 'border-y border-r border-accented'
                   : rowIndex === 0 ? 'border-r border-y border-accented'
                     : itemIndex === 0 ? 'border-b border-x border-accented'
-                      : 'border-r border-b border-accented'"
-          :rounded="rowIndex === 0 && itemIndex === 0 ? 'rounded-tl-2xl'
-            : rowIndex === 0 && itemIndex === 3 ? 'rounded-tr-2xl'
-              : rowIndex === 7 && itemIndex === 0 ? 'rounded-bl-2xl'
-                : rowIndex === 7 && itemIndex === 3 ? 'rounded-br-2xl' : ''" />
+                      : 'border-r border-b border-accented'" :rounded="rowIndex === 0 && itemIndex === 0 ? 'rounded-tl-2xl'
+                        : rowIndex === 0 && itemIndex === 3 ? 'rounded-tr-2xl'
+                          : rowIndex === 7 && itemIndex === 0 ? 'rounded-bl-2xl'
+                            : rowIndex === 7 && itemIndex === 3 ? 'rounded-br-2xl' : ''" />
       </template>
     </div>
   </div>
