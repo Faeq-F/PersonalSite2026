@@ -1,1 +1,0 @@
-function n(l,c,m){let t={maxAttempts:20,interval:100,...m},a=0;function i(){var r;let e=l();e==null||t.expectedValue!==void 0&&e!==t.expectedValue?a<t.maxAttempts?(a++,setTimeout(i,t.interval)):(r=t.onError)==null||r.call(t,Error(t.errorMessage||`[maz-ui](checkAvailability) Nothing found after ${t.maxAttempts} attempts`)):c(e)}i()}export{n as c};

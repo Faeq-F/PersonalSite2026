@@ -1,1 +1,0 @@
-import{J as t,A as e}from"./HrAcYcC5.js";var r="mazLinkComponent";function i(){var n,o;return t(r,void 0)||((o=(n=e())==null?void 0:n.appContext.components)==null?void 0:o.RouterLink)||(console.warn('You are using the "to" property but no router component was found (NuxtLink or RouterLink), falling back to anchor ("<a />" - HTMLAnchorElement) tag'),"a")}export{i as r};
