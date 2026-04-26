@@ -1,177 +1,87 @@
 <script lang="ts" setup>
-import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
 import contentPanels from '~/components/layoutSections/contentPanels.vue';
-import type { TabsItem } from '@nuxt/ui'
-import { ref, provide, computed } from 'vue';
-import SkillsInput from '~/components/skillsInput.vue';
-
-import { useRoute } from 'nuxt/app';
-const route = useRoute()
+import PortfolioFilters from '~/components/portfolio/PortfolioFilters.vue'
+import '~/assets/css/portfolio.css'
+import { ref, computed, onMounted } from 'vue';
 
 import { useSettingsStore } from '~/stores/settings'
 const settings = useSettingsStore()
-const { defaultColor, zarlashtTheme, aeonTheme, mirageTheme } = storeToRefs(settings)
+const { petalTheme, defaultColor, zarlashtTheme, aeonTheme, mirageTheme } = storeToRefs(settings)
+
+// Import DB
+import { db, type Project, type Certificate } from '~/assets/scripts/db';
 
 // Check if on default theme
-const isDefaultTheme = computed(() => !zarlashtTheme.value && !aeonTheme.value && !mirageTheme.value)
+const isPetalTheme = computed(() => petalTheme.value && !zarlashtTheme.value && !aeonTheme.value && !mirageTheme.value)
 
-// Portfolio data - all projects with their images and details
-const portfolioItems = ref([
-  {
-    id: 'quokka',
-    name: 'Quokka',
-    type: 'project',
-    images: [
-      'https://faeq-f.github.io/Quokka/media/AppScreenshots/AllApps.png',
-      '/PersonalSite2026/media/QuokkaLight.png',
-      'https://faeq-f.github.io/Quokka/media/AppScreenshots/AllApps.png',
-      '/PersonalSite2026/media/QuokkaLight.png',
-    ],
-    description: 'A collection of productivity applications',
-    skills: ['C#', 'WPF', 'XAML', '.NET'],
-    startDate: new Date('2023-01-01'),
-    endDate: new Date('2024-12-31'),
-  },
-  {
-    id: 'personal-site',
-    name: 'Personal Site 2025',
-    type: 'project',
-    images: [
-      '/PersonalSite2026/media/portfolio/site1.png',
-      '/PersonalSite2026/media/portfolio/site2.png',
-    ],
-    description: 'My personal portfolio website built with Nuxt 3',
-    skills: ['Vue.js', 'Nuxt', 'TypeScript', 'Tailwind CSS'],
-    startDate: new Date('2024-01-01'),
-    endDate: new Date('2024-03-31'),
-  },
-  {
-    id: 'bsc-degree',
-    name: 'BSc Hons. Computer Science (Software Engineering)',
-    type: 'certificate',
-    images: [
-      '/PersonalSite2026/media/portfolio/Faeq Faisal Certificate front side.jpg',
-      '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 1.png',
-      '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 2.png'
-    ],
-    description: 'First Class Honours degree from the University of Westminster',
-    skills: ['Software Engineering', 'Computer Science'],
-    awarded: new Date('2024-07-01'),
-  },
-  // Add more items as needed - placeholders for the rest
-  {
-    id: 'project-2',
-    name: 'E-Commerce Platform',
-    type: 'project',
-    images: [
-      'https://picsum.photos/400/600?random=1',
-      'https://picsum.photos/400/300?random=2',
-    ],
-    description: 'Full-stack e-commerce solution with payment integration',
-    skills: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    startDate: new Date('2023-06-01'),
-    endDate: new Date('2023-12-31'),
-  },
-  {
-    id: 'project-3',
-    name: 'AI Chat Assistant',
-    type: 'project',
-    images: [
-      'https://picsum.photos/400/500?random=3',
-      'https://picsum.photos/400/400?random=4',
-      'https://picsum.photos/400/350?random=5',
-    ],
-    description: 'Conversational AI powered by OpenAI GPT',
-    skills: ['Python', 'FastAPI', 'OpenAI', 'WebSocket'],
-    startDate: new Date('2024-01-01'),
-    endDate: new Date('2024-06-30'),
-  },
-  {
-    id: 'project-4',
-    name: 'Mobile Fitness App',
-    type: 'project',
-    images: [
-      'https://picsum.photos/400/700?random=6',
-      'https://picsum.photos/400/450?random=7',
-    ],
-    description: 'Cross-platform fitness tracking application',
-    skills: ['React Native', 'Firebase', 'HealthKit'],
-    startDate: new Date('2023-03-01'),
-    endDate: new Date('2023-08-31'),
-  },
-  {
-    id: 'project-5',
-    name: 'Data Visualization Dashboard',
-    type: 'project',
-    images: [
-      'https://picsum.photos/400/550?random=8',
-      'https://picsum.photos/400/380?random=9',
-      'https://picsum.photos/400/420?random=10',
-    ],
-    description: 'Real-time analytics dashboard with D3.js',
-    skills: ['D3.js', 'Vue.js', 'PostgreSQL', 'WebSocket'],
-    startDate: new Date('2023-09-01'),
-    endDate: new Date('2024-02-29'),
-  },
-  {
-    id: 'project-6',
-    name: 'Blockchain Wallet',
-    type: 'project',
-    images: [
-      'https://picsum.photos/400/480?random=11',
-      'https://picsum.photos/400/520?random=12',
-    ],
-    description: 'Secure cryptocurrency wallet with multi-sig support',
-    skills: ['Solidity', 'Web3.js', 'React', 'Ethereum'],
-    startDate: new Date('2022-11-01'),
-    endDate: new Date('2023-05-31'),
-  },
-  {
-    id: 'project-7',
-    name: 'Video Streaming Platform',
-    type: 'project',
-    images: [
-      'https://picsum.photos/400/640?random=13',
-      'https://picsum.photos/400/360?random=14',
-      'https://picsum.photos/400/400?random=15',
-    ],
-    description: 'Netflix-like streaming service with adaptive bitrate',
-    skills: ['AWS', 'FFmpeg', 'Node.js', 'React'],
-    startDate: new Date('2023-07-01'),
-    endDate: new Date('2024-01-31'),
-  },
-  {
-    id: 'project-8',
-    name: 'IoT Home Automation',
-    type: 'project',
-    images: [
-      'https://picsum.photos/400/580?random=16',
-      'https://picsum.photos/400/440?random=17',
-    ],
-    description: 'Smart home system with voice control integration',
-    skills: ['Raspberry Pi', 'MQTT', 'Python', 'Alexa Skills'],
-    startDate: new Date('2022-08-01'),
-    endDate: new Date('2023-02-28'),
-  },
-])
+// Placeholder image
+const PLACEHOLDER_IMAGE = '/PersonalSite2026/media/placeholder.png'
 
-// Flatten all images for waterfall layout
+// Portfolio data loaded from DB
+const portfolioItems = ref<Array<Project | Certificate & { type: 'project' | 'certificate', id: string }>>([])
+
+onMounted(async () => {
+  // Load projects from DB
+  const dbProjects = await db.projects.toArray()
+  const projects = dbProjects.map(p => ({
+    ...p,
+    type: 'project' as const,
+    id: p.name
+  }))
+
+  // Load certificates from DB
+  const dbCerts = await db.certificates.toArray()
+  const certs = dbCerts.map(c => ({
+    ...c,
+    type: 'certificate' as const,
+    id: c.name,
+    awarded: c.awarded
+  }))
+
+  portfolioItems.value = [...projects, ...certs]
+})
+
+// Flatten all images for waterfall layout (with placeholder fallback)
+const imageSeed = ref(0)
+const itemOrderSeed = ref(0)
 const filteredItems = computed(() => {
-  return portfolioItems.value.flatMap(item =>
-    item.images.map((image, index) => ({
+  const seed = imageSeed.value
+  const orderSeed = itemOrderSeed.value
+  // Deterministic shuffle based on orderSeed using Fisher-Yates
+  const shuffledItems = [...portfolioItems.value]
+  for (let i = shuffledItems.length - 1; i > 0; i--) {
+    // Use a simple hash of orderSeed + i for deterministic random
+    const hash = ((orderSeed * 9301 + 49297) * i) % 233280
+    const j = hash % (i + 1)
+      ;[shuffledItems[i], shuffledItems[j]] = [shuffledItems[j], shuffledItems[i]]
+  }
+  return shuffledItems.map(item => {
+    // Fallback to placeholder if no images
+    const images = (item.images && item.images.length > 0) ? item.images : [PLACEHOLDER_IMAGE]
+    // Deterministic random based on item name and seed
+    let hash = 0
+    for (const char of item.id) {
+      hash = (hash + char.charCodeAt(0)) % 10000
+    }
+    const randomIndex = ((hash + seed) % images.length + images.length) % images.length
+    return {
       ...item,
-      imageIndex: index,
-      imageUrl: image,
-      uniqueId: `${item.id}-${index}`
-    }))
-  )
+      imageIndex: randomIndex,
+      imageUrl: images[randomIndex],
+      uniqueId: item.id
+    }
+  })
 })
 
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
-const df = new DateFormatter('en-US', {
-  dateStyle: 'medium'
-})
-const calendarVal = ref<{ start: CalendarDate | undefined, end: CalendarDate | undefined }>({ start: undefined, end: undefined })
+// Randomize image selection
+const randomizeImages = () => {
+  imageSeed.value = Math.floor(Math.random() * 10000)
+}
+
+// Randomize item order
+const randomizeItems = () => {
+  itemOrderSeed.value = Math.floor(Math.random() * 10000)
+}
 
 // Helper functions for formatting dates
 const formatDate = (item: any) => {
@@ -206,70 +116,15 @@ const getBentoClass = (index: number): string => {
   }
 }
 
-// Mutex for popovers - only one popup can be "opening" at a time
-const activePopupId = ref<string | null>(null)
-const popupOpenStates = ref<Record<string, boolean>>({})
-
-// Delay constants
-const POPUP_OPEN_DELAY = 150 // ms before opening
-const POPUP_CLOSE_DELAY = 100 // ms before closing
-
-// Set up hover handlers with mutex
-const handleMouseEnter = (itemId: string) => {
-  // Clear any existing timeout for this item
-  if (popupTimeouts[itemId]) {
-    clearTimeout(popupTimeouts[itemId])
-  }
-
-  // If another popup is opening or open, don't open this one immediately
-  if (activePopupId.value && activePopupId.value !== itemId) {
-    // Close the other popup first
-    popupOpenStates.value[activePopupId.value] = false
-  }
-
-  // Set this as the active popup
-  activePopupId.value = itemId
-
-  // Open after delay
-  popupTimeouts[itemId] = setTimeout(() => {
-    popupOpenStates.value[itemId] = true
-  }, POPUP_OPEN_DELAY)
-}
-
-const handleMouseLeave = (itemId: string) => {
-  if (popupTimeouts[itemId]) {
-    clearTimeout(popupTimeouts[itemId])
-  }
-
-  popupTimeouts[itemId] = setTimeout(() => {
-    popupOpenStates.value[itemId] = false
-    if (activePopupId.value === itemId) {
-      activePopupId.value = null
-    }
-  }, POPUP_CLOSE_DELAY)
-}
-
-// Track timeouts
-const popupTimeouts: Record<string, ReturnType<typeof setTimeout>> = {}
-
 // UTabs filter options and state
-const contributorsOptions = ref<TabsItem[]>([
-  { label: 'All', value: 'all', icon: 'i-lucide-gallery-vertical-end' },
-  { label: 'Solo', value: 'solo', icon: 'i-lucide-user' },
-  { label: 'Team', value: 'team', icon: 'i-lucide-users' }
-])
-const contributorsActive = ref('all')
 
-const certsOptions = ref<TabsItem[]>([
-  { label: 'All', icon: 'i-lucide-gallery-vertical-end', value: 'all' },
-  { label: 'Projects', icon: 'i-lucide-square-kanban', value: 'project' },
-  { label: 'Certificates', icon: 'i-lucide-file-badge', value: 'certificate' }
-])
-const certsActive = ref('all')
+// Track open popover state
+const openPopovers = ref<string[]>([]);
 
-// Carousel settings
-const CarouselBG = ref(true)
-const CarouselScroll = ref(true)
+const isPopoverOpen = (id: string) => openPopovers.value.includes(id);
+const closePopover = (id: string) => {
+  openPopovers.value = openPopovers.value.filter(pid => pid !== id);
+};
 
 </script>
 
@@ -287,60 +142,21 @@ const CarouselScroll = ref(true)
     </template>
 
     <template #left-panel-content>
-      <div class="flex flex-col items-start">
-        <MazAnimatedElement direction="up" :duration="700" :delay="900">
-          <UTabs :content="false" :items="contributorsOptions"
-            class="mx-auto w-fit" style="--ui-primary: #4a5565"
-            v-model="contributorsActive"
-            :ui="{ trigger: 'self-start', label: 'dark:text-white', leadingIcon: 'dark:text-white' }" />
-        </MazAnimatedElement>
-        <MazAnimatedElement direction="up" :duration="700" :delay="700">
-          <SkillsInput
-            @change="(e) => console.log(JSON.parse(JSON.stringify(e)))" />
-        </MazAnimatedElement>
-        <MazAnimatedElement direction="up" :duration="700" :delay="800">
-          <UTabs :content="false" :items="certsOptions" class="mx-auto w-fit"
-            style="--ui-primary: #4a5565" orientation="vertical"
-            v-model="certsActive"
-            :ui="{ trigger: 'self-start', label: 'dark:text-white', leadingIcon: 'dark:text-white' }" />
-        </MazAnimatedElement>
-        <MazAnimatedElement direction="up" :duration="700" :delay="950"
-          class="flex justify-center mt-4">
-          <UPopover>
-            <UButton color="neutral" variant="soft" icon="i-lucide-calendar">
-              <template v-if="calendarVal.start">
-                <template v-if="calendarVal.end">
-                  {{ df.format(calendarVal.start.toDate(getLocalTimeZone())) }}
-                  -
-                  {{ df.format(calendarVal.end.toDate(getLocalTimeZone())) }}
-                </template>
-
-                <template v-else>
-                  {{ df.format(calendarVal.start.toDate(getLocalTimeZone())) }}
-                </template>
-              </template>
-              <template v-else>
-                Pick a date range
-              </template>
-            </UButton>
-            <template #content>
-              <UCalendar v-model="(calendarVal as any)" class="p-2"
-                color="primary" :number-of-months="2" range />
-            </template>
-          </UPopover>
-        </MazAnimatedElement>
-      </div>
+      <PortfolioFilters />
     </template>
 
     <template #left-panel-footer>
-      <div class=" flex items-start justify-between flex-col gap-4"
-        :style="isDefaultTheme ? { '--ui-primary': `hsl(${defaultColor.h}, ${defaultColor.s}%, ${defaultColor.l}%)` } : {}">
-        <USwitch v-model="CarouselBG"
-          :color="isDefaultTheme ? 'primary' : 'neutral'"
-          label="Carousel Backgrounds" size="sm" />
-        <USwitch v-model="CarouselScroll"
-          :color="isDefaultTheme ? 'primary' : 'neutral'" size="sm"
-          description="(on hover)" label="Carousel Scrolling" />
+      <div class="flex flex-col gap-2">
+        <UButton color="neutral" variant="soft" icon="i-lucide-shuffle"
+          @click="randomizeImages"
+          :style="isPetalTheme ? { '--ui-primary': `hsl(${defaultColor.h}, ${defaultColor.s}%, ${defaultColor.l}%)` } : {}">
+          Randomize Images
+        </UButton>
+        <UButton color="neutral" variant="soft" icon="i-lucide-arrow-up-down"
+          @click="randomizeItems"
+          :style="isPetalTheme ? { '--ui-primary': `hsl(${defaultColor.h}, ${defaultColor.s}%, ${defaultColor.l}%)` } : {}">
+          Randomize Order
+        </UButton>
       </div>
     </template>
 
@@ -348,16 +164,14 @@ const CarouselScroll = ref(true)
       <!-- Bento/Brick Grid Layout -->
       <div class="bento-grid p-4">
         <div v-for="(item, index) in filteredItems" :key="item.uniqueId"
-          :class="['bento-item', getBentoClass(index)]"
-          @mouseenter="handleMouseEnter(item.uniqueId)"
-          @mouseleave="handleMouseLeave(item.uniqueId)">
-          <UPopover mode="hover" :ui="{ content: 'w-80 p-0' }"
-            class="w-full h-full" :open="popupOpenStates[item.uniqueId]"
-            :open-delay="0" :close-delay="0"
-            @update:open="(val: boolean) => popupOpenStates[item.uniqueId] = val">
+          :class="['bento-item', getBentoClass(index)]">
+          <UPopover :open="isPopoverOpen(item.uniqueId)"
+            :ui="{ content: 'w-80 p-0' }" class="w-full h-full"
+            :popper="{ placement: 'bottom' }"
+            @update:open="(val: boolean) => val ? openPopovers.push(item.uniqueId) : closePopover(item.uniqueId)">
             <template #default>
               <div
-                class="relative group cursor-pointer overflow-hidden rounded-xl w-full h-full bg-[var(--ui-bg)] cardShadow">
+                class="relative group overflow-hidden rounded-xl w-full h-full bg-[var(--ui-bg)] cardShadow clickable">
                 <img :src="item.imageUrl" :alt="item.name"
                   class="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
                   loading="lazy" />
@@ -382,26 +196,28 @@ const CarouselScroll = ref(true)
                       </h3>
                       <p class="text-xs text-muted">{{ formatDate(item) }}</p>
                     </div>
-                    <UBadge
-                      :color="item.type === 'certificate' ? 'warning' : 'primary'"
-                      variant="soft" size="xs">
-                      {{ item.type === 'certificate' ? 'Certificate' :
-                        'Project' }}
-                    </UBadge>
+                    <div class="flex items-center gap-2">
+                      <UBadge variant="soft" size="sm">
+                        {{ item.type === 'certificate' ? 'Certificate' :
+                          'Project' }}
+                      </UBadge>
+                      <UButton variant="ghost" size="xs" icon="i-lucide-x"
+                        @click="closePopover(item.uniqueId)" />
+                    </div>
                   </div>
                 </template>
 
                 <p class="text-sm text-muted mb-3">{{ item.description }}</p>
 
-                <div class="flex flex-wrap gap-1">
-                  <span v-for="skill in item.skills.slice(0, 6)" :key="skill"
-                    class="text-xs px-2 py-1 rounded-full bg-[var(--ui-bg-elevated)]">
-                    {{ skill }}
-                  </span>
-                  <span v-if="item.skills.length > 6"
-                    class="text-xs px-2 py-1 text-muted">
-                    +{{ item.skills.length - 6 }}
-                  </span>
+                <div v-if="item.skills?.filter(s => s).length"
+                  class="flex flex-wrap gap-1">
+                  <UTooltip v-for="skill in item.skills.filter(s => s)"
+                    :key="skill" :text="skill">
+                    <nuxt-link :to="'/skill/' + skill.replaceAll(' ', '~')"
+                      class="text-xs px-2 py-1 rounded-full bg-[var(--ui-bg-elevated)] text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] transition-colors">
+                      {{ skill }}
+                    </nuxt-link>
+                  </UTooltip>
                 </div>
 
                 <template #footer>
@@ -423,76 +239,3 @@ const CarouselScroll = ref(true)
 
   </contentPanels>
 </template>
-
-<style scoped>
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 200px;
-  grid-auto-flow: dense;
-  gap: 1rem;
-}
-
-.bento-item {
-  grid-column: span 1;
-  grid-row: span 1;
-}
-
-.bento-item.span-2-cols {
-  grid-column: span 2;
-}
-
-.bento-item.span-2-rows {
-  grid-row: span 2;
-}
-
-.bento-item.span-both {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
-@media (max-width: 1200px) {
-  .bento-grid {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 180px;
-  }
-
-  .bento-item.span-2-cols {
-    grid-column: span 2;
-  }
-
-  .bento-item.span-both {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-}
-
-@media (max-width: 768px) {
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 150px;
-  }
-
-  .bento-item.span-2-cols,
-  .bento-item.span-both {
-    grid-column: span 2;
-  }
-
-  .bento-item.span-2-rows,
-  .bento-item.span-both {
-    grid-row: span 2;
-  }
-}
-
-@media (max-width: 480px) {
-  .bento-grid {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 200px;
-  }
-
-  .bento-item.span-2-cols,
-  .bento-item.span-both {
-    grid-column: span 1;
-  }
-}
-</style>

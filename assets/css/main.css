@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica:ital@0;1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
 @import "tailwindcss";
 @import "@nuxt/ui";
 @import "./layout.css";
@@ -85,6 +86,40 @@ body{
 
 .zTheme *{
   font-family: "IM Fell DW Pica", serif !important;
+}
+
+
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) *{
+  font-family: "EB Garamond", serif;
+  font-optical-sizing: auto;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-style: italic !important;
+}
+
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) .varela,
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) .outfit {
+  color:#000;
+  html.dark &{
+    color: #fff;
+  }
+}
+
+html .varela{
+  font-style: italic !important;
+}
+
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) .varela {
+  font-style: normal !important;
+  font-weight: 600;
+}
+
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) .homeTitle {
+  font-style: normal !important;
+}
+
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme) .homeTitle * {
+  font-style: normal !important;
 }
 
 /* Dark-mode specific styles */
@@ -246,19 +281,28 @@ html.dark {
 
 .boxLink{
   text-decoration: underline;
-
-  &:hover {
-    border-radius: 0.5rem;
+  transition: color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms;
+  &:hover{
+    border: none;
     padding: 0.5rem;
-    filter: brightness(0.5);
-    box-shadow: #00000014 0 5px 15px, #191c2133 0 15px 35px -5px, #ffffff12 0 0 0 1px;
+    border-radius: 0.5rem;
   }
 }
 
-html:not(.mTheme, .aTheme, .zTheme) .boxLink{
-  &:hover {
-    filter: brightness(1);
-  }
+html:not(.zTheme, .mTheme, .aTheme) .boxLink{
+  background: transparent;
+  box-shadow: none;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  transition: color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+}
+
+html.zTheme .boxLink:hover,
+html.mTheme .boxLink:hover {
+  border: 1px solid var(--primary-color);
+  padding: 0.5rem;
+  filter: brightness(0.5) !important;
+  box-shadow: #00000014 0 5px 15px, #191c2133 0 15px 35px -5px, #ffffff12 0 0 0 1px;
 }
 
 .ScrollBlur {

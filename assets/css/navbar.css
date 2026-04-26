@@ -1,0 +1,81 @@
+/* Zarlasht theme navbar - unique styles */
+.zTheme #navbar {
+  backdrop-filter: blur(6px) !important;
+}
+
+.zTheme #navbar .navbar {
+  border: 1px solid color-mix(in oklab, #000 15%, transparent);
+  background-color: color-mix(in oklab, #000 10%, transparent);
+}
+
+.dark.zTheme #navbar .navbar {
+  border: 1px solid color-mix(in oklab, #fff 15%, transparent) !important;
+  background-color: color-mix(in oklab, #fff 15%, transparent) !important;
+}
+
+/* Zarlasht theme nav links */
+.zTheme #navbar .navbar .middleItems ul li a {
+  background-color: #f6f7fa;
+}
+
+.dark.zTheme #navbar .navbar .middleItems ul li a {
+  background-color: #0e0d0d;
+}
+
+/* Border radius for about/cv links */
+html.petalTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/about"],
+html:not(.aTheme, .zTheme, .mTheme, .petalTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/about"],
+html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/about"] {
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+html.petalTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/cv"],
+html:not(.aTheme, .zTheme, .mTheme, .petalTheme) #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/cv"],
+html.zTheme #navbar .navbar .middleItems ul li a[href="/PersonalSite2026/cv"] {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+/* Theme controls styling */
+html.petalTheme #themeControls label,
+html.petalTheme #themeControls p,
+html:not(.aTheme, .zTheme) #themeControls label,
+html:not(.aTheme, .zTheme) #themeControls p {
+  font-size: 0.7rem !important;
+}
+
+/* Search panel styling */
+html.petalTheme div[role="dialog"]:has(#searchPanel) .themeLink,
+html:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel) .themeLink {
+  background-color: hsl(var(--primary-hue, 10), calc(var(--primary-sat, 39) * 0.5%), 97%);
+}
+
+html.dark.petalTheme div[role="dialog"]:has(#searchPanel) .themeLink,
+html.dark:not(.aTheme, .zTheme) div[role="dialog"]:has(#searchPanel) .themeLink {
+  background-color: hsl(var(--primary-hue, 10), calc(var(--primary-sat, 39) * 0.5%), 8%);
+}
+
+/* Navbar link text colors */
+html.petalTheme #navbar .navbar a,
+html:not(.aTheme, .zTheme) #navbar .navbar a {
+  &:hover{
+    color: #000 !important;
+  }
+}
+
+html.dark.petalTheme #navbar .navbar a,
+html.dark:not(.aTheme, .zTheme) #navbar .navbar a {
+  &:hover{
+    color: #fff !important;
+  }
+}
+
+/* Zarlasht theme link text colors */
+.zTheme #navbar .navbar a {
+  color: #000 !important;
+}
+
+.dark.zTheme #navbar .navbar a {
+  color: #fff !important;
+}

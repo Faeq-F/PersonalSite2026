@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
+import WelcomeColorPicker from '~/components/welcome/WelcomeColorPicker.vue'
 import type { TabsItem } from '@nuxt/ui'
 import { useSettingsStore } from '~/stores/settings'
 
@@ -13,13 +14,14 @@ const {
 } = useTheme()
 
 // Use store state
-const { zarlashtTheme, aeonTheme, mirageTheme, bgAnimation, defaultColor } = storeToRefs(settings)
+const { petalTheme, zarlashtTheme, aeonTheme, mirageTheme, bgAnimation, defaultColor } = storeToRefs(settings)
 
 const selectedMode = ref<'light' | 'dark' | 'system'>('system')
 const selectedTheme = ref('default')
 
 const themeTabs = ref<TabsItem[]>([
   { label: 'Default', value: 'default' },
+  { label: 'Petal', value: 'petal' },
   { label: 'Aeon', value: 'aeon' },
   { label: 'Mirage', value: 'mirage' },
   { label: 'Zarlasht', value: 'zarlasht' }
@@ -28,6 +30,8 @@ const themeTabs = ref<TabsItem[]>([
 watch(selectedTheme, (newVal) => {
   if (newVal === 'default') {
     settings.clearThemes()
+  } else if (newVal === 'petal') {
+    settings.setPetalTheme(true)
   } else if (newVal === 'aeon') {
     settings.setAeonTheme(true)
   } else if (newVal === 'mirage') {
@@ -43,34 +47,36 @@ watch(selectedMode, (newMode) => {
 })
 
 // Sync theme tabs with store state
-watch([zarlashtTheme, aeonTheme, mirageTheme], ([z, a, m]) => {
-  if (z) selectedTheme.value = 'zarlasht'
+watch([petalTheme, zarlashtTheme, aeonTheme, mirageTheme], ([p, z, a, m]) => {
+  if (p) selectedTheme.value = 'petal'
+  else if (z) selectedTheme.value = 'zarlasht'
   else if (a) selectedTheme.value = 'aeon'
   else if (m) selectedTheme.value = 'mirage'
-  else selectedTheme.value = 'default'
+  else selectedTheme.value = 'default' // No theme active
 })
 
-// Track if we're on default theme for bg animation logic
-const isDefaultTheme = computed(() => !zarlashtTheme.value && !aeonTheme.value && !mirageTheme.value)
+// Track if we're on petal theme (custom colors)
+const isPetalTheme = computed(() => petalTheme.value)
 
 // Calculate primary color with dark mode offset
 const primaryColorStyle = computed(() => {
-  if (selectedTheme.value !== 'default') return {}
+  if (selectedTheme.value !== 'petal') return {}
   const isDark = selectedMode.value === 'dark' || (selectedMode.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
   const hue = isDark ? defaultColor.value.h + 240 : defaultColor.value.h
   return { '--ui-primary': `hsl(${hue}, ${defaultColor.value.s}%, ${defaultColor.value.l}%)` }
 })
 
-// Turn off bg animation when default theme is active, enable when switching FROM default
-let previousWasDefault = true
-watch(isDefaultTheme, (isDefault) => {
-  if (isDefault) {
+// Turn off bg animation when petal or default theme is active
+let previousWasPetalOrDefault = false
+watch([isPetalTheme, selectedTheme], ([isPetal, theme]) => {
+  const isDefault = theme === 'default'
+  if (isPetal || isDefault) {
     bgAnimation.value = false
-  } else if (previousWasDefault) {
-    // Switched FROM default TO a theme - auto-enable
+  } else if (previousWasPetalOrDefault) {
+    // Switched FROM petal/default TO another theme - auto-enable
     bgAnimation.value = true
   }
-  previousWasDefault = isDefault
+  previousWasPetalOrDefault = isPetal || isDefault
 })
 
 function enterSite() {
@@ -84,9 +90,13 @@ function resetColor() {
 
 // Sync initial theme state with HTML classes
 onMounted(() => {
+  // Reset to system theme instead of loading persisted preference
+  colorMode.value = 'system'
   settings.syncFromHtml()
   const html = document.documentElement
-  if (html.classList.contains('zTheme')) {
+  if (html.classList.contains('petalTheme')) {
+    selectedTheme.value = 'petal'
+  } else if (html.classList.contains('zTheme')) {
     selectedTheme.value = 'zarlasht'
   } else if (html.classList.contains('aTheme')) {
     selectedTheme.value = 'aeon'
@@ -132,7 +142,7 @@ watch(defaultColor, (newColor) => {
   <div
     class="welcome-container h-screen w-screen flex items-center justify-center p-8">
     <div
-      class="cardShadow p-16 max-w-lg w-full h-[34rem] flex-col flex justify-between">
+      class="cardShadow p-16 max-w-xl w-full h-[34rem] flex-col flex justify-between">
       <!-- Welcome Title -->
       <MazAnimatedElement direction="up" :duration="800" :delay="100">
         <div class="text-center mb-12">
@@ -147,9 +157,9 @@ watch(defaultColor, (newColor) => {
             Pick your aesthetic
           </h2>
           <UTabs :content="false" :items="themeTabs" v-model="selectedTheme"
-            :color="selectedTheme === 'default' ? 'primary' : 'neutral'"
+            :color="selectedTheme === 'petal' ? 'primary' : 'neutral'"
             class="w-full theme-tabs" orientation="horizontal"
-            :ui="{ list: 'grid grid-cols-4 gap-2', trigger: 'theme-tab-trigger' }">
+            :ui="{ list: 'grid grid-cols-5 gap-2', trigger: 'theme-tab-trigger' }">
           </UTabs>
         </div>
       </MazAnimatedElement>
@@ -165,57 +175,10 @@ watch(defaultColor, (newColor) => {
             :ui="{ list: 'grid grid-cols-3 gap-2' }" />
 
           <!-- Color Pickers & BG Animation Toggle -->
-          <Transition name="fade" mode="out-in">
-            <div v-if="selectedTheme === 'default'" key="sliders"
-              class="mt-2 space-y-2">
-              <!-- Hue -->
-              <div
-                class="flex items-center justify-between p-2 rounded-lg bg-elevated">
-                <div class="flex items-center gap-2">
-                  <UIcon name="i-lucide-palette" class="text-lg" />
-                  <span class="text-sm font-medium">Hue</span>
-                </div>
-                <USlider v-model="defaultColor.h" :min="0" :max="360" :step="1"
-                  class="w-24" size="sm" color="neutral" />
-              </div>
-              <!-- Saturation -->
-              <div
-                class="flex items-center justify-between p-2 rounded-lg bg-elevated">
-                <div class="flex items-center gap-2">
-                  <UIcon name="i-lucide-droplets" class="text-lg" />
-                  <span class="text-sm font-medium">Saturation</span>
-                </div>
-                <USlider v-model="defaultColor.s" :min="0" :max="100" :step="1"
-                  class="w-24" size="sm" color="neutral" />
-              </div>
-              <!-- Lightness -->
-              <div
-                class="flex items-center justify-between p-2 rounded-lg bg-elevated">
-                <div class="flex items-center gap-2">
-                  <UIcon name="i-lucide-sun" class="text-lg" />
-                  <span class="text-sm font-medium">Lightness</span>
-                </div>
-                <USlider v-model="defaultColor.l" :min="0" :max="100" :step="1"
-                  class="w-24" size="sm" color="neutral" />
-              </div>
-              <!-- Reset Button -->
-              <UButton variant="soft" size="xs" color="neutral"
-                @click="resetColor" trailing-icon="i-lucide-rotate-ccw"
-                class="w-full"
-                :disabled="defaultColor.h === 10 && defaultColor.s === 39 && defaultColor.l === 46"
-                :class="{ 'opacity-50': defaultColor.h === 10 && defaultColor.s === 39 && defaultColor.l === 46 }">
-                <p class="w-full text-center">Reset Color</p>
-              </UButton>
-            </div>
-            <div v-else key="bgAnim"
-              class="mt-2 flex items-center bg-elevated justify-between p-3 rounded-lg">
-              <div class="flex items-center gap-2">
-                <UIcon name="i-lucide-play-circle" class="text-lg " />
-                <span class="text-sm font-medium">Background Animation</span>
-              </div>
-              <USwitch v-model="bgAnimation" color="neutral" size="sm" />
-            </div>
-          </Transition>
+          <WelcomeColorPicker :defaultColor="defaultColor"
+            :selectedTheme="selectedTheme" :bgAnimation="bgAnimation"
+            @update:defaultColor="(val) => settings.setDefaultColor(val)"
+            @update:bgAnimation="bgAnimation = $event" />
         </div>
       </MazAnimatedElement>
       <USeparator class="w-11/12 self-center my-3" />
@@ -224,7 +187,7 @@ watch(defaultColor, (newColor) => {
         <div class="contents" :style="primaryColorStyle">
           <UButton trailing-icon="i-lucide-arrow-right" @click="enterSite"
             class="w-full justify-center"
-            :color="selectedTheme === 'default' ? 'primary' : 'neutral'">
+            :color="selectedTheme === 'petal' ? 'primary' : 'neutral'">
             <span class="text-lg">Enter</span>
           </UButton>
         </div>
@@ -232,17 +195,3 @@ watch(defaultColor, (newColor) => {
     </div>
   </div>
 </template>
-
-<style>
-/* Fade transition for color pickers */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-5px);
-}
-</style>

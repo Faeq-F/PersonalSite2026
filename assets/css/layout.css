@@ -5,11 +5,11 @@
   height: 100vh;
 }
 
-.zTheme #bodyPanel{
-  clip-path: inset(0.9rem round 1.5rem)
+.zTheme #bodyPanel {
+  clip-path: inset(0.9rem round 1.5rem);
 }
 
-body{
+body {
   overflow: hidden;
 }
 
@@ -21,54 +21,69 @@ body{
 }
 
 html:not(.zTheme) #vidBG {
-  box-shadow: #00000003 0 5px 15px, #191c2113 0 15px 35px -5px, #00000003 0 0 0 1px;
+  box-shadow:
+    #00000003 0 5px 15px,
+    #191c2113 0 15px 35px -5px,
+    #00000003 0 0 0 1px;
 }
 
-html.dark:not(.zTheme) #vidBG{
-  box-shadow: #00000014 0 5px 15px, #191c2133 0 15px 35px -5px, #ffffff12 0 0 0 1px;
+html.dark:not(.zTheme) #vidBG {
+  box-shadow:
+    #00000014 0 5px 15px,
+    #191c2133 0 15px 35px -5px,
+    #ffffff12 0 0 0 1px;
 }
 
-html:not(.zTheme, .mTheme, .aTheme) #vidBG{
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+html:not(.zTheme, .mTheme, .aTheme) #vidBG {
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border: #eee 1px solid;
 }
 
-html.dark:not(.zTheme, .mTheme, .aTheme, .petalTheme) #vidBG{
-  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
-  0 0 0 1px hsla(230, 13%, 9%, 0.075),
-  0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
-  0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
-  0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+html.dark:not(.zTheme, .mTheme, .aTheme, .petalTheme) #vidBG {
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
   border: none;
   background: #000 !important;
 }
 
-html.dark.petalTheme #vidBG{
-  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
-  0 0 0 1px hsla(230, 13%, 9%, 0.075),
-  0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
-  0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
-  0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+html.dark.petalTheme #vidBG {
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
   border: none;
   background: hsl(calc(var(--primary-hue, 10) + 240.43), 33.33%, 13.53%) !important;
 }
 
-html.dark:not(.zTheme) #vidBG video{
-  filter: grayscale(1) ;
+html.petalTheme #vidBG {
+  border: none;
+  background: hsl(calc(var(--primary-hue, 10)), 33.33%, 97.53%) !important;
 }
 
-.zTheme #vidBG video{
+html.dark:not(.zTheme) #vidBG video {
+  filter: grayscale(1);
+}
+
+.zTheme #vidBG video {
   display: none;
 }
 
 html:not(.zTheme) #vidBG video {
   object-fit: cover;
-  filter: sepia(1) brightness(0.7) invert(1) ;
+  filter: sepia(1) brightness(0.7) invert(1);
   transition: all 0.2s ease-in-out;
   display: block;
 }
 
-html:not(.mTheme, .aTheme, .zTheme) #vidBG video{
+html:not(.mTheme, .aTheme, .zTheme) #vidBG video {
   display: none;
 }
 
@@ -83,8 +98,8 @@ html:not(.mTheme, .aTheme, .zTheme) #vidBG video{
   z-index: 999;
 }
 
-html:not(.zTheme, .mTheme, .aTheme, .petalTheme, .dark) #credits{
-color: #fff;
+html:not(.zTheme, .mTheme, .aTheme, .petalTheme, .dark) #credits {
+  color: #fff;
 }
 
 #pageContent {
@@ -97,18 +112,24 @@ color: #fff;
   transition: all 0.2s ease-in-out;
 }
 
-#navbar .navbar{
+#navbar .navbar {
   transition: all;
-  transition-duration: .2s;
-  box-shadow: #00000007 0 5px 15px, #191c210c 0 15px 35px -5px, #00000006 0 0 0 1px;
+  transition-duration: 0.2s;
+  box-shadow:
+    #00000007 0 5px 15px,
+    #191c210c 0 15px 35px -5px,
+    #00000006 0 0 0 1px;
 }
 
-.dark #navbar .navbar{
-  box-shadow: #00000014 0 5px 15px, #191c2133 0 15px 35px -5px, #ffffff12 0 0 0 1px;
+.dark #navbar .navbar {
+  box-shadow:
+    #00000014 0 5px 15px,
+    #191c2133 0 15px 35px -5px,
+    #ffffff12 0 0 0 1px;
 }
 
 html.zTheme #vidBG {
-  background-image: url('/media/bgZtheme.png');
+  background-image: url("/media/bgZtheme.png");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -122,8 +143,9 @@ html.zTheme.dark #vidBG {
 html.zTheme #pageContent::before,
 html:not(.zTheme, .mTheme, .aTheme, .petalTheme) #pageContent::before,
 html.petalTheme #pageContent::before,
-html.mTheme #pageContent::before {
-  content: '';
+html.mTheme #pageContent::before,
+html.aTheme #pageContent::before {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -137,18 +159,35 @@ html.mTheme #pageContent::before {
 
 /* zTheme home background */
 html.zTheme #pageContent::before {
-  background-image: url('/media/bgZthemeHome.png');
+  background-image: url("/media/bgZthemeHome.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: right;
 }
 
 html.zTheme.dark #pageContent::before {
-  background-image: url('/media/bgZthemeHomeDark.png');
+  background-image: url("/media/bgZthemeHomeDark.png");
 }
 
 html.zTheme #pageContent:has(#HomeSocialButtonGroup)::before {
   opacity: 1;
+}
+
+/* aTheme home background */
+html.aTheme #pageContent::before {
+  background-image: url("/media/vignette_white-and-black-round-gauge_chuttersnap-X2SL7nrXiVM-unsplash.png");
+  background-size: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position-x: 80%;
+}
+
+html.aTheme.dark #pageContent::before {
+  background-image: url("/media/vignette_white-and-black-round-gauge_chuttersnap-X2SL7nrXiVM-unsplash.png");
+}
+
+html.aTheme #pageContent:has(#HomeSocialButtonGroup)::before {
+  opacity: 0.5;
 }
 
 /* Default theme home background */
@@ -169,16 +208,15 @@ html:not(.zTheme, .mTheme, .aTheme, .petalTheme) #pageContent:has(#HomeSocialBut
 }
 
 /* petalTheme home background */
+
 html.petalTheme #pageContent::before {
-  background-image: url("/media/fabio-jock-51U-PW1y3ts-unsplash_white-swan-on-water.jpg");
-  background-size: contain;
+  background-image: url("/media/linus-belanger-iQkLU7YgtYM-unsplash.png");
+  background-size: cover;
   background-repeat: no-repeat;
-  background-position: right;
-  background-position-x: 150%;
 }
 
 html.petalTheme.dark #pageContent::before {
-  background-image: url("/media/no-background_fabio-jock-51U-PW1y3ts-unsplash_white-swan-on-water.png");
+  background-image: url("/media/linus-belanger-iQkLU7YgtYM-unsplash.png");
 }
 
 html.petalTheme #pageContent:has(#HomeSocialButtonGroup)::before {
@@ -199,24 +237,33 @@ html.mTheme #pageContent:has(#HomeSocialButtonGroup)::before {
   background-position-x: 70%;
 }
 
-html.mTheme body{
-  background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("/media/jason-leung-Rp17qQr9q8w-unsplash_Geometric-light-patterns-on-a-blue-surface.jpg");
+html.mTheme body {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+    url("/media/jason-leung-Rp17qQr9q8w-unsplash_Geometric-light-patterns-on-a-blue-surface.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-position-x: 70%;
 }
 
-html.mTheme.dark body{
-  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("/media/jason-leung-Rp17qQr9q8w-unsplash_Geometric-light-patterns-on-a-blue-surface.jpg");
+html.mTheme.dark body {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/media/jason-leung-Rp17qQr9q8w-unsplash_Geometric-light-patterns-on-a-blue-surface.jpg");
 }
 
-html.mTheme.dark #pageContent .homeTitle{
+html.mTheme.dark #pageContent .homeTitle {
   color: #596d6d;
-  text-shadow: -1px -1px 0 #20363a, 1px -1px 0 #20363a, -1px 1px 0 #20363a, 1px 1px 0 #20363a;
+  text-shadow:
+    -1px -1px 0 #20363a,
+    1px -1px 0 #20363a,
+    -1px 1px 0 #20363a,
+    1px 1px 0 #20363a;
 }
 
-html.mTheme #pageContent{
+html.petalTheme #pageContent,
+html.mTheme #pageContent {
   clip-path: inset(1rem round 1.5rem);
 }
 
@@ -241,7 +288,11 @@ html.petalTheme {
 }
 
 html.dark.petalTheme {
-  --primary-color: hsl(calc(var(--primary-hue, 10) + 240), var(--primary-sat, 39%), var(--primary-lit, 46%));
+  --primary-color: hsl(
+    calc(var(--primary-hue, 10) + 240),
+    var(--primary-sat, 39%),
+    var(--primary-lit, 46%)
+  );
   --ui-primary: var(--primary-color);
 }
 
@@ -257,11 +308,11 @@ html.dark:not(.petalTheme) {
 }
 
 html.petalTheme body {
-  background: hsl(var(--primary-hue, 25), 36.36%, 87%)
+  background: hsl(var(--primary-hue, 25), 36.36%, 87%);
 }
 
 html:not(.zTheme, .mTheme, .aTheme, .petalTheme) body {
-  background: #ffffff
+  background: #ffffff;
 }
 
 html.dark.petalTheme body {
@@ -269,7 +320,7 @@ html.dark.petalTheme body {
 }
 
 html.dark:not(.zTheme, .mTheme, .aTheme, .petalTheme) body {
-  background: #000000
+  background: #000000;
 }
 
 html.petalTheme div[role="dialog"]:has(#searchPanel) .bg-default,
@@ -401,7 +452,6 @@ html.mTheme #navbar .navbar,
 html.mTheme .cardShadow,
 html.mTheme .glass-card,
 html.mTheme #HomeSocialButtonGroup {
-
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(50px);
   -webkit-backdrop-filter: blur(50px);
@@ -414,18 +464,14 @@ html.mTheme #HomeSocialButtonGroup {
     inset 0 0 2px 1px rgba(255, 255, 255, 0.1);
   position: relative;
 
-
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(255, 255, 255, 0.8),
-        transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
   }
 
   &:hover {
@@ -487,16 +533,13 @@ html.zTheme .cardShadow {
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(255, 255, 255, 0.8),
-        transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
   }
 }
 
@@ -519,13 +562,16 @@ html.dark.zTheme .cardShadow {
 /* Aeon theme navbar - solid opaque background */
 html.aTheme #navbar .navbar {
   background: rgb(255, 255, 255);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border: #eee 1px solid;
 }
 
 html.dark.aTheme #navbar .navbar {
   background: rgb(0, 0, 0);
-  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
     0 0 0 1px hsla(230, 13%, 9%, 0.075),
     0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
     0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
@@ -586,10 +632,19 @@ html.petalTheme .popoverContent,
 html.petalTheme .cardShadow,
 html.petalTheme .glass-card {
   background: rgb(255, 255, 255);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border: #eee 1px solid;
   border-radius: 1rem;
-  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+  transition:
+    background 0ms,
+    box-shadow 0ms,
+    border 0ms,
+    color 200ms,
+    text-decoration 200ms,
+    padding 200ms,
+    border-radius 200ms !important;
 }
 
 html.dark.petalTheme .boxLink:hover,
@@ -600,14 +655,22 @@ html.dark.petalTheme .themeLink,
 html.dark.petalTheme .popoverContent,
 html.dark.petalTheme .cardShadow,
 html.dark.petalTheme .glass-card {
-  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
-     0 0 0 1px hsla(230, 13%, 9%, 0.075),
-     0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
-     0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
-     0 3.5px 6px hsla(230, 13%, 9%, 0.09);
-  background: rgb(0,0,0);
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+  background: rgb(0, 0, 0);
   border: #222 1px solid;
-  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+  transition:
+    background 0ms,
+    box-shadow 0ms,
+    border 0ms,
+    color 200ms,
+    text-decoration 200ms,
+    padding 200ms,
+    border-radius 200ms !important;
 }
 
 html:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
@@ -619,10 +682,19 @@ html:not(.aTheme, .zTheme, .mTheme) .popoverContent,
 html:not(.aTheme, .zTheme, .mTheme) .cardShadow,
 html:not(.aTheme, .zTheme, .mTheme) .glass-card {
   background: rgb(255, 255, 255);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border: #eee 1px solid;
   border-radius: 1rem;
-  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+  transition:
+    background 0ms,
+    box-shadow 0ms,
+    border 0ms,
+    color 200ms,
+    text-decoration 200ms,
+    padding 200ms,
+    border-radius 200ms !important;
 }
 
 html.dark:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
@@ -633,14 +705,22 @@ html.dark:not(.aTheme, .zTheme, .mTheme) .themeLink,
 html.dark:not(.aTheme, .zTheme, .mTheme) .popoverContent,
 html.dark:not(.aTheme, .zTheme, .mTheme) .cardShadow,
 html.dark:not(.aTheme, .zTheme, .mTheme) .glass-card {
-  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
-     0 0 0 1px hsla(230, 13%, 9%, 0.075),
-     0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
-     0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
-     0 3.5px 6px hsla(230, 13%, 9%, 0.09);
-  background: rgb(0,0,0);
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+    0 0 0 1px hsla(230, 13%, 9%, 0.075),
+    0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
+    0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
+    0 3.5px 6px hsla(230, 13%, 9%, 0.09);
+  background: rgb(0, 0, 0);
   border: #222 1px solid;
-  transition: background 0ms, box-shadow 0ms, border 0ms, color 200ms, text-decoration 200ms, padding 200ms, border-radius 200ms !important;
+  transition:
+    background 0ms,
+    box-shadow 0ms,
+    border 0ms,
+    color 200ms,
+    text-decoration 200ms,
+    padding 200ms,
+    border-radius 200ms !important;
 }
 
 /*=-------------------------------------------------------------------
@@ -679,6 +759,18 @@ html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .homeNavSection {
   background-color: #000;
 }
 
+html:not(.aTheme, .zTheme, .mTheme, .petalTheme) #credits span {
+  background-color: #212121;
+  html.dark & {
+    background-color: #000;
+  }
+  /* copyleft symbol */
+  & span,
+  html.dark & span {
+    background-color: #fff;
+  }
+}
+
 /* Theme nav section - Petal theme */
 html.petalTheme #navbar .navbar .themeNavSection {
   background-color: #fff;
@@ -700,12 +792,15 @@ html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .themeNavSection {
 /* Middle nav links - Petal theme */
 html.petalTheme #navbar .navbar .middleItems ul li a {
   background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
 html.dark.petalTheme #navbar .navbar .middleItems ul li a {
   background-color: #000;
-  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
     0 0 0 1px hsla(230, 13%, 9%, 0.075),
     0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
     0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
@@ -715,12 +810,15 @@ html.dark.petalTheme #navbar .navbar .middleItems ul li a {
 /* Middle nav links - Default theme */
 html:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a {
   background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
 html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .middleItems ul li a {
   background-color: #000;
-  box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.1),
     0 0 0 1px hsla(230, 13%, 9%, 0.075),
     0 0.3px 0.4px hsla(230, 13%, 9%, 0.02),
     0 0.9px 1.5px hsla(230, 13%, 9%, 0.045),
@@ -758,4 +856,28 @@ html.dark.aTheme #navbar .navbar .themeNavSection {
 
 html.aTheme #navbar .navbar .middleItems div.absolute ul li a:hover {
   background-color: #eee;
+}
+
+html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li a {
+  border-top: #eee 1px solid;
+  border-bottom: #eee 1px solid;
+
+  html.dark & {
+    border-top: #222 1px solid;
+    border-bottom: #222 1px solid;
+  }
+}
+
+html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-of-type(1) a {
+  border-left: #eee 1px solid;
+  html.dark & {
+    border-left: #222 1px solid;
+  }
+}
+
+html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-last-of-type(1) a {
+  border-right: #eee 1px solid;
+  html.dark & {
+    border-right: #222 1px solid;
+  }
 }

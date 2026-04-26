@@ -34,6 +34,7 @@ interface Project {
   links: string[]; // their urls
   relatedActivities: number[]; // their ids
   relatedProjects: string[]; // their names
+  images: string[]; // their urls
 }
 
 interface Link {
@@ -100,11 +101,11 @@ const db = new Dexie('Database') as Dexie & {
 db.delete().then(() => db.open()) // ensure localstorage is cleared
 
 // Schema declaration:
-db.version(1).stores({
+db.version(2).stores({
   skills: 'name, *category, *experienceLevel',
   skillCategories: 'name, *subCategories',
   certificates: 'name, *organization, *skills, code',
-  projects: 'name, *skills, startDate, endDate, *relatedActivities, *relatedProjects',
+  projects: 'name, *skills, startDate, endDate, *relatedActivities, *relatedProjects, *images',
   links: 'url, type',
   linkTypes: 'name',
   roles: 'id, name, *organization, type, *category, startDate, endDate, *skills, *locations, *relatedActivities',
@@ -361,25 +362,25 @@ db.on('populate', () => {
 
   db.certificates.bulkPut([
     {
-      name: "BSc Hons. Computer Science (Software Engineering)", description: 'My Degree in Software Engineering from Royal Holloway, University of London', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date('August 2025')
+      name: "BSc Hons. Computer Science (Software Engineering)", description: 'My Degree in Software Engineering from Royal Holloway, University of London', organization: [''], code: '', links: [''], images: ['/PersonalSite2026/media/portfolio/Faeq Faisal Certificate front side.jpg', '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 1.png', '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 2.png'], skills: [''], awarded: new Date('August 2025')
     },
-    { name: "CS & Physics A-level cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "Maths A level cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "Spanish GCSE cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "Bio, physics, chem cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "Geog, RS, Maths cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "CS & 2 engs cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "C# cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "pathway cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "web dev cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "RI masterclass cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "Siemens work experience cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "Science engineering & IT work experience cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "become a hacker cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "make a website cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "tech the future cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "tech the future insight cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
-    { name: "career in tech cert", description: '', organization: [''], code: '', links: [''], images: [''], skills: [''], awarded: new Date() },
+    { name: "CS & Physics A-level cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "Maths A level cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "Spanish GCSE cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "Bio, physics, chem cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "Geog, RS, Maths cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "CS & 2 engs cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "C# cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "pathway cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "web dev cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "RI masterclass cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "Siemens work experience cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "Science engineering & IT work experience cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "become a hacker cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "make a website cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "tech the future cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "tech the future insight cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    { name: "career in tech cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
   ])
 
   db.projects.bulkPut([
@@ -387,7 +388,8 @@ db.on('populate', () => {
       name: "My Phone",
       description: 'Customizing my Phone',
       links: [''],
-      skills: [''],
+      skills: ['Nova Launcher', 'Kvaesitso', 'Total Launcher', 'KLWP', 'KWGT', 'Android'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [],
       relatedProjects: ['My Desktop']
@@ -396,7 +398,8 @@ db.on('populate', () => {
       name: "My Desktop",
       description: 'Customizing my Desktop',
       links: [''],
-      skills: [''],
+      skills: ['Rainmeter', 'Windows', 'PowerShell', 'OhMyPosh', 'WindowsTerminalTheme'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [],
       relatedProjects: ['My Phone']
@@ -405,7 +408,8 @@ db.on('populate', () => {
       name: "Zarlasht",
       description: 'My dissertation. Includes 6 programs total; Online Chat (JS & Erl targets), Tic-Tac-Toe (JS & Erl targets), Pong (Erl target) & Zarlasht (Erl target)',
       links: ['https://github.com/Faeq-F/Zarlasht'],
-      skills: [''],
+      skills: ['JavaScript', 'HTML', 'CSS', 'Git', 'GitHub', 'TeX / LaTeX',],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -413,7 +417,8 @@ db.on('populate', () => {
     {
       name: "Muslim Guide", description: 'Duas and Umrah, Hajj & Madinah Guides',
       links: ['https://github.com/Faeq-F/MuslimGuide'],
-      skills: [''],
+      skills: ['Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -422,7 +427,8 @@ db.on('populate', () => {
       name: "IT Assets Metadata Repository",
       description: 'A holistic Web-based system that supports the metadata-based organization of different source-code related assets',
       links: ['https://github.com/Faeq-F/IT-Assets-Metadata-Repository'],
-      skills: [''],
+      skills: ['Svelte', 'TailwindCSS', 'TypeScript', 'Node.js', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -431,7 +437,17 @@ db.on('populate', () => {
       name: "ALSET",
       description: 'Track following robot using the EV3 kit, LeJOS (Java for Lego Mindstorms) and an Android phone',
       links: ['https://github.com/Faeq-F/ALSET'],
-      skills: [''],
+      skills: ['Java', 'Android Studio', 'Git', 'GitHub'],
+      images: [
+        "/PersonalSite2026/media/portfolio/ALSET.png",
+        "/PersonalSite2026/media/portfolio/ALSET2.png",
+        "/PersonalSite2026/media/portfolio/ALSET calibration instructions screen.png",
+        "/PersonalSite2026/media/portfolio/ALSET followTrack screen.png",
+        "/PersonalSite2026/media/portfolio/ALSET Pause in followtrack.png",
+        "/PersonalSite2026/media/portfolio/ALSET welcome screen.png",
+        "/PersonalSite2026/media/portfolio/ALSET Control Flow.drawio.png",
+        "/PersonalSite2026/media/portfolio/ALSET app.jpg"
+      ],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4], relatedProjects: ['']
     },
@@ -445,6 +461,7 @@ db.on('populate', () => {
       skills: [
         'C#', '.NET', 'WPF', 'XAML', 'JSON', 'Visual Studio', 'Git', 'GitHub', 'Markdown', 'Windows'
       ],
+      images: ['/PersonalSite2026/media/QuokkaLight.png', '/PersonalSite2026/media/QuokkaDark.png'],
       startDate: new Date("January 2020"), endDate: new Date("December 2019"),
       relatedActivities: [],
       relatedProjects: []
@@ -453,8 +470,9 @@ db.on('populate', () => {
       name: "WhatsappPortable", description: 'A portable application to use WhatsApp',
       links: ['https://github.com/Faeq-F/whatsappPortable'],
       skills: [
-        'Flutter', 'Dart', 'CSS3', 'JavaScript', 'HTML5',
+        'Flutter', 'Dart', 'CSS', 'JavaScript', 'HTML', 'Git', 'GitHub',
       ],
+      images: [],
       startDate: new Date('June 2024'), endDate: new Date('"December 2023"'),
       relatedActivities: [],
       relatedProjects: []
@@ -466,7 +484,8 @@ db.on('populate', () => {
         'https://github.com/Faeq-F/faeq-f.github.io',
         'https://faeq-f.github.io'
       ],
-      skills: [''],
+      skills: ['Nuxt', 'Vue.js', 'TypeScript', 'TailwindCSS', 'Sass', 'Git', 'GitHub'],
+      images: ['/PersonalSite2026/media/PersonalSite2020.png', '/PersonalSite2026/media/PersonalSite2021.png', '/PersonalSite2026/media/PersonalSite2022.png', '/PersonalSite2026/media/PersonalSite2023.png', '/PersonalSite2026/media/PersonalSite2022dark.png', '/PersonalSite2026/media/PersonalSite2023dark.png'],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -475,7 +494,8 @@ db.on('populate', () => {
       name: "Dynamic Memory Allocator Simulator",
       description: 'A program that simulates a dynamic memory allocator',
       links: ['https://github.com/Faeq-F/DynamicMemoryAllocatorSimulator'],
-      skills: [''],
+      skills: ['C', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -484,7 +504,8 @@ db.on('populate', () => {
       name: "Notes",
       description: 'Notes written for a variety of topics; lectures at university, advanced topic talks given by guests, etc.',
       links: ['https://github.com/Faeq-F/Notes'],
-      skills: [''],
+      skills: ['Markdown', 'TeX / LaTeX', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -493,17 +514,19 @@ db.on('populate', () => {
       name: "LLM 2 Leaf",
       description: 'Convert your LLM usage to planting trees',
       links: ['https://github.com/Faeq-F/LLM-2-Leaf'],
-      skills: [''],
+      skills: ['Git', 'GitHub'],
+      images: ['/PersonalSite2026/media/portfolio/LLM2LEAF-groupPhoto2.jpg', '/PersonalSite2026/media/portfolio/LLM2LEAF-groupPhoto1.jpg', '/PersonalSite2026/media/portfolio/Chat.jpg', '/PersonalSite2026/media/portfolio/Offset carbon footprint.jpg', '/PersonalSite2026/media/portfolio/LLM2LEAF presentation.jpg', '/PersonalSite2026/media/portfolio/Statistics.jpg', '/PersonalSite2026/media/portfolio/chatting.png', '/PersonalSite2026/media/portfolio/wonVerdn.jpg'],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
     },
-    { name: "Generic social media app", description: '', links: [''], skills: [''], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
+    { name: "Generic social media app", description: '', links: [''], skills: ['Java', 'SQL', 'Git', 'GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
     {
       name: "Tool Customizations",
       description: 'Setting files and other resources for my terminal, text editor, etc.',
       links: ['https://github.com/Faeq-F/ToolCustomizations'],
-      skills: [''],
+      skills: ['Vim', 'PowerShell', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -512,7 +535,8 @@ db.on('populate', () => {
       name: "Partial Scroll",
       description: 'A demo webpage where, in a section of the page, only one half of the page scrolls, with static content on the other half',
       links: ['https://github.com/Faeq-F/PartialScroll'],
-      skills: [''],
+      skills: ['HTML', 'CSS', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -521,7 +545,8 @@ db.on('populate', () => {
       name: "Sandbox",
       description: 'Snippets of useful code found / developed or still being developed. These snippets should be reusable for any program.',
       links: ['https://github.com/Faeq-F/SandBox'],
-      skills: [''],
+      skills: ['Python', 'Java', 'C', 'JavaScript', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -530,7 +555,8 @@ db.on('populate', () => {
       name: "JavaFX Calculator",
       description: 'A calculator that can evaluate expressions in both infix and postfix notation',
       links: ['https://github.com/Faeq-F/JavaFX-Calculator'],
-      skills: [''],
+      skills: ['Java', 'JavaFX', 'FXML', 'Eclipse', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -539,7 +565,8 @@ db.on('populate', () => {
       name: "JavaFX Minimal Navigation example",
       description: 'An example of navigating between scenes in JavaFX',
       links: ['https://github.com/Faeq-F/JavaFX-MinimalNavExample'],
-      skills: [''],
+      skills: ['Java', 'JavaFX', 'FXML', 'Eclipse', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -548,7 +575,8 @@ db.on('populate', () => {
       name: "Business Card",
       description: 'My Business Card (An Android app)',
       links: ['https://github.com/Faeq-F/BusinessCard'],
-      skills: [''],
+      skills: ['Android Studio', 'Java', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -557,7 +585,8 @@ db.on('populate', () => {
       name: "Browser Home page",
       description: 'Simple home page for your browser',
       links: ['https://github.com/Faeq-F/Browser-Home-Page'],
-      skills: [''],
+      skills: ['HTML', 'CSS', 'JavaScript', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -566,7 +595,8 @@ db.on('populate', () => {
       name: "Hackaway v7 Sign-up Page",
       description: 'Get to our Royal Hackaway V7 project',
       links: ['https://github.com/Faeq-F/HackawayV7'],
-      skills: [''],
+      skills: ['Flask', 'Python', 'HTML', 'CSS', 'JavaScript', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -575,7 +605,8 @@ db.on('populate', () => {
       name: "OhMyPosh Windows Terminal Theme",
       description: 'My Windows terminal theme - using OhMyPosh',
       links: ['https://github.com/Faeq-F/WindowsTerminalTheme'],
-      skills: [''],
+      skills: ['PowerShell', 'Windows', 'Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -584,7 +615,8 @@ db.on('populate', () => {
       name: "Gideon",
       description: 'An automated personal assistant',
       links: ['https://github.com/Faeq-F/Gideon'],
-      skills: [''],
+      skills: ['Git', 'GitHub'],
+      images: [],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -593,7 +625,15 @@ db.on('populate', () => {
       name: "Ascii Art viewer",
       description: 'An ASCII art viewer that can also compress the files using Run Length Encoding',
       links: ['https://github.com/Faeq-F/ASCII-art-viewer'],
-      skills: [''],
+      skills: ['GitHub'],
+      images: [
+        "/PersonalSite2026/media/portfolio/ASCII pHome.PNG",
+        "/PersonalSite2026/media/portfolio/ASCII pLoadArt.PNG",
+        "/PersonalSite2026/media/portfolio/ASCII pArt.PNG",
+        "/PersonalSite2026/media/portfolio/ASCII pEnterRLE.PNG",
+        "/PersonalSite2026/media/portfolio/ASCII Overall Flowchart (vertically).png",
+        "/PersonalSite2026/media/portfolio/ASCII Decomposition diagram.png"
+      ],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -602,7 +642,8 @@ db.on('populate', () => {
       name: "WRDSRCH",
       description: 'A Wordsearch solver',
       links: ['https://github.com/Faeq-F/WRDSRCH'],
-      skills: [''],
+      skills: ['Java', 'Android Studio', 'Git', 'GitHub'],
+      images: ["/PersonalSite2026/media/portfolio/WRDSRCH demo.png"],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -611,17 +652,18 @@ db.on('populate', () => {
       name: "Portable Application Launcher",
       description: 'A launcher for portable apps on your usb drive or computer',
       links: ['https://github.com/Faeq-F/Portable-Application-Launcher'],
-      skills: [''],
+      skills: ['GitHub'],
+      images: ["/PersonalSite2026/media/portfolio/launcherScreenshot1.png", "/PersonalSite2026/media/portfolio/launcherScreenshot2.png"],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
     },
-    { name: "soulmate finder", description: '', links: [''], skills: [''], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
-    { name: "databse x2 ??", description: '', links: [''], skills: [''], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
-    { name: "pathfinding", description: '', links: [''], skills: [''], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
-    { name: "trading card??", description: '', links: [''], skills: [''], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
-    { name: "album cover", description: '', links: [''], skills: [''], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
-    { name: "book system??", description: '', links: [''], skills: [''], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
+    { name: "soulmate finder", description: '', links: [''], skills: ['GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
+    { name: "databse x2 ??", description: '', links: [''], skills: ['GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
+    { name: "pathfinding", description: '', links: [''], skills: ['GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
+    { name: "trading card??", description: '', links: [''], skills: ['GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
+    { name: "album cover", description: '', links: [''], skills: ['GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
+    { name: "book system??", description: '', links: [''], skills: ['GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
   ])
 
   db.roleCategories.bulkPut([

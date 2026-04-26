@@ -85,7 +85,7 @@ onMounted(() => {
     <template #left-panel-header>
       <div class="font-bold " style="line-height: 1;">
         <MazAnimatedElement direction="up" :duration="700" :delay="500">
-          <p class="text-[2.75rem] varela">Experience</p>
+          <p class="text-[2.75rem] varela mb-2">Experience</p>
         </MazAnimatedElement>
         <MazAnimatedElement direction="up" :duration="700" :delay="600">
           <p class="text-[1rem]">My professional growth</p>

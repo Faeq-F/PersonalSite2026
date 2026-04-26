@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import LinkPopover from './LinkPopover.vue'
+import { db } from '~/assets/scripts/db'
+
+const projectCount = ref(0)
+const certificationCount = ref(0)
+
+onMounted(async () => {
+  projectCount.value = await db.projects.count()
+  certificationCount.value = await db.certificates.count()
+})
+</script>
+
 <template>
   <UCard
     class="my-5 mx-4 opacity-80 min-h-[32rem] cardShadow border border-[var(--ui-border)]">
@@ -6,7 +19,7 @@
       <div class="grow">
         <div class="varela mt-2 ml-4">
           Introduction
-          <USeparator class="w-28 mb-4 mt-0.5 self-center " />
+          <USeparator class="w-28 mb-4 mt-0.5 self-center" />
         </div>
         <div class="mr-4 ml-8 leading-[1.9] aboutContent">
           I'm a software engineer with a passion for building
@@ -16,118 +29,53 @@
           <div class="h-4"></div>
           I am constantly learning, whether through formal education or
           independently. I completed my
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://faeq-f.github.io/Quokka" target="_blank"
-              class="boxLink">Bachelor's degree in Software
-              Engineering</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See my degree</p>
-            </template>
-          </UPopover> at
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://www.royalholloway.ac.uk/" target="_blank"
-              class="boxLink">RHUL</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See the University</p>
-            </template>
-          </UPopover>
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link
-              to="https://en.wikipedia.org/wiki/Royal_Holloway,_University_of_London"
-              class="boxLink">
-              <UIcon name="i-lucide-info" />
-            </nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">University Information</p>
-            </template>
-          </UPopover>
+          <LinkPopover url="https://faeq-f.github.io/Quokka"
+            text="Bachelor's degree in Software Engineering"
+            content="See my degree" />
+          at
+          <LinkPopover url="https://www.royalholloway.ac.uk/" text="RHUL"
+            content="See the University" />
+          <LinkPopover
+            url="https://en.wikipedia.org/wiki/Royal_Holloway,_University_of_London"
+            text="" content="University Information" icon="i-lucide-info" />
           (Royal Holloway, University of London), graduating
           with a
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link
-              to="https://en.wikipedia.org/wiki/British_undergraduate_degree_classification#Degree_classification"
-              target="_blank" class="boxLink">First Class Honours</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See degree classification</p>
-            </template>
-          </UPopover>. Now I'm expanding my expertise,
+          <LinkPopover
+            url="https://en.wikipedia.org/wiki/British_undergraduate_degree_classification#Degree_classification"
+            text="First Class Honours" content="See degree classification" />.
+          Now I'm expanding my expertise,
           learning new skills on the job while proactively exploring
           exciting, new technologies.
           <div class="h-4"></div>
-          <USeparator class="w-11/12 self-center " />
+          <USeparator class="w-11/12 self-center" />
           <div class="h-4"></div>
           My current interests lie in declarative, functional
           programming, with a focus on concurrency and event-based
           architectures. I enjoy
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link
-              to="https://en.wikipedia.org/wiki/Free_and_open-source_software"
-              target="_blank" class="boxLink">FOSS</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See FOSS</p>
-            </template>
-          </UPopover>
+          <LinkPopover
+            url="https://en.wikipedia.org/wiki/Free_and_open-source_software"
+            text="FOSS" content="See FOSS" />
           projects with plugin-based
           architectures and customizability. My preferred technologies
           include
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://learn.microsoft.com/en-us/dotnet/csharp/"
-              target="_blank" class="boxLink">C#</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See C#</p>
-            </template>
-          </UPopover>,
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://vuejs.org/" target="_blank"
-              class="boxLink">Vue.js</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See Vue.js</p>
-            </template>
-          </UPopover> (with
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://nuxt.com/" target="_blank"
-              class="boxLink">Nuxt</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See Nuxt</p>
-            </template>
-          </UPopover>),
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://www.typescriptlang.org/" target="_blank"
-              class="boxLink">TypeScript</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See TypeScript</p>
-            </template>
-          </UPopover>,
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://tailwindcss.com/" target="_blank"
-              class="boxLink">TailwindCSS</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See TailwindCSS</p>
-            </template>
-          </UPopover>,
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://gleam.run/" target="_blank"
-              class="boxLink">Gleam</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See Gleam</p>
-            </template>
-          </UPopover>,
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://flutter.dev/" target="_blank"
-              class="boxLink">Flutter</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">See Flutter</p>
-            </template>
-          </UPopover>
+          <LinkPopover url="https://learn.microsoft.com/en-us/dotnet/csharp/"
+            text="C#" content="See C#" />,
+          <LinkPopover url="https://vuejs.org/" text="Vue.js"
+            content="See Vue.js" /> (with
+          <LinkPopover url="https://nuxt.com/" text="Nuxt" content="See Nuxt" />
+          ),
+          <LinkPopover url="https://www.typescriptlang.org/" text="TypeScript"
+            content="See TypeScript" />,
+          <LinkPopover url="https://tailwindcss.com/" text="TailwindCSS"
+            content="See TailwindCSS" />,
+          <LinkPopover url="https://gleam.run/" text="Gleam"
+            content="See Gleam" />,
+          <LinkPopover url="https://flutter.dev/" text="Flutter"
+            content="See Flutter" />
           <div class="h-4"></div>
           My main, current personal endeavor is
-          <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
-            <nuxt-link to="https://faeq-f.github.io/Quokka" target="_blank"
-              class="boxLink">Quokka</nuxt-link>
-            <template #content>
-              <p class="p-1 text-sm">Project Site</p>
-            </template>
-          </UPopover>
+          <LinkPopover url="https://faeq-f.github.io/Quokka" text="Quokka"
+            content="Project Site" />
           <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
             <nuxt-link to="/project/quokka" class="boxLink">
               <UIcon name="i-lucide-info" />
@@ -143,7 +91,7 @@
           <br /><br />
         </div>
       </div>
-      <USeparator orientation="vertical" class="h-70 self-center " />
+      <USeparator orientation="vertical" class="h-70 self-center" />
       <img src="/media/me.jpeg"
         class="min-h-96 max-h-96 rounded-lg ml-4 meImage" />
     </div>
@@ -154,9 +102,7 @@
           <UBadge icon="i-lucide-user" size="lg" color="neutral" variant="soft">
             <USeparator orientation="vertical" class="h-4 invert opacity-20" />
             Legal Name:
-            <span class="opacity-80">
-              Faeq Faisal
-            </span>
+            <span class="opacity-80">Faeq Faisal</span>
           </UBadge>
         </span>
         <span>
@@ -164,9 +110,7 @@
             variant="soft">
             <USeparator orientation="vertical" class="h-4 invert opacity-20" />
             Location:
-            <span class="opacity-80">
-              London, UK
-            </span>
+            <span class="opacity-80">London, UK</span>
           </UBadge>
         </span>
         <span>
@@ -176,9 +120,7 @@
               <USeparator orientation="vertical"
                 class="h-4 invert opacity-20" />
               Number of Projects:
-              <span class="opacity-80">
-                00
-              </span>
+              <span class="opacity-80">{{ projectCount }}</span>
             </UBadge>
           </nuxt-link>
         </span>
@@ -189,9 +131,7 @@
               <USeparator orientation="vertical"
                 class="h-4 invert opacity-20" />
               Number of Certifications:
-              <span class="opacity-80">
-                00
-              </span>
+              <span class="opacity-80">{{ certificationCount }}</span>
             </UBadge>
           </nuxt-link>
         </span>

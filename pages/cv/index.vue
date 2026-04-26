@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
+import RelatedCards from '~/components/cv/RelatedCards.vue'
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
 import '@tato30/vue-pdf/style.css'
 import { ref, watch } from 'vue'
+import { useSettingsStore } from '~/stores/settings'
 
 const { pdf, pages } = usePDF('/PersonalSite2026/cv.pdf')
+
+const settings = useSettingsStore()
 
 const scale = ref(0.95)
 
@@ -60,7 +64,7 @@ const LenisContent = ref();
             <MazAnimatedElement direction="up" :duration="700" :delay="600">
               <a href="./cv.pdf" download="cv.pdf">
                 <UButton leading-icon="i-lucide-download" size="xl"
-                  style="--ui-primary: #4a5565" class="dark:text-white" />
+                  color="primary" />
               </a>
             </MazAnimatedElement>
           </div>
@@ -71,89 +75,7 @@ const LenisContent = ref();
             <p class="font-bold text-[1rem]">Related content</p>
           </MazAnimatedElement>
           <USeparator class="w-28 mb-4 mt-0.5 self-center " />
-          <div class="max-h-[45vh] overflow-y-scroll flex flex-col gap-2 p-2 "
-            data-lenis-prevent>
-            <div class="flex flex-col gap-2">
-              <MazAnimatedElement direction="up" :duration="700">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-              <MazAnimatedElement direction="down" :duration="700">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-            </div>
-            <USeparator class="w-28 my-4 self-center " />
-            <div class="flex gap-1">
-              <MazAnimatedElement direction="right" :duration="700"
-                class="flex-1/2">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-              <MazAnimatedElement direction="left" :duration="700"
-                class="flex-1/2">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-            </div>
-            <div>
-              <MazAnimatedElement direction="up" :duration="700">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-            </div>
-            <USeparator class="w-28 my-4 self-center " />
-            <div>
-              <MazAnimatedElement direction="down" :duration="700">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-            </div>
-            <div class="flex gap-1">
-              <MazAnimatedElement direction="right" :duration="700"
-                class="flex-1/2">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-              <MazAnimatedElement direction="left" :duration="700"
-                class="flex-1/2">
-                <nuxt-link to="/">
-                  <UCard
-                    class="h-full w-full opacity-80 zLink border border-[var(--ui-border)]">
-                    content
-                  </UCard>
-                </nuxt-link>
-              </MazAnimatedElement>
-            </div>
-          </div>
+          <RelatedCards />
         </div>
 
         <template #footer>
@@ -180,7 +102,7 @@ const LenisContent = ref();
                 :delay="1000">
                 <UTabs :content="false" :items="viewOptions"
                   v-model="viewActive"
-                  :ui="{ trigger: 'self-start', label: 'dark:text-white', leadingIcon: 'dark:text-white' }"
+                  :ui="{ trigger: 'self-start', label: 'dark:text-[--primary]', leadingIcon: 'dark:text-[--primary]' }"
                   style="--ui-primary: #4a5565" />
               </MazAnimatedElement>
             </div>

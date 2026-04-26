@@ -2,9 +2,34 @@
 import { db, type Project, type Skill } from "~/assets/scripts/db";
 import { liveQuery } from 'dexie';
 import { useObservable } from "@vueuse/rxjs";
+import Gallery from "~/components/layoutSections/portfolioCard.vue"
 import { from } from "rxjs";
+import { MdPreview, type Themes, config } from 'md-editor-v3';
+import 'md-editor-v3/lib/preview.css';
+import LinkAttr from 'markdown-it-link-attributes';
+import { useTheme } from '@maz-ui/themes'
+
+config({
+  markdownItPlugins(_plugins, _opts) {
+    return [
+      {
+        type: 'linkAttr',
+        plugin: LinkAttr,
+        options: {
+          matcher(href: string) {
+            return !href.startsWith('#');
+          },
+          attrs: {
+            target: '_blank'
+          }
+        }
+      },
+    ]
+  }
+})
+
 const route = useRoute()
-const project = useObservable<Project | undefined>(from(liveQuery(async () => await db.projects.get(route.params.name + ''))));
+const project = useObservable<Project | undefined>(from(liveQuery(async () => await db.projects.get((route.params.name + '').replaceAll('~', ' ')))));
 
 import { useSettingsStore } from '~/stores/settings'
 const settings = useSettingsStore()
@@ -32,6 +57,43 @@ const getSkill = (skill: string) => skills.value?.find(s => s.name == skill);
 import { VueLenis } from 'lenis/vue'
 const LenisWrapper = ref();
 const LenisContent = ref();
+
+const { colorMode } = useTheme()
+const theme = ref(colorMode.value)
+watch(colorMode, async (newTheme, _oldTheme) => theme.value = newTheme.toString())
+
+const readme = ref('')
+const loading = ref(true)
+
+const getGithubReadmeUrl = (project: Project | undefined): string | null => {
+  if (!project?.links) return null
+  const githubLink = project.links.find(link => link.includes('github.com/Faeq-F/'))
+  if (!githubLink) return null
+  // Extract owner/repo from github.com/owner/repo URL
+  const repo = githubLink.split('/')
+  // TODO - account for lack of main branch - e.g. WRDSRCH uses Final & master
+  return `https://raw.githubusercontent.com/Faeq-F/${repo[repo.length - 1]}/refs/heads/main/README.md`
+}
+
+watch(project, async (newProject) => {
+  readme.value = ''
+  loading.value = true
+  const url = getGithubReadmeUrl(newProject)
+  if (!url) {
+    loading.value = false
+    return
+  }
+  try {
+    readme.value = await $fetch(url)
+    // Remove first line (typically the title with #)
+    readme.value = readme.value.substring(readme.value.indexOf('\n') + 1)
+  } catch (err) {
+    console.log('Error fetching README:', err)
+    readme.value = 'Failed to load README.'
+  } finally {
+    loading.value = false
+  }
+}, { immediate: true })
 </script>
 
 <template>
@@ -135,22 +197,19 @@ const LenisContent = ref();
           <div class="w-full flex flex-row" data-lenis-prevent>
             <div class="w-full pt-4 px-4">
               <UCard
-                class="opacity-80 cardShadow border border-[var(--ui-border)] m-4 hover:scale-103">
+                class="opacity-80 cardShadow border border-[var(--ui-border)] m-4">
                 <template #header>
                   <div class="flex items-center text-sm">
                     <UIcon name="i-lucide-images" class="mr-1.5 !size-4" />
                     <span>Gallery</span>
                   </div>
                 </template>
-                <MazCard :images="['https://loremflickr.com/600/600',
-                  'https://loremflickr.com/700/700', 'https://loremflickr.com/400/400',
-                  'https://loremflickr.com/300/300']" :images-show-count="3"
-                  :no-remaining="false" zoom class="w-full"
-                  :gallery-height="400" noPadding>
-                </MazCard>
+                <Gallery v-if="project" :project="project"
+                  :images="project?.images || []" widthClass="w-full"
+                  heightClass="h-96" :horizontal="true" />
               </UCard>
               <UCard
-                class="opacity-80 cardShadow border border-[var(--ui-border)] m-4 hover:scale-103">
+                class="opacity-80 cardShadow border border-[var(--ui-border)] m-4 ">
                 <template #header>
                   <nuxt-link
                     :to="'https://github.com/' + '/blob/main/README.md'"
@@ -162,9 +221,10 @@ const LenisContent = ref();
                   </nuxt-link>
                 </template>
                 <div class="min-h-64">
-                  <!-- <MdPreview :theme="theme" previewTheme="github" codeTheme="github"
-                language="en-US" class="!bg-transparent" :modelValue="readme"
-                v-if="!loading" /> -->
+                  <MdPreview v-if="!loading" :theme="theme as Themes"
+                    previewTheme="github" codeTheme="github" language="en-US"
+                    class="!bg-transparent" :modelValue="readme" />
+                  <USkeleton v-else class="h-32" />
                 </div>
               </UCard>
             </div>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import MazAnimatedElement from 'maz-ui/components/MazAnimatedElement'
-import { onMounted, ref, useTemplateRef, watch } from 'vue';
+import { onMounted, ref, useTemplateRef, watch, computed } from 'vue';
 import type { StepperItem } from '@nuxt/ui'
 import contentPanels from '~/components/layoutSections/contentPanels.vue';
 import IntroCard from '~/components/aboutMeCards/IntroductionCard.vue';
@@ -10,7 +10,6 @@ import Card2018 from '~/components/aboutMeCards/2018Card.vue';
 import Card2020 from '~/components/aboutMeCards/2020Card.vue';
 import Card2022 from '~/components/aboutMeCards/2022Card.vue';
 import Card2025 from '~/components/aboutMeCards/2025Card.vue';
-
 
 const items: StepperItem[] = [
   {
@@ -67,12 +66,15 @@ const queryChange = (to: any) =>
   active.value = items.indexOf(items.find((section) => section.title == to?.replace('/about?section=', '')) || items[0])
 
 const switchSectionTo = (newVal: number) =>
-  document.getElementById('contentPanelsContent')!.scrollTo({ top: document.getElementById('AboutMeCard' + newVal)!.offsetTop, behavior: 'smooth' });
+  document.getElementById('contentPanelsContent')!.scrollTo({ top: document.getElementById('AboutMeCard' + newVal)!.getBoundingClientRect().top, behavior: 'smooth' });
 
 onMounted(() => {
   queryChange(route.query.section ? route.query.section : 'Introduction');
-  watch(active, switchSectionTo, { immediate: true });
+  watch(active, (newVal, oldVal) => {
+    if (oldVal !== undefined) switchSectionTo(newVal);
+  });
   watch(() => route.query.section, queryChange, { immediate: true });
+  if (route.query.section) switchSectionTo(active.value);
 })
 
 // Update about-me timeline as you scroll
@@ -99,8 +101,12 @@ class Scroller {
 
   static update() {
     this.activeHeader ||= this.headers[0];
+    const rootContainer = document.getElementById("contentPanelsContent");
+    const containerHeight = rootContainer!.clientHeight;
+    const threshold = containerHeight * 1.05; // Use 5% from bottom as threshold
+
     let activeIndex = this.headers.findIndex((header) => {
-      return header!.getBoundingClientRect().top > 180;
+      return header!.getBoundingClientRect().bottom > threshold;
     });
     if (activeIndex == -1) {
       activeIndex = this.headers.length - 1;
@@ -136,8 +142,7 @@ onMounted(() => { Scroller.init(); })
       <MazAnimatedElement direction="right" :duration="700" :delay="700">
         <UStepper ref="stepper" :items="items" orientation="vertical"
           v-model="active" class="h-full w-full -mt-4 stepper"
-          style="--ui-primary: #4a5565"
-          :ui="{ separator: 'h-8 transition-all ease-in-out duration-200', item: 'mt-4', indicator: 'transition-all ease-in-out duration-200 dark:text-white', trigger: 'transition-all ease-in-out duration-200' }"
+          :ui="{ separator: 'h-8 transition-all ease-in-out duration-200', item: 'mt-4', indicator: 'transition-all ease-in-out duration-200 dark:text-[--primary]', trigger: 'transition-all ease-in-out duration-200' }"
           disabled />
       </MazAnimatedElement>
     </template>
@@ -147,13 +152,13 @@ onMounted(() => { Scroller.init(); })
         <div class="flex gap-2 justify-between">
           <UButton leading-icon="i-lucide-arrow-left"
             :disabled="!stepper?.hasPrev" @click="stepper?.prev()"
-            style="--ui-primary: #4a5565" class="dark:text-white">
+            color="primary">
             Prev
           </UButton>
           <span class="pt-1">{{ items[active].label }}</span>
           <UButton trailing-icon="i-lucide-arrow-right"
             :disabled="!stepper?.hasNext" @click="stepper?.next()"
-            style="--ui-primary: #4a5565" class="dark:text-white">
+            color="primary">
             Next
           </UButton>
         </div>

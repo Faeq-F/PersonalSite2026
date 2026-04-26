@@ -78,8 +78,10 @@ onMounted(async () => {
     description="Thank you!" inset :handle="false"
     :ui="{ content: 'rounded-3xl' }">
     <div id="credits" class="hover:underline">
-      Built by Faeq
-      <UIcon name="i-lucide-copyleft" class="!size-1.75 min-w-1.75 ml-0.5" />
+      <span class="px-1">
+        Built by Faeq
+        <UIcon name="i-lucide-copyleft" class="!size-1.75 min-w-1.75 ml-0.5" />
+      </span>
     </div>
 
     <template #content>
