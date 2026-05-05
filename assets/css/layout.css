@@ -890,9 +890,12 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
 
 /* Mobile height adjustments */
 @media (max-width: 768px) {
+  /* Use dynamic viewport height to account for mobile browser chrome (URL bar) */
   #bodyPanel {
     padding: 0;
     border-radius: 0;
+    height: 100vh; /* Fallback for older browsers */
+    height: 100dvh;
   }
 
   html.petalTheme #pageContent,
@@ -901,9 +904,15 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
     clip-path: none;
   }
 
+  #pageContent {
+    height: 100vh; /* Fallback for older browsers */
+    height: 100dvh;
+  }
+
   #vidBG {
     width: 100vw;
-    height: 100vh;
+    height: 100vh; /* Fallback for older browsers */
+    height: 100dvh;
     border-radius: 0;
     position: fixed;
     top: 0;
