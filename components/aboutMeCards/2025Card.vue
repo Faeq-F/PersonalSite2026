@@ -1,6 +1,6 @@
 <template>
   <UCard
-    class="m-5 my-4 max-h-[15.5rem] min-h-[15.5rem] opacity-80 cardShadow border border-[var(--ui-border)]">
+    class="m-5 my-4 opacity-80 cardShadow border border-[var(--ui-border)]">
     <template #header>
       <div class="flex justify-between">
         <span class="flex items-center">
@@ -14,8 +14,8 @@
       </div>
     </template>
 
-    <div class="flex justify-between aboutContent">
-      <div class="leading-[1.9] -mt-2">
+    <div class="flex flex-col md:flex-row justify-between aboutContent">
+      <div class="leading-[1.9] -mt-2 min-w-0">
         As the culminating step, I earned a
         <UPopover mode="hover" :ui="{ content: 'popoverContent' }">
           <nuxt-link target="_blank"
@@ -46,10 +46,11 @@
           </span>
         </nuxt-link>
       </div>
-      <div class="flex">
-        <USeparator orientation="vertical" class=" self-center h-[6rem]" />
+      <div class="flex flex-row mt-4 md:mt-0 md:mx-4">
+        <USeparator orientation="vertical"
+          class="hidden md:block self-center h-[6rem] mr-4" />
         <img src="/media/TimeLineImage6.webp"
-          class="rounded-lg ml-4 h-[9rem]" />
+          class="rounded-lg md:h-[9rem] w-full md:w-auto object-contain" />
       </div>
     </div>
   </UCard>

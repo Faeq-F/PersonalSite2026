@@ -11,6 +11,10 @@ import '~/assets/css/navbar.css'
 const middleItems = useMiddleNavbarItems()
 const settings = useSettingsStore()
 
+const device = useDevice()
+
+const hideMiddlePopup = device.isMobile ? 'hidden' : '';
+
 const {
   isDark,
   toggleDarkMode,
@@ -115,7 +119,8 @@ const searchVal = ref('')
           </nuxt-link>
           <USeparator orientation="vertical"
             class="h-4 mx-2.5 invert opacity-20" />
-          <UPopover :ui="{ content: '-translate-y-6 ml-6' }">
+          <UPopover
+            :ui="{ content: '-translate-y-6 ml-6 -translate-x-5 md:translate-x-0' }">
             <UIcon name="i-lucide-search"
               class="!size-4.5 h-full clickable hover:text-black dark:hover:text-white text-muted mx-2.5 my-1.5" />
             <template #content>
@@ -129,11 +134,15 @@ const searchVal = ref('')
         <UNavigationMenu highlight highlight-color="neutral" color="neutral"
           orientation="horizontal" :items="middleItems.items" variant="link"
           class="middleItems" :ui="{
-            viewport: '!px-70 mt-[1px] -translate-y-15/12 min-h-68 max-h-68',
+            viewport: `!px-70 mt-[1px] -translate-y-15/12 min-h-68 max-h-68 ${hideMiddlePopup}`,
             childLink: 'rounded-lg',
             childLinkDescription: 'text-balance line-clamp-2',
             linkTrailingIcon: 'rotate-180 group-data-[state=open]:rotate-0'
-          }" />
+          }">
+          <template #item="{ item }" v-if="device.isMobile">
+            <UIcon :name="item.icon!" class="" />
+          </template>
+        </UNavigationMenu>
       </MazAnimatedElement>
       <MazAnimatedElement direction="left" :delay="900" :duration="700"
         class="relative flex w-auto justify-end ">
@@ -170,7 +179,7 @@ const searchVal = ref('')
             <template #item="{ item }">
               <UIcon :name="item.icon!" class="!size-4.5 " />
             </template>
-            <template #settings="{ item }: { item: NavigationMenuItem }">
+            <template #settings="{ item }">
               <USeparator orientation="vertical"
                 class="h-4 mx-4 -ml-6 invert opacity-20" />
               <UIcon :name="item.icon!" class="!size-4.5"

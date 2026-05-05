@@ -24,6 +24,7 @@
     "@nuxt/scripts": "^0.11.7",
     "@nuxt/ui": "^3.3.4",
     "@nuxtjs/composition-api": "^0.34.0",
+    "@nuxtjs/device": "^4.0.0",
     "@pinia/nuxt": "^0.11.0",
     "@tato30/vue-pdf": "^1.11.4",
     "@types/prismjs": "^1.26.5",
@@ -48,6 +49,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.13",
     "@iconify-json/lucide": "^1.2.50",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "prismjs": "^1.30.0",
     "sass-embedded": "^1.93.1"
   }

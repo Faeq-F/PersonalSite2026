@@ -1,5 +1,3 @@
-import { Script } from "vm";
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
@@ -10,7 +8,10 @@ export default defineNuxtConfig({
     buildAssetsDir: "assets",
     head: {
       link: [{ rel: "icon", type: "image/svg", href: "/PersonalSite2026/favicon.png" }],
-      title: "<Faeq />"
+      title: "<Faeq />",
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" }
+      ]
     },
     pageTransition: { name: 'page', mode: 'out-in' }
   },
@@ -26,6 +27,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
+      include: ['maz-ui', '@maz-ui/nuxt'],
       esbuildOptions: {
         supported: {
           'top-level-await': true,
@@ -57,6 +59,8 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@nuxt/ui",
     "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
+    '@nuxtjs/device',
   ],
   mazUi: {
     theme: {

@@ -1,14 +1,19 @@
 import { defineStore } from "pinia";
+import { useColorMode } from "@vueuse/core";
 
 export const useSettingsStore = defineStore("settingsStore", {
+  persist: {
+    pick: ['petalTheme', 'zarlashtTheme', 'aeonTheme', 'mirageTheme', 'bgAnimation', 'defaultColor', 'colorModeOverride']
+  },
   state: () => ({
     months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    petalTheme: false, // Petal theme - uses custom colors
+    petalTheme: false,
     zarlashtTheme: false,
     aeonTheme: false,
     mirageTheme: false,
     bgAnimation: false,
-    defaultColor: { h: 10, s: 39, l: 46 }, // Default brownish HSL color
+    defaultColor: { h: 10, s: 39, l: 46 },
+    colorModeOverride: 'system' as 'light' | 'dark' | 'system',
     initialized: false
   }),
   actions: {
@@ -17,14 +22,14 @@ export const useSettingsStore = defineStore("settingsStore", {
       // Called once on app mount
       if (this.initialized) return
       this.initialized = true
-      
+
       const html = document.documentElement
       // Check if any theme class exists in HTML
       const hasThemeClass = html.classList.contains('petalTheme') ||
-                           html.classList.contains('zTheme') ||
-                           html.classList.contains('aTheme') ||
-                           html.classList.contains('mTheme')
-      
+        html.classList.contains('zTheme') ||
+        html.classList.contains('aTheme') ||
+        html.classList.contains('mTheme')
+
       if (!hasThemeClass) {
         // No theme class found - leave bare (default theme, no class)
         // Petal theme is opt-in
@@ -105,6 +110,13 @@ export const useSettingsStore = defineStore("settingsStore", {
       document.documentElement.style.setProperty('--primary-hue', color.h.toString())
       document.documentElement.style.setProperty('--primary-sat', color.s + '%')
       document.documentElement.style.setProperty('--primary-lit', color.l + '%')
+    },
+    setColorMode(mode: 'light' | 'dark' | 'system') {
+      this.colorModeOverride = mode
+      const colorMode = useColorMode()
+      if (mode !== 'system') {
+        colorMode.value = mode
+      }
     }
   },
 });

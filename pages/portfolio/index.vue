@@ -133,7 +133,7 @@ const closePopover = (id: string) => {
     <template #left-panel-header>
       <div class="font-bold " style="line-height: 1;">
         <MazAnimatedElement direction="up" :duration="700" :delay="500">
-          <p class="text-[3rem] varela">Portfolio</p>
+          <p class="text-[2rem] md:text-[3rem] varela">Portfolio</p>
         </MazAnimatedElement>
         <MazAnimatedElement direction="up" :duration="700" :delay="600">
           <p class="text-[1rem]">What I have worked on</p>

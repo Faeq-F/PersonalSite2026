@@ -13,10 +13,9 @@ const {
   colorMode
 } = useTheme()
 
-// Use store state
-const { petalTheme, zarlashtTheme, aeonTheme, mirageTheme, bgAnimation, defaultColor } = storeToRefs(settings)
+// Use store state (all persisted via pinia-plugin-persistedstate)
+const { petalTheme, zarlashtTheme, aeonTheme, mirageTheme, bgAnimation, defaultColor, colorModeOverride } = storeToRefs(settings)
 
-const selectedMode = ref<'light' | 'dark' | 'system'>('system')
 const selectedTheme = ref('default')
 
 const themeTabs = ref<TabsItem[]>([
@@ -39,12 +38,14 @@ watch(selectedTheme, (newVal) => {
   } else if (newVal === 'zarlasht') {
     settings.setZarlashtTheme(true)
   }
-})
+}, { immediate: true })
 
-// Watch for dark/light mode changes
-watch(selectedMode, (newMode) => {
-  colorMode.value = newMode
-})
+// Watch for dark/light mode changes (persisted in store)
+watch(colorModeOverride, (newMode) => {
+  if (newMode !== 'system') {
+    colorMode.value = newMode
+  }
+}, { immediate: true })
 
 // Sync theme tabs with store state
 watch([petalTheme, zarlashtTheme, aeonTheme, mirageTheme], ([p, z, a, m]) => {
@@ -61,7 +62,7 @@ const isPetalTheme = computed(() => petalTheme.value)
 // Calculate primary color with dark mode offset
 const primaryColorStyle = computed(() => {
   if (selectedTheme.value !== 'petal') return {}
-  const isDark = selectedMode.value === 'dark' || (selectedMode.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const isDark = colorModeOverride.value === 'dark' || (colorModeOverride.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
   const hue = isDark ? defaultColor.value.h + 240 : defaultColor.value.h
   return { '--ui-primary': `hsl(${hue}, ${defaultColor.value.s}%, ${defaultColor.value.l}%)` }
 })
@@ -88,25 +89,24 @@ function resetColor() {
   settings.setDefaultColor({ h: 10, s: 39, l: 46 })
 }
 
-// Sync initial theme state with HTML classes
+// Sync initial theme state with persisted store values
 onMounted(() => {
-  // Reset to system theme instead of loading persisted preference
-  colorMode.value = 'system'
-  settings.syncFromHtml()
-  const html = document.documentElement
-  if (html.classList.contains('petalTheme')) {
+  // Sync theme selection from persisted store state
+  if (petalTheme.value) {
     selectedTheme.value = 'petal'
-  } else if (html.classList.contains('zTheme')) {
+  } else if (zarlashtTheme.value) {
     selectedTheme.value = 'zarlasht'
-  } else if (html.classList.contains('aTheme')) {
+  } else if (aeonTheme.value) {
     selectedTheme.value = 'aeon'
-  } else if (html.classList.contains('mTheme')) {
+  } else if (mirageTheme.value) {
     selectedTheme.value = 'mirage'
+  } else {
+    selectedTheme.value = 'default'
   }
-  // Initialize CSS variables
-  document.documentElement.style.setProperty('--primary-hue', defaultColor.value.h.toString())
-  document.documentElement.style.setProperty('--primary-sat', defaultColor.value.s + '%')
-  document.documentElement.style.setProperty('--primary-lit', defaultColor.value.l + '%')
+  // Apply persisted color mode
+  if (colorModeOverride.value !== 'system') {
+    colorMode.value = colorModeOverride.value
+  }
 })
 
 // Watch for color changes to update CSS variables
@@ -116,7 +116,7 @@ watch(defaultColor, (newColor) => {
   document.documentElement.style.setProperty('--primary-lit', newColor.l + '%')
 }, { deep: true })
 
-// Actually control background animation
+// Actually control background animation (apply persisted state immediately)
 watch(bgAnimation, (newValue) => {
   const videoBGelem = document.getElementById('video-bg-elem') as HTMLVideoElement
   const fogWrap = document.getElementById('fogWrap')
@@ -130,23 +130,21 @@ watch(bgAnimation, (newValue) => {
     fogWrap?.classList.add('hidden')
     videoBGelem.pause()
   }
-})
+}, { immediate: true })
 
-// Update CSS variable when default color changes
-watch(defaultColor, (newColor) => {
-  document.documentElement.style.setProperty('--primary-hue', newColor.h.toString())
-}, { immediate: true, deep: true })
+const device = useDevice()
+const tabOrientation = computed(() => device.isMobile ? 'vertical' : 'horizontal')
 </script>
 
 <template>
   <div
-    class="welcome-container h-screen w-screen flex items-center justify-center p-8">
+    class="welcome-container h-screen w-screen flex items-center justify-center p-4 md:p-8">
     <div
-      class="cardShadow p-16 max-w-xl w-full h-[34rem] flex-col flex justify-between">
+      class="cardShadow p-6 md:p-16 max-w-xl w-full h-auto md:h-[34rem] flex-col flex justify-between">
       <!-- Welcome Title -->
       <MazAnimatedElement direction="up" :duration="800" :delay="100">
-        <div class="text-center mb-12">
-          <h1 class="text-6xl font-bold varela">Welcome</h1>
+        <div class="text-center mb-6 md:mb-12">
+          <h1 class="text-4xl md:text-6xl font-bold varela">Welcome</h1>
         </div>
       </MazAnimatedElement>
 
@@ -158,8 +156,9 @@ watch(defaultColor, (newColor) => {
           </h2>
           <UTabs :content="false" :items="themeTabs" v-model="selectedTheme"
             :color="selectedTheme === 'petal' ? 'primary' : 'neutral'"
-            class="w-full theme-tabs" orientation="horizontal"
-            :ui="{ list: 'grid grid-cols-5 gap-2', trigger: 'theme-tab-trigger' }">
+            class="w-full theme-tabs"
+            :ui="!device.isMobile ? { list: 'grid grid-cols-5 gap-2', trigger: 'theme-tab-trigger' } : { list: 'w-full' }"
+            :orientation="tabOrientation">
           </UTabs>
         </div>
       </MazAnimatedElement>
@@ -171,7 +170,7 @@ watch(defaultColor, (newColor) => {
             { label: 'Auto', icon: 'i-lucide-laptop', value: 'system' },
             { label: 'Light', icon: 'i-lucide-sun', value: 'light' },
             { label: 'Dark', icon: 'i-lucide-moon', value: 'dark' }
-          ]" v-model="selectedMode" class="w-full" color="neutral"
+          ]" v-model="colorModeOverride" class="w-full" color="neutral"
             :ui="{ list: 'grid grid-cols-3 gap-2' }" />
 
           <!-- Color Pickers & BG Animation Toggle -->

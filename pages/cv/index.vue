@@ -42,14 +42,27 @@ watch(page, (newPageVal) => {
 const LenisWrapper = ref();
 const LenisContent = ref();
 
+// Collapsible state - collapsed by default on mobile
+const device = useDevice()
+const open = ref(false)
+
+onMounted(() => {
+  if (device.isMobile) {
+    scale.value = 0.6
+    viewActive.value = 'single'
+  }
+})
+const label = computed(() => (open.value ? 'Close' : 'Open') + ' controls')
 </script>
 
 
 <template>
-  <div class="flex w-full p-8 h-full">
+  <div
+    class="flex flex-col md:flex-row w-full p-4 md:p-8 h-full overflow-y-auto md:overflow-hidden">
 
-    <div class="p-8 pb-0 h-full transition-all duration-200"
-      :class="viewActive == 'single' ? 'flex-1/10' : ''">
+    <div
+      class="p-4 md:p-8 pb-0 h-auto md:h-full transition-all duration-200 w-full md:w-auto"
+      :class="viewActive === 'single' ? 'md:flex-1/10' : ''">
 
       <UCard
         class="h-full w-full opacity-80 cardShadow border border-[var(--ui-border)]">
@@ -58,7 +71,8 @@ const LenisContent = ref();
           <div class="flex gap-4 items-center justify-between">
             <div class="font-bold" style="line-height: 1;">
               <MazAnimatedElement direction="up" :duration="700" :delay="500">
-                <p class="text-[3rem] varela">Curriculum Vitae</p>
+                <p class="text-[2rem] md:text-[3rem] varela">Curriculum Vitae
+                </p>
               </MazAnimatedElement>
             </div>
             <MazAnimatedElement direction="up" :duration="700" :delay="600">
@@ -70,7 +84,23 @@ const LenisContent = ref();
           </div>
         </template>
 
-        <div class="">
+        <!-- Collapsible on mobile, always open on desktop -->
+        <UCollapsible v-if="device.isMobile" v-model:open="open">
+          <UButton :label="label" variant="soft" class="group" :ui="{
+            trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200'
+          }" trailing-icon="i-lucide-chevron-down" block />
+          <template #content>
+            <div class="mt-4">
+              <MazAnimatedElement direction="up" :duration="700" :delay="700">
+                <p class="font-bold text-[1rem]">Related content</p>
+              </MazAnimatedElement>
+              <USeparator class="w-28 mb-4 mt-0.5 self-center " />
+              <RelatedCards />
+            </div>
+          </template>
+        </UCollapsible>
+        <!-- Desktop -->
+        <div class="" v-if="!device.isMobile">
           <MazAnimatedElement direction="up" :duration="700" :delay="700">
             <p class="font-bold text-[1rem]">Related content</p>
           </MazAnimatedElement>
@@ -78,9 +108,10 @@ const LenisContent = ref();
           <RelatedCards />
         </div>
 
-        <template #footer>
+        <template #footer v-if="!device.isMobile || (device.isMobile && open)">
           <div class="flex flex-col gap-4">
-            <div class="flex gap-4 items-end w-full justify-between">
+            <div
+              class="flex flex-col md:flex-row gap-4 items-start md:items-end w-full justify-between">
               <MazAnimatedElement direction="right" :duration="700"
                 :delay="800">
                 <UFormField label="Page">

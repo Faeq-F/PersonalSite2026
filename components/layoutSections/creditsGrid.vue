@@ -7,7 +7,9 @@ interface Item {
   label: string
 }
 
-const Rows = [
+const device = useDevice()
+
+const sourceRows = [
   // Row 1
   [
     { url: 'https://nuxt.com/', icon: 'i-lucide-server', label: 'Nuxt' },
@@ -55,7 +57,7 @@ const Rows = [
     { url: 'https://fonts.google.com/specimen/EB+Garamond', icon: 'i-lucide-scroll-text', label: 'EB Garamond Font' },
     { url: 'https://unsplash.com/photos/geometric-light-patterns-on-a-blue-surface-Rp17qQr9q8w', icon: 'i-lucide-images', label: 'Mirage theme image' },
     { url: 'https://unsplash.com/photos/white-swan-on-water-51U-PW1y3ts', icon: 'i-lucide-origami', label: 'Default theme image' },
-    { url: 'https://unsplash.com/photos/white-and-black-round-gauge-X2SL7nrXiVM', icon: 'i-lucide-circle-gauge', label: 'Aeon theme image' },
+    { url: 'https://unsplash.com/photos/shiny-metallic-head-with-circuit-board-patterns-OobcCeOAH1k', icon: 'i-lucide-bot', label: 'Aeon theme image' },
   ],
   // Row 8
   [
@@ -65,23 +67,46 @@ const Rows = [
     { url: '', icon: '', label: '' },
   ]
 ] as Item[][]
+
+// Flatten all items and restructure for mobile (3 columns) vs desktop (4 columns)
+const Rows = computed(() => {
+  const allItems = sourceRows.flat()
+  const columns = device.isMobile ? 3 : 4
+  const rows: Item[][] = []
+
+  for (let i = 0; i < allItems.length; i += columns) {
+    rows.push(allItems.slice(i, i + columns))
+  }
+
+  if (columns == 3) rows.pop()
+
+  return rows
+})
+
+// Calculate height per row based on total rows
+// const rowHeightClass = computed(() => {
+//   const rowCount = Rows.value.length
+//   return `h-[${Math.floor(100 / rowCount)}%]`
+// })
 </script>
 
 <template>
-  <div class="rounded-2xl w-full h-full mt-1">
-    <div v-for="(row, rowIndex) in Rows" :key="rowIndex" class="flex h-1/5">
+  <div class="rounded-2xl w-[110vw] md:w-full h-full mt-1 mb-2">
+    <div v-for="(row, rowIndex) in Rows" :key="rowIndex" class="flex"
+      :class="device.isMobile ? 'h-[10%]' : 'h-1/5'">
       <template v-for="(item, itemIndex) in row" :key="itemIndex">
         <Button :url="item.url" :icon="item.icon" :label="item.label"
           :disabled="!item.label" :border="rowIndex === 0 && itemIndex === 0 ? 'border border-accented'
-            : rowIndex === 7 && itemIndex === 0 ? 'border-x border-b border-accented'
-              : rowIndex === 7 && itemIndex === 3 ? 'border-r border-b border-accented'
-                : rowIndex === 0 && itemIndex === 3 ? 'border-y border-r border-accented'
+            : rowIndex === Rows.length - 1 && itemIndex === 0 ? 'border-x border-b border-accented'
+              : rowIndex === Rows.length - 1 && itemIndex === row.length - 1 ? 'border-r border-b border-accented'
+                : rowIndex === 0 && itemIndex === row.length - 1 ? 'border-y border-r border-accented'
                   : rowIndex === 0 ? 'border-r border-y border-accented'
                     : itemIndex === 0 ? 'border-b border-x border-accented'
-                      : 'border-r border-b border-accented'" :rounded="rowIndex === 0 && itemIndex === 0 ? 'rounded-tl-2xl'
-                        : rowIndex === 0 && itemIndex === 3 ? 'rounded-tr-2xl'
-                          : rowIndex === 7 && itemIndex === 0 ? 'rounded-bl-2xl'
-                            : rowIndex === 7 && itemIndex === 3 ? 'rounded-br-2xl' : ''" />
+                      : 'border-r border-b border-accented'"
+          :rounded="rowIndex === 0 && itemIndex === 0 ? 'rounded-tl-2xl'
+            : rowIndex === 0 && itemIndex === row.length - 1 ? 'rounded-tr-2xl'
+              : rowIndex === Rows.length - 1 && itemIndex === 0 ? 'rounded-bl-2xl'
+                : rowIndex === Rows.length - 1 && itemIndex === row.length - 1 ? 'rounded-br-2xl' : ''" />
       </template>
     </div>
   </div>

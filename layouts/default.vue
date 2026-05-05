@@ -58,11 +58,13 @@ onMounted(async () => {
     </div>
 
     <div class="fogWrap" id="fogWrap">
-      <img src="/media/cloud.png" v-for="_i in Array.from(Array(100).keys())" />
+      <img src="/media/cloud.png" alt=""
+        v-for="_i in Array.from(Array(100).keys())" />
     </div>
 
     <div id="pageContent" class="overflow-hidden">
-      <div style="height: calc(100% - 4.5rem)" class="w-full">
+      <!-- Desktop: original height, Mobile: adjusted for header and bottom nav -->
+      <div class="w-full desktop-height mobile-height">
         <transition name="slide" mode="out-in">
           <div :key="route.name" class="h-full w-full">
             <slot />

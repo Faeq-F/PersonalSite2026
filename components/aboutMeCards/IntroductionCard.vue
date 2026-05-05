@@ -13,15 +13,16 @@ onMounted(async () => {
 
 <template>
   <UCard
-    class="my-5 mx-4 opacity-80 min-h-[32rem] cardShadow border border-[var(--ui-border)]">
+    class="my-5 mx-2 md:mx-4 opacity-80 min-h-auto cardShadow border border-[var(--ui-border)]">
 
-    <div class="min-h-[24.5rem] flex max-h-[24.5rem] w-full">
-      <div class="grow">
-        <div class="varela mt-2 ml-4">
+    <div class="flex flex-col md:flex-row w-full">
+      <div class="grow min-w-0">
+        <div class="varela mt-2 ml-2 md:ml-4">
           Introduction
           <USeparator class="w-28 mb-4 mt-0.5 self-center" />
         </div>
-        <div class="mr-4 ml-8 leading-[1.9] aboutContent">
+        <div
+          class="mr-2 ml-4 md:mr-4 md:ml-8 leading-[1.9] aboutContent text-sm md:text-base">
           I'm a software engineer with a passion for building
           useful things. I'm always working on a wide range of projects,
           with a diverse set of technologies, many of which are publicly
@@ -91,32 +92,37 @@ onMounted(async () => {
           <br /><br />
         </div>
       </div>
-      <USeparator orientation="vertical" class="h-70 self-center" />
+      <USeparator orientation="vertical"
+        class="hidden md:block h-70 self-center mx-2 shrink-0" />
       <img src="/media/me.jpeg"
-        class="min-h-96 max-h-96 rounded-lg ml-4 meImage" />
+        class="md:h-96 rounded-lg mt-4 md:mt-0 md:ml-4 meImage object-cover w-full md:w-auto shrink-0" />
     </div>
 
     <template #footer>
-      <div class="flex justify-evenly">
-        <span>
-          <UBadge icon="i-lucide-user" size="lg" color="neutral" variant="soft">
+      <div
+        class="flex flex-wrap gap-2 md:gap-0 md:flex-nowrap md:flex-row justify-evenly">
+        <span class="w-full md:w-auto">
+          <UBadge icon="i-lucide-user" size="md" color="neutral" variant="soft"
+            class="w-full md:w-auto md:justify-center justify-start">
             <USeparator orientation="vertical" class="h-4 invert opacity-20" />
             Legal Name:
             <span class="opacity-80">Faeq Faisal</span>
           </UBadge>
         </span>
-        <span>
-          <UBadge icon="i-lucide-map-pin-house" size="lg" color="neutral"
-            variant="soft">
+        <span class="w-full md:w-auto">
+          <UBadge icon="i-lucide-map-pin-house" size="md" color="neutral"
+            variant="soft"
+            class="w-full md:w-auto md:justify-center justify-start">
             <USeparator orientation="vertical" class="h-4 invert opacity-20" />
             Location:
             <span class="opacity-80">London, UK</span>
           </UBadge>
         </span>
-        <span>
-          <nuxt-link to="/portfolio">
-            <UBadge icon="i-lucide-square-kanban" size="lg" color="neutral"
-              variant="soft">
+        <span class="w-full md:w-auto">
+          <nuxt-link to="/portfolio" class="block w-full md:w-auto">
+            <UBadge icon="i-lucide-square-kanban" size="md" color="neutral"
+              variant="soft"
+              class="w-full md:w-auto md:justify-center justify-start">
               <USeparator orientation="vertical"
                 class="h-4 invert opacity-20" />
               Number of Projects:
@@ -124,10 +130,11 @@ onMounted(async () => {
             </UBadge>
           </nuxt-link>
         </span>
-        <span>
-          <nuxt-link to="/portfolio">
-            <UBadge icon="i-lucide-file-badge" size="lg" color="neutral"
-              variant="soft">
+        <span class="w-full md:w-auto">
+          <nuxt-link to="/portfolio" class="block w-full md:w-auto">
+            <UBadge icon="i-lucide-file-badge" size="md" color="neutral"
+              variant="soft"
+              class="w-full md:w-auto md:justify-center justify-start">
               <USeparator orientation="vertical"
                 class="h-4 invert opacity-20" />
               Number of Certifications:

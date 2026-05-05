@@ -175,15 +175,16 @@ html.zTheme #pageContent:has(#HomeSocialButtonGroup)::before {
 
 /* aTheme home background */
 html.aTheme #pageContent::before {
-  background-image: url("/media/vignette_white-and-black-round-gauge_chuttersnap-X2SL7nrXiVM-unsplash.png");
-  background-size: 50%;
+  background-image: url("/media/Vignette_DarkenedLightNoBG_shiny-metallic-head-with-circuit-board-patterns_resource-database-OobcCeOAH1k-unsplash.png");
+  background-size: 30%;
   background-repeat: no-repeat;
   background-position: center;
-  background-position-x: 80%;
+  background-position-x: 20%;
+  transform: scaleX(-1);
 }
 
 html.aTheme.dark #pageContent::before {
-  background-image: url("/media/vignette_white-and-black-round-gauge_chuttersnap-X2SL7nrXiVM-unsplash.png");
+  background-image: url("/media/Vignette_DarkNoBG_shiny-metallic-head-with-circuit-board-patterns_resource-database-OobcCeOAH1k-unsplash.png");
 }
 
 html.aTheme #pageContent:has(#HomeSocialButtonGroup)::before {
@@ -264,7 +265,7 @@ html.mTheme.dark #pageContent .homeTitle {
 
 html.petalTheme #pageContent,
 html.mTheme #pageContent {
-  clip-path: inset(1rem round 1.5rem);
+  clip-path: inset(0.9rem round 1.5rem);
 }
 
 html.mTheme #vidBG {
@@ -879,5 +880,143 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
   border-right: #eee 1px solid;
   html.dark & {
     border-right: #222 1px solid;
+  }
+}
+
+/* Desktop height for page content area */
+.desktop-height {
+  height: calc(100% - 4.5rem);
+}
+
+/* Mobile height adjustments */
+@media (max-width: 768px) {
+  #bodyPanel {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  html.petalTheme #pageContent,
+  html.mTheme #pageContent,
+  .zTheme #bodyPanel {
+    clip-path: none;
+  }
+
+  #vidBG {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  /* Mobile page content height: full - bottom nav height */
+  .mobile-height {
+    height: calc(100% - 3.5rem);
+    padding-bottom: 3.5rem;
+  }
+
+  .desktop-height {
+    height: 100%;
+  }
+
+  /* Reduce fog animation density on mobile for performance */
+  .fogWrap img:nth-child(n + 51) {
+    display: none;
+  }
+
+  /* Mobile header bar - already handled by component but ensure z-index */
+  #pageContent {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Ensure mobile nav stays above content */
+  #mobileNavbar {
+    position: relative;
+    z-index: 50;
+  }
+
+  /* Mobile-safe area support for notched devices */
+  @supports (padding-top: env(safe-area-inset-top)) {
+    #bodyPanel {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
+  /* Credits positioning on mobile - above bottom navbar */
+  #credits {
+    bottom: 0.1rem;
+    right: 0.5rem;
+  }
+}
+
+/* Mobile navbar - hide labels, show only icons */
+@media (max-width: 768px) {
+  #navbar {
+    position: absolute;
+    bottom: 0.1rem;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 1rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    background: transparent;
+  }
+
+  #navbar .navbar {
+    width: 100% !important;
+    margin: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    gap: 0rem;
+  }
+
+  #navbar .middleItems a,
+  #navbar .middleItems button {
+    padding: 0.5rem;
+  }
+
+  /* Center the middle items and make them flex evenly */
+  #navbar .w-full.justify-center {
+    width: 100%;
+  }
+}
+
+/* Touch optimization */
+@media (max-width: 768px) {
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Ensure touch targets are at least 44px */
+  .mobileNav a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Mobile image position */
+@media (max-width: 768px) {
+  html.zTheme #pageContent::before {
+    background-position: left;
+  }
+  html.aTheme #pageContent::before {
+    background-size: 100%;
+    background-position-y: 70%;
+  }
+
+  html:not(.zTheme, .mTheme, .aTheme, .petalTheme) #pageContent::before {
+    background-size: 100vh;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-position-x: 21.5%;
+    background-position-y: bottom;
   }
 }
