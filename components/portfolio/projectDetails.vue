@@ -2,10 +2,12 @@
 import { useObservable } from "@vueuse/rxjs";
 import { from } from "rxjs";
 import { liveQuery } from 'dexie';
-import { db, type Project, type Skill } from "~/assets/scripts/db";
+import { db, type Project, type Skill, type Certificate } from "~/assets/scripts/db";
 
 const route = useRoute()
+const isCert = route.path.includes('certificate')
 const project = useObservable<Project | undefined>(from(liveQuery(async () => await db.projects.get((route.params.name + '').replaceAll('~', ' ')))));
+const certificate = useObservable<Certificate | undefined>(from(liveQuery(async () => await db.certificates.get((route.params.name + '').replaceAll('~', ' ')))));
 
 const skills = useObservable<Skill[]>(from(liveQuery(async () => await db.skills.toArray())));
 const getSkill = (skill: string) => skills.value?.find(s => s.name == skill);
@@ -20,7 +22,7 @@ const getSkill = (skill: string) => skills.value?.find(s => s.name == skill);
     <USeparator class="my-3" :ui="{ border: 'dark:border-gray-600' }" />
     <div class="text-sm min-w-0">
       <ul class="list-none text-left">
-        <li v-for="link in project?.links" class="truncate">
+        <li v-for="link in (isCert ? certificate?.links : project?.links)" class="truncate">
           <div class="flex">
             <!--link type icon-->
             <ULink :url="link" class="truncate max-w-full">
@@ -37,33 +39,34 @@ const getSkill = (skill: string) => skills.value?.find(s => s.name == skill);
       <span>Tags</span>
     </div>
     <USeparator class="my-3" :ui="{ border: 'dark:border-gray-600' }" />
-    <UPopover v-for="(tag, i) in project?.skills" :key="i" class="mx-0.5 outfit"
-      mode="hover">
-      <UKbd>
-        {{ tag }}
-      </UKbd>
-      <template #content>
-        <div class="text-sm flex flex-col gap-2 p-2">
-          <UButton color="neutral" variant="soft" :to="'/skill/' + tag">
-            See the skill '{{ tag }}'
-          </UButton>
-          <USeparator class="" :ui="{ border: 'dark:border-gray-600' }" />
-          Categories:
-          <UButton color="neutral" variant="outline" :to="'/skill/' + skillCat"
-            class="text-xs w-fit p-1"
-            v-for="skillCat in getSkill(tag)?.category ?? []">
-            {{ skillCat }}
-          </UButton>
-          <USeparator class="" :ui="{ border: 'dark:border-gray-600' }" />
-          Current experience level:<br />
-          <ul class="list-disc ml-4 pr-4">
-            <li>sample level</li>
-          </ul>
-        </div>
-      </template>
-    </UPopover>
+    <div class="max-h-32 overflow-y-scroll">
+      <UPopover v-for="(tag, i) in (isCert ? certificate?.skills : project?.skills)" :key="i" class="mx-0.5 outfit"
+        mode="hover">
+        <UKbd>
+          {{ tag }}
+        </UKbd>
+        <template #content>
+          <div class="text-sm flex flex-col gap-2 p-2">
+            <UButton color="neutral" variant="soft" :to="'/skill/' + tag">
+              See the skill '{{ tag }}'
+            </UButton>
+            <USeparator class="" :ui="{ border: 'dark:border-gray-600' }" />
+            Categories:
+            <UButton color="neutral" variant="outline" :to="'/skill/' + skillCat" class="text-xs w-fit p-1"
+              v-for="skillCat in getSkill(tag)?.category ?? []">
+              {{ skillCat }}
+            </UButton>
+            <USeparator class="" :ui="{ border: 'dark:border-gray-600' }" />
+            Current experience level:<br />
+            <ul class="list-disc ml-4 pr-4">
+              <li>sample level</li>
+            </ul>
+          </div>
+        </template>
+      </UPopover>
+    </div>
   </MazAnimatedElement>
-  <MazAnimatedElement direction="left" :delay="200" :duration="700">
+  <MazAnimatedElement direction="left" :delay="200" :duration="700" v-if="!isCert">
     <div class="flex items-center text-sm mt-4 md:mt-0">
       <UIcon name="i-lucide-git-pull-request-arrow" class="mr-1.5 !size-4" />
       <span>Related Activities & Projects</span>
