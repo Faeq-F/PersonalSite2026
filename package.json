@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@bentogrid/core": "^1.1.1",
     "@internationalized/date": "^3.10.0",
     "@maz-ui/icons": "^4.7.6",
     "@maz-ui/nuxt": "^4.9.0",

@@ -20,9 +20,9 @@ interface Certificate {
   images: string[];
   skills: string[]; // their names
   links: string[]; // their urls
-  code: string;
   description: string;
   awarded: Date;
+  isFeatured?: boolean;
 }
 
 interface Project {
@@ -35,6 +35,7 @@ interface Project {
   relatedActivities: number[]; // their ids
   relatedProjects: string[]; // their names
   images: string[]; // their urls
+  isFeatured?: boolean;
 }
 
 interface Link {
@@ -227,7 +228,9 @@ db.on('populate', () => {
     { name: "PowerShell", category: ['Object-Oriented Programming Languages', 'Procedural Programming Languages', "Languages", 'Scripting Languages',], experienceLevel: [] },
     { name: "Batch", category: ['Procedural Programming Languages', "Languages", 'Scripting Languages',], experienceLevel: [] },
     { name: "Docker", category: ['Runtime Environments'], experienceLevel: [] },
+    { name: "Bun", category: ['Runtime Environments',], experienceLevel: [] },
     { name: "Node.js", category: ['Runtime Environments',], experienceLevel: [] },
+    { name: "Deno", category: ['Runtime Environments',], experienceLevel: [] },
     { name: "React", category: ['Libraries & Frameworks'], experienceLevel: [] },
     { name: "Astro", category: ['Libraries & Frameworks'], experienceLevel: [] },
     { name: "Next.js", category: ['Libraries & Frameworks'], experienceLevel: [] },
@@ -350,37 +353,331 @@ db.on('populate', () => {
     { name: "Organization" },
     { name: "Docs" },
     { name: "Other" },
+    { name: "Details" },
   ])
 
   db.links.bulkPut([
     { url: "https://www.heathland.hounslow.sch.uk/", type: 'Organization' },
+    { url: "https://www.royalholloway.ac.uk/", type: 'Organization' },
+    { url: 'https://web.archive.org/web/20240618113322/https://www.royalholloway.ac.uk/studying-here/undergraduate/computer-science/computer-science-software-engineering/#', type: 'Details' }
   ])
 
   db.organizations.bulkPut([
-    { name: "", roles: [7], locations: [''], links: [''] },
+    { name: "Royal Holloway, University of London", roles: [7], locations: ['Egham, Surrey, United Kingdom', 'In-Person'], links: ['https://www.royalholloway.ac.uk/'] },
+    { name: "The Heathland School", roles: [7], locations: ['Hounslow, Greater London, United Kingdom', 'In-Person'], links: ['https://www.heathland.hounslow.sch.uk/'] },
+    { name: "freeCodeCamp", roles: [11], locations: ['Online'], links: ['https://www.freecodecamp.org/'] },
+    { name: "Microsoft", roles: [11], locations: ['Online'], links: ['https://www.microsoft.com/'] },
+    { name: "UKMT", roles: [11], locations: ['In-Person'], links: ['https://www.ukmt.org.uk/'] },
+    { name: "Mimo", roles: [11], locations: ['Online'], links: ['https://www.mimo.org/'] },
+    { name: "Royal Institution", roles: [11], locations: ['Online'], links: ['https://www.rigb.org/'] },
   ])
 
   db.certificates.bulkPut([
     {
-      name: "BSc Hons. Computer Science (Software Engineering)", description: 'My Degree in Software Engineering from Royal Holloway, University of London', organization: [''], code: '', links: [''], images: ['/PersonalSite2026/media/portfolio/Faeq Faisal Certificate front side.jpg', '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 1.png', '/PersonalSite2026/media/portfolio/Faeq Faisal Transcript page 2.png'], skills: [''], awarded: new Date('August 2025')
+      name: "BSc Hons. Computer Science (Software Engineering)",
+      description: "My Bachelor's Degree in Software Engineering from Royal Holloway, University of London",
+      organization: ['Royal Holloway, University of London'],
+      links: ['https://web.archive.org/web/20240618113322/https://www.royalholloway.ac.uk/studying-here/undergraduate/computer-science/computer-science-software-engineering/#'],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Bachelor\'s Degree Certificate front side.jpg',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Bachelor\'s Degree Transcript page 1.png',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Bachelor\'s Degree Transcript page 2.png'
+      ],
+      skills: [
+        'Python', 'JavaScript', 'TypeScript', 'Java', 'C',
+        "Eclipse", "Maven", "JUnit", "JavaFX", "FXML", "SPIM", "MIPS", "LMC", "SQL",
+        "PostgreSQL", "UML", "Visual Studio Code", "XML", "Git", "GitLab", "Markdown",
+        "Terminal", "Node.js", "React", "Next.js", "htmx", "TailwindCSS", "Express.js",
+        "Svelte", "Spring", "SvelteKit", "Alpine.js", "Nginx", "MongoDB", "Redis",
+        "Valkey", "HTML", "CSS", "Sass", "Jupyter", "Microsoft Office", "WSL",
+        "Microsoft PowerPoint", "TeX / LaTeX", "Gleam", "Linux", "Windows", "BEAM",
+        "Haskell", "Scala", "SWI-Prolog", "Microsoft Word", "Microsoft Excel",
+        "Microsoft OneNote", "Microsoft Outlook", "Microsoft Access", "Microsoft Teams",
+        //
+        "Active Listening", "Empathy", "Clarity and Conciseness", "Persuasion",
+        "Presenting", "Conflict Management / Resolution", "Giving and Receiving Feedback",
+        "Public Speaking", "Collaboration", "Emotional Intelligence", "Flexibility / Adaptability",
+        "Reliability", "Constructive Feedback", "Respectfulness", "Cultural Awareness",
+        "Responsibility", "Supportiveness", "Critical Thinking", "Analytical",
+        "Creativity", "Decision Making", "Research", "Attention to Detail",
+        "Interpersonal", "Logical Reasoning", "Resourcefulness", "Motivating Others",
+        "Troubleshooting", "Risk Assessment", "Accountability", "Vision Setting",
+        "Strategic Thinking", "Delegation", "Coaching and Mentoring", "Initiative",
+        "Written Communication", "Time Management", "Dependability", "Self-Motivation",
+        "Nonverbal Communication", "Discipline", "Integrity", "Storytelling",
+        "Professionalism", "Commitment to Excellence", "Idea Generation",
+        "Persistence", "Visual Communication", "Imagination", "Experimentation",
+        "English",
+      ],
+      awarded: new Date('August 2025'),
+      isFeatured: true
     },
-    { name: "CS & Physics A-level cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "Maths A level cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "Spanish GCSE cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "Bio, physics, chem cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "Geog, RS, Maths cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "CS & 2 engs cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "C# cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "pathway cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "web dev cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "RI masterclass cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "Siemens work experience cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "Science engineering & IT work experience cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "become a hacker cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "make a website cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "tech the future cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "tech the future insight cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
-    { name: "career in tech cert", description: '', organization: [''], code: '', links: [''], images: [], skills: [''], awarded: new Date() },
+    {
+      name: "A Level (Advanced GCE) in Computer Science and Physics",
+      description: 'My A Level qualification in Computer Science and Physics',
+      organization: ['The Heathland School'],
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal A Level Computer Science and Physics Certificate page 1.jpg',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal A Level Computer Science and Physics Certificate page 2.jpg',
+      ],
+      skills: [''],
+      awarded: new Date('September 2022')
+    },
+    {
+      name: "A Level (Advanced GCE) in Mathematics",
+      description: 'My A Level qualification in Mathematics',
+      organization: ['The Heathland School'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal A Level Mathematics Certificate page 1.jpg',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal A Level Mathematics Certificate page 2.jpg',
+      ],
+      skills: [''],
+      awarded: new Date('September 2022')
+    },
+    {
+      name: "GCSE in Spanish",
+      description: 'My GCSE qualification in Spanish',
+      organization: ['The Heathland School'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Spanish Certificate page 1.jpg',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Spanish Certificate page 2.jpg',
+      ],
+      skills: [''],
+      awarded: new Date('September 2020')
+    },
+    {
+      name: "GCSE in Biology, Chemistry and Physics (Triple Science)",
+      description: 'My GCSE qualification in Biology, Chemistry and Physics (Triple Science)',
+      organization: ['The Heathland School'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Biology%2C Chemistry and Physics Certificate page 1.jpg',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Biology%2C Chemistry and Physics Certificate page 2.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('September 2020')
+    },
+    {
+      name: "GCSE in Geography, Religious Studies and Mathematics",
+      description: 'My GCSE qualification in Geography, Religious Studies and Mathematics',
+      organization: ['The Heathland School'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Geography%2C Religious Studies and Mathematics Certificate page 1.jpg',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Geography%2C Religious Studies and Mathematics Certificate page 2.jpg',
+      ],
+      skills: [''],
+      awarded: new Date('October 2020')
+    },
+    {
+      name: "GCSE in Computer Science, English Language and English Literature",
+      description: 'My GCSE qualification in Computer Science, English Language and English Literature',
+      organization: ['The Heathland School'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Computer Science%2C English Language and English Literature Certificate page 1.jpg',
+        '/PersonalSite2026/media/portfolio/Faeq Faisal GCSE Computer Science%2C English Language and English Literature Certificate page 2.jpg',
+      ],
+      skills: [''],
+      awarded: new Date('September 2020')
+    },
+    {
+      name: "UKMT Senior Mathematical Challenge 2020 - Bronze",
+      description: 'My Bronze certificate from the UKMT Senior Mathematical Challenge in 2020',
+      organization: ['UKMT', 'The Heathland School'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal UKMT Senior Mathematical Challenge 2020 Certificate.jpg',
+      ],
+      skills: [''],
+      awarded: new Date('February 2020')
+    },
+    {
+      name: "Foundational C# with Microsoft",
+      description: 'My Foundational C# with Microsoft certificate from completing a course on freeCodeCamp',
+      organization: ['freeCodeCamp', 'Microsoft'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal freeCodeCamp Foundational C%23 with Microsoft Certificate.png',
+      ],
+      skills: [''],
+      awarded: new Date('September 2023')
+    },
+    {
+      name: "Cisco Pathway To Your Furture Work Experience",
+      description: '',
+      organization: [''],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Cisco Pathway To Your Furture Work Experience Certificate.jpg',
+      ],
+      skills: [''],
+      awarded: new Date('February 2022')
+    },
+    {
+      name: "Mimo Web Development Course",
+      description: 'Completed a curriculum covering the core concepts of using JavaScript, HTML and CSS to create web pages. Included the practical experience needed to combine these technologies and publish a website on the internet.',
+      organization: ['Mimo'],
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Mimo Web Development Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('November 2022')
+    },
+    {
+      name: "Royal Institution Computer Science Masterclasses",
+      description: 'Attended the 2020 - 2021 University of Kent Sixth Form Computer Science Masterclasses, provided by the Royal Institution. Learnt about the future of computing!',
+      organization: ['Royal Institution'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Royal Institution Computer Science Masterclasses Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('July 2021')
+    },
+    {
+      name: "Siemens Work Experience",
+      description: 'Completed a virtual work experience program with Siemens, via Springpod, gaining insights into the world of engineering and technology.',
+      organization: ['Siemens', 'Springpod'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Springpod Siemens Work Experience Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('June 2023')
+    },
+    {
+      name: "Science engineering & IT work experience cert",
+      description: 'Completed Science, Engineering & IT Work Experience with Young Professionals, learning about the various pathways into the industry and the skills needed to succeed.',
+      organization: [''],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Science, Engineering & IT Work Experience Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('April 2023')
+    },
+    {
+      name: "Mimo Become a Hacker Course",
+      description: 'Developed an understanding of the skills required for white hat hacking, such as Cryptography, SQL, and identifying password weaknesses. I also gained the practical knowledge required to apply these techniques and reveal vulnerabilities within websites.',
+      organization: ['Mimo'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Mimo Become a hacker Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('October 2019')
+    },
+    {
+      name: "Mimo React Course",
+      description: 'Completed a curriculum that provided an understanding of the core concepts needed for React, including experience calling external APIs and practice with React hooks and other React APIs.',
+      organization: ['Mimo'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Mimo React Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('February 2025')
+    },
+    {
+      name: "Mimo Front-End Development Course",
+      description: 'Learnt HTML essentials, CSS techniques for styling web pages and Core JavaScript programming concepts for single-page application development with React.',
+      organization: ['Mimo'],
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Mimo Front-End Development Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('February 2025')
+    },
+    {
+      name: "Google AI and Productivity",
+      description: '',
+      organization: [''],
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Santander Open Academy Google AI and Productivity Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('August 2024')
+    },
+    {
+      name: "Microsoft Copilot Productivity",
+      description: '',
+      organization: [''],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Santander Open Academy Microsoft Copilot Productivity Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('August 2024')
+    },
+    {
+      name: "make a website cert",
+      description: '',
+      organization: [''],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Mimo Make a Website Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('October 2019')
+    },
+    {
+      name: "tech the future cert",
+      description: '',
+      organization: [''],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Tech the Future Work Experience Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('April 2022')
+    },
+    {
+      name: "tech the future insight cert",
+      description: '',
+      organization: [''],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Tech the Future Insight Evening Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('September 2021')
+    },
+    {
+      name: "Young Professionals Careers in Technology event",
+      description: 'Attended an event held by Young Professionals, learning about what it is like to work in the industry',
+      organization: ['Young Professionals'],
+
+      links: [''],
+      images: [
+        '/PersonalSite2026/media/portfolio/Faeq Faisal Careers in Technology Certificate.jpg'
+      ],
+      skills: [''],
+      awarded: new Date('September 2022')
+    },
   ])
 
   db.projects.bulkPut([
@@ -389,7 +686,18 @@ db.on('populate', () => {
       description: 'Customizing my Phone',
       links: [''],
       skills: ['Nova Launcher', 'Kvaesitso', 'Total Launcher', 'KLWP', 'KWGT', 'Android'],
-      images: [],
+      images: [
+        '/PersonalSite2026/media/portfolio/PhoneSetup1.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup2.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup3.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup4.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup5.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup6.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup7.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup8.jpg',
+        '/PersonalSite2026/media/portfolio/PhoneSetup9.png',
+        '/PersonalSite2026/media/portfolio/PhoneSetup10.png',
+      ],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [],
       relatedProjects: ['My Desktop']
@@ -408,17 +716,70 @@ db.on('populate', () => {
       name: "Zarlasht",
       description: 'My dissertation. Includes 6 programs total; Online Chat (JS & Erl targets), Tic-Tac-Toe (JS & Erl targets), Pong (Erl target) & Zarlasht (Erl target)',
       links: ['https://github.com/Faeq-F/Zarlasht'],
-      skills: ['JavaScript', 'HTML', 'CSS', 'Git', 'GitHub', 'TeX / LaTeX',],
-      images: [],
+      skills: [
+        'JavaScript', 'HTML', 'CSS', 'Git', 'GitHub', 'TeX / LaTeX', 'UML', "XML",
+        "GitLab", "Markdown", "Terminal", "Deno", "htmx", "Alpine.js", "jQuery",
+        "Nginx", "Redis", "Sass", "GIMP", "WSL", "Gleam", "BEAM", "Linux",
+        "Windows", "Valkey", "TailwindCSS", "Visual Studio Code",
+        //
+        "Active Listening", "Giving and Receiving Feedback", "Respectfulness",
+        "Responsibility", "Critical Thinking", "Analytical", "Resourcefulness",
+        "Troubleshooting", "Risk Assessment", "Strategic Thinking",
+        "Creativity", "Decision Making", "Research", "Accountability",
+        "Public Speaking", "Presenting", "Reliability", "Logical Reasoning",
+        "Written Communication", "Clarity and Conciseness", "Vision Setting",
+        "Initiative", "Time Management", "Dependability", "Self-Motivation",
+        "Discipline", "Commitment to Excellence", "Idea Generation",
+        "Integrity", "Innovation", "Storytelling", "Visual Communication",
+        "Professionalism", "Experimentation", "English", "Persistence",
+      ],
+      images: [
+        '/PersonalSite2026/media/portfolio/Zarlasht_DemonstrationPoster.jpg',
+        '/PersonalSite2026/media/portfolio/Zarlasht_home.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_initialPlayScreen.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_joinGame.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_EncounteredEnemyTribe.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_rollingBattleDice.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_multiplePlayers-mapTraversal.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_Pong-POC.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_Pong-leaderboard-POC.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_TicTacToe-POC.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_OnlineChat-POC.png',
+        '/PersonalSite2026/media/portfolio/Zarlasht_Leaderboard.png',
+      ],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
-      relatedProjects: ['']
+      relatedProjects: [''],
+      isFeatured: true
     },
     {
       name: "Muslim Guide", description: 'Duas and Umrah, Hajj & Madinah Guides',
       links: ['https://github.com/Faeq-F/MuslimGuide'],
       skills: ['Git', 'GitHub'],
-      images: [],
+      images: [
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Home.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Search.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Guides.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Duas.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Settings.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Home-SetName.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Dua-example.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Guide-example.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Guide-content-example.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Guide-content-example2.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Guide-content-example3.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Mobile-Guide-content-example4.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Home.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Search.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Guides.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Duas.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Settings.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Dua-example.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Guide-example.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Guide-content-example.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Guide-content-example2.png',
+        '/PersonalSite2026/media/portfolio/MuslimGuide-Desktop-Guide-content-example3.png',
+      ],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -428,10 +789,44 @@ db.on('populate', () => {
       description: 'A holistic Web-based system that supports the metadata-based organization of different source-code related assets',
       links: ['https://github.com/Faeq-F/IT-Assets-Metadata-Repository'],
       skills: ['Svelte', 'TailwindCSS', 'TypeScript', 'Node.js', 'Git', 'GitHub'],
-      images: [],
+      images: [
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_Architecture_(Package Diagram).drawio.svg',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_home.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_AdminAccount.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_account.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_Assets.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_AssetTypes.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_AuditTrail.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_MakeAsset.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_MakeAssetType.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_ExpandAsset.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_EditAssetType.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_filterAssets.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_searchAssets.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_ManagePermissions.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_MakeDiscussionBoard.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_MakeDiscussionBoardContainer.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_discussionBoards.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_DiscussionBoardMenu.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_discussionBoardExample.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_DiscussionBoardContentExample.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_DiscussionBoardContainers.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_graphsOnHome.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_InitialDependencyGraph.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_ExpandedDependencyGraph.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_sequenceDiagramExample_creatingAssets&creatingTypes.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_login.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_signup.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_SystemAssets.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_Menus.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_docs.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_docs2.png',
+        '/PersonalSite2026/media/portfolio/IT-Assets-Metadata-Repository_Database.svg',
+      ],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
-      relatedProjects: ['']
+      relatedProjects: [''],
+      isFeatured: true
     },
     {
       name: "ALSET",
@@ -461,10 +856,16 @@ db.on('populate', () => {
       skills: [
         'C#', '.NET', 'WPF', 'XAML', 'JSON', 'Visual Studio', 'Git', 'GitHub', 'Markdown', 'Windows'
       ],
-      images: ['/PersonalSite2026/media/QuokkaLight.png', '/PersonalSite2026/media/QuokkaDark.png'],
+      images: [
+        '/PersonalSite2026/media/portfolio/Quokka_AllApps.png',
+        '/PersonalSite2026/media/portfolio/Quokka_CommandSignifiers.png',
+        '/PersonalSite2026/media/portfolio/Quokka_ContextPanes.png',
+        '/PersonalSite2026/media/portfolio/Quokka_FuzzySearching.png',
+      ],
       startDate: new Date("January 2020"), endDate: new Date("December 2019"),
       relatedActivities: [],
-      relatedProjects: []
+      relatedProjects: [],
+      isFeatured: true
     },
     {
       name: "WhatsappPortable", description: 'A portable application to use WhatsApp',
@@ -472,10 +873,18 @@ db.on('populate', () => {
       skills: [
         'Flutter', 'Dart', 'CSS', 'JavaScript', 'HTML', 'Git', 'GitHub',
       ],
-      images: [],
+      images: [
+        'https://raw.githubusercontent.com/Faeq-F/whatsappPortable/refs/heads/main/docs/WhatsappPortable.png',
+        'https://raw.githubusercontent.com/Faeq-F/whatsappPortable/refs/heads/main/docs/WhatsappPortable-Dark.png',
+        'https://raw.githubusercontent.com/Faeq-F/whatsappPortable/refs/heads/main/docs/WhatsappPortable-Login.png',
+        'https://raw.githubusercontent.com/Faeq-F/whatsappPortable/refs/heads/main/docs/WhatsappPortable-MultipleAccounts.png',
+        'https://raw.githubusercontent.com/Faeq-F/whatsappPortable/refs/heads/main/docs/WhatsappPortable-Settings.png',
+        'https://raw.githubusercontent.com/Faeq-F/whatsappPortable/refs/heads/main/docs/WhatsappPortable-SettingsDark.png',
+      ],
       startDate: new Date('June 2024'), endDate: new Date('"December 2023"'),
       relatedActivities: [],
-      relatedProjects: []
+      relatedProjects: [],
+      isFeatured: true
     },
     {
       name: "My Personal Site",
@@ -495,17 +904,23 @@ db.on('populate', () => {
       description: 'A program that simulates a dynamic memory allocator',
       links: ['https://github.com/Faeq-F/DynamicMemoryAllocatorSimulator'],
       skills: ['C', 'Git', 'GitHub'],
-      images: [],
+      images: ['/PersonalSite2026/media/portfolio/DynamicMemoryAllocatorSimulator.png'],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
-      relatedProjects: ['']
+      relatedProjects: [''],
+      isFeatured: true
     },
     {
       name: "Notes",
       description: 'Notes written for a variety of topics; lectures at university, advanced topic talks given by guests, etc.',
       links: ['https://github.com/Faeq-F/Notes'],
       skills: ['Markdown', 'TeX / LaTeX', 'Git', 'GitHub'],
-      images: [],
+      images: [
+        '/PersonalSite2026/media/portfolio/ExampleNotes1.png',
+        '/PersonalSite2026/media/portfolio/ExampleNotes2.png',
+        '/PersonalSite2026/media/portfolio/ExampleNotes3.png',
+        '/PersonalSite2026/media/portfolio/ExampleNotes4.png'
+      ],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -514,19 +929,57 @@ db.on('populate', () => {
       name: "LLM 2 Leaf",
       description: 'Convert your LLM usage to planting trees',
       links: ['https://github.com/Faeq-F/LLM-2-Leaf'],
-      skills: ['Git', 'GitHub'],
-      images: ['/PersonalSite2026/media/portfolio/LLM2LEAF-groupPhoto2.jpg', '/PersonalSite2026/media/portfolio/LLM2LEAF-groupPhoto1.jpg', '/PersonalSite2026/media/portfolio/Chat.jpg', '/PersonalSite2026/media/portfolio/Offset carbon footprint.jpg', '/PersonalSite2026/media/portfolio/LLM2LEAF presentation.jpg', '/PersonalSite2026/media/portfolio/Statistics.jpg', '/PersonalSite2026/media/portfolio/chatting.png', '/PersonalSite2026/media/portfolio/wonVerdn.jpg'],
+      skills: [
+        'Git', 'GitHub', "TypeScript", "Visual Studio Code", "XML", "Markdown",
+        "Terminal", "Node.js", "Vue.js", "Python", "TailwindCSS", "Express.js",
+        "jQuery", "MongoDB", "HTML", "Microsoft PowerPoint", "Microsoft Office",
+        "CSS", "Windows",
+        //
+        "Active Listening", "Nonverbal Communication", "Empathy",
+        "Public Speaking", "Persuasion", "Collaboration", "Cultural Awareness",
+        "Reliability", "Giving and Receiving Feedback", "Constructive Feedback",
+        "Presenting", "Emotional Intelligence", "Flexibility / Adaptability",
+        "Respectfulness", "Supportiveness", "Critical Thinking", "Research",
+        "Responsibility", "Analytical", "Logical Reasoning", "Strategic Thinking",
+        "Creativity", "Resourcefulness", "Motivating Others", "Initiative",
+        "Troubleshooting", "Delegation", "Vision Setting", "Time Management",
+        "Interpersonal", "Dependability", "Discipline", "Persistence",
+        "Integrity", "Commitment to Excellence", "Idea Generation",
+        "Self-Motivation", "Storytelling", "Visual Communication", "Experimentation",
+        "English",
+      ],
+      images: [
+        '/PersonalSite2026/media/portfolio/LLM2LEAF_wonVerdn.jpg',
+        '/PersonalSite2026/media/portfolio/LLM2LEAF-groupPhoto2.jpg',
+        '/PersonalSite2026/media/portfolio/LLM2LEAF-groupPhoto1.jpg',
+        '/PersonalSite2026/media/portfolio/LLM2LEAF_Chat.jpg',
+        '/PersonalSite2026/media/portfolio/LLM2LEAF_Offset carbon footprint.jpg',
+        '/PersonalSite2026/media/portfolio/LLM2LEAF presentation.jpg',
+        '/PersonalSite2026/media/portfolio/LLM2LEAF_Statistics.jpg',
+        '/PersonalSite2026/media/portfolio/LLM2LEAF_chatting.png'
+      ],
       startDate: new Date(), endDate: new Date(),
+      relatedActivities: [4],
+      relatedProjects: [''],
+      isFeatured: true
+    },
+    {
+      name: "Generic social media app",
+      description: '',
+      links: [''],
+      skills: ['Java', 'SQL', 'Git', 'GitHub'],
+      images: [],
+      startDate: new Date(),
+      endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
     },
-    { name: "Generic social media app", description: '', links: [''], skills: ['Java', 'SQL', 'Git', 'GitHub'], images: [], startDate: new Date(), endDate: new Date(), relatedActivities: [4], relatedProjects: [''] },
     {
       name: "Tool Customizations",
       description: 'Setting files and other resources for my terminal, text editor, etc.',
       links: ['https://github.com/Faeq-F/ToolCustomizations'],
       skills: ['Vim', 'PowerShell', 'Git', 'GitHub'],
-      images: [],
+      images: ['/PersonalSite2026/media/portfolio/ToolCustomizations-terminal.png'],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']
@@ -536,17 +989,7 @@ db.on('populate', () => {
       description: 'A demo webpage where, in a section of the page, only one half of the page scrolls, with static content on the other half',
       links: ['https://github.com/Faeq-F/PartialScroll'],
       skills: ['HTML', 'CSS', 'Git', 'GitHub'],
-      images: [],
-      startDate: new Date(), endDate: new Date(),
-      relatedActivities: [4],
-      relatedProjects: ['']
-    },
-    {
-      name: "Sandbox",
-      description: 'Snippets of useful code found / developed or still being developed. These snippets should be reusable for any program.',
-      links: ['https://github.com/Faeq-F/SandBox'],
-      skills: ['Python', 'Java', 'C', 'JavaScript', 'Git', 'GitHub'],
-      images: [],
+      images: ['https://raw.githubusercontent.com/Faeq-F/PartialScroll/refs/heads/main/Screenshot.png'],
       startDate: new Date(), endDate: new Date(),
       relatedActivities: [4],
       relatedProjects: ['']

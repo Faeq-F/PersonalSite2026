@@ -2,7 +2,8 @@
 import contentPanels from '~/components/layoutSections/contentPanels.vue';
 import PortfolioFilters from '~/components/portfolio/PortfolioFilters.vue'
 import '~/assets/css/portfolio.css'
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick, watch, provide } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import { useSettingsStore } from '~/stores/settings'
 const settings = useSettingsStore()
@@ -19,6 +20,69 @@ const PLACEHOLDER_IMAGE = '/PersonalSite2026/media/placeholder.png'
 
 // Portfolio data loaded from DB
 const portfolioItems = ref<Array<Project | Certificate & { type: 'project' | 'certificate', id: string }>>([])
+
+import BentoGrid from "@bentogrid/core";
+
+let featuredBentoInstance: InstanceType<typeof BentoGrid> | null = null
+let regularBentoInstance: InstanceType<typeof BentoGrid> | null = null
+
+// Store calculated bento sizes per item (keyed by uniqueId)
+const bentoSizes = ref<Record<string, string>>({})
+
+// Preload an image and return its natural dimensions
+function getImageDimensions(src: string): Promise<{ width: number; height: number }> {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight })
+    img.onerror = () => resolve({ width: 1, height: 1 }) // fallback to 1x1
+    img.src = src
+  })
+}
+
+function calcBentoValue(width: number, height: number): string {
+  const ratio = width / height
+  if (ratio > 1.4) {
+    // Wide (landscape): 2x1 base, multiply both by random factor
+    const multiplier = Math.floor(Math.random()) + 1
+    return `${2 * multiplier}x${multiplier}`
+  }
+  if (ratio < 0.7) {
+    // Portrait: 1x2 base, multiply both by random factor
+    const multiplier = Math.floor(Math.random()) + 1
+    return `${multiplier}x${2 * multiplier}`
+  }
+  // Square-ish: 1x1 base, multiply both by random factor
+  const multiplier = Math.floor(Math.random()) + 1
+  return `${multiplier}x${multiplier}`
+}
+
+function initFeaturedGrid() {
+  if (featuredBentoInstance) {
+    featuredBentoInstance.recalculate()
+  } else {
+    featuredBentoInstance = new BentoGrid({
+      target: '.bentogrid.featured',
+      cellGap: 16,
+      columns: 6,
+      aspectRatio: 1,
+      breakpointReference: 'window',
+    })
+  }
+}
+
+function initRegularGrid() {
+  if (regularBentoInstance) {
+    regularBentoInstance.recalculate()
+  } else {
+    regularBentoInstance = new BentoGrid({
+      target: '.bentogrid.regular',
+      cellGap: 16,
+      columns: 6,
+      aspectRatio: 1,
+      breakpointReference: 'window',
+    })
+  }
+}
 
 onMounted(async () => {
   // Load projects from DB
@@ -42,46 +106,87 @@ onMounted(async () => {
 })
 
 // Flatten all images for waterfall layout (with placeholder fallback)
-const imageSeed = ref(0)
-const itemOrderSeed = ref(0)
-const filteredItems = computed(() => {
-  const seed = imageSeed.value
-  const orderSeed = itemOrderSeed.value
-  // Deterministic shuffle based on orderSeed using Fisher-Yates
-  const shuffledItems = [...portfolioItems.value]
+const featuredOrderSeed = ref(0)
+const regularOrderSeed = ref(0)
+const featuredItems = computed(() => {
+  const orderSeed = featuredOrderSeed.value
+  // Filter and shuffle featured items
+  const featured = portfolioItems.value.filter(item => item.isFeatured)
+  const shuffledItems = [...featured]
   for (let i = shuffledItems.length - 1; i > 0; i--) {
-    // Use a simple hash of orderSeed + i for deterministic random
     const hash = ((orderSeed * 9301 + 49297) * i) % 233280
     const j = hash % (i + 1)
-      ;[shuffledItems[i], shuffledItems[j]] = [shuffledItems[j], shuffledItems[i]]
+    const temp = shuffledItems[i]
+    shuffledItems[i] = shuffledItems[j]
+    shuffledItems[j] = temp
   }
   return shuffledItems.map(item => {
-    // Fallback to placeholder if no images
     const images = (item.images && item.images.length > 0) ? item.images : [PLACEHOLDER_IMAGE]
-    // Deterministic random based on item name and seed
-    let hash = 0
-    for (const char of item.id) {
-      hash = (hash + char.charCodeAt(0)) % 10000
-    }
-    const randomIndex = ((hash + seed) % images.length + images.length) % images.length
-    return {
-      ...item,
-      imageIndex: randomIndex,
-      imageUrl: images[randomIndex],
-      uniqueId: item.id
-    }
+    return { ...item, imageIndex: 0, imageUrl: images[0], uniqueId: item.id }
+  })
+})
+const regularItems = computed(() => {
+  const orderSeed = regularOrderSeed.value
+  const regular = portfolioItems.value.filter(item => !item.isFeatured)
+  const shuffledItems = [...regular]
+  for (let i = shuffledItems.length - 1; i > 0; i--) {
+    const hash = ((orderSeed * 9301 + 49297) * i) % 233280
+    const j = hash % (i + 1)
+    const temp = shuffledItems[i]
+    shuffledItems[i] = shuffledItems[j]
+    shuffledItems[j] = temp
+  }
+  return shuffledItems.map(item => {
+    const images = (item.images && item.images.length > 0) ? item.images : [PLACEHOLDER_IMAGE]
+    return { ...item, imageIndex: 0, imageUrl: images[0], uniqueId: item.id }
   })
 })
 
-// Randomize image selection
-const randomizeImages = () => {
-  imageSeed.value = Math.floor(Math.random() * 10000)
-}
+// Watch both sections – preload images, compute bento sizes, then init grids
+watch([featuredItems, regularItems], async () => {
+  // Preload featured items
+  const featuredSizeMap: Record<string, string> = {}
+  await Promise.all(
+    featuredItems.value.map(async (item) => {
+      const dims = await getImageDimensions(item.imageUrl)
+      featuredSizeMap[item.uniqueId] = calcBentoValue(dims.width, dims.height)
+    })
+  )
+  bentoSizes.value = { ...bentoSizes.value, ...featuredSizeMap }
+
+  // Preload regular items
+  const regularSizeMap: Record<string, string> = {}
+  await Promise.all(
+    regularItems.value.map(async (item) => {
+      const dims = await getImageDimensions(item.imageUrl)
+      regularSizeMap[item.uniqueId] = calcBentoValue(dims.width, dims.height)
+    })
+  )
+  bentoSizes.value = { ...bentoSizes.value, ...regularSizeMap }
+
+  // Wait for Vue to render the items with updated data-bento attributes
+  await nextTick()
+  // Small delay to ensure DOM is fully painted
+  requestAnimationFrame(() => {
+    initFeaturedGrid()
+    initRegularGrid()
+  })
+}, { immediate: true })
 
 // Randomize item order
 const randomizeItems = () => {
-  itemOrderSeed.value = Math.floor(Math.random() * 10000)
+  featuredOrderSeed.value = Math.floor(Math.random() * 10000)
+  regularOrderSeed.value = Math.floor(Math.random() * 10000)
+  featuredBentoInstance = null
+  regularBentoInstance = null
 }
+
+//randomize initially
+randomizeItems()
+
+provide('randomizeItems', randomizeItems)
+provide('isPetalTheme', isPetalTheme)
+provide('defaultColor', defaultColor)
 
 // Helper functions for formatting dates
 const formatDate = (item: any) => {
@@ -97,26 +202,6 @@ const formatDate = (item: any) => {
   }
   return ''
 }
-
-// Determine bento grid span class based on index pattern
-const getBentoClass = (index: number): string => {
-  // Create a varied pattern: some wide, some tall, some both, some normal
-  const pattern = index % 10
-  switch (pattern) {
-    case 0:
-    case 5:
-      return 'span-2-cols' // Wide
-    case 2:
-    case 7:
-      return 'span-2-rows' // Tall
-    case 4:
-      return 'span-both' // Large (2x2)
-    default:
-      return '' // Normal (1x1)
-  }
-}
-
-// UTabs filter options and state
 
 // Track open popover state
 const openPopovers = ref<string[]>([]);
@@ -146,96 +231,170 @@ const closePopover = (id: string) => {
     </template>
 
     <template #left-panel-footer>
-      <div class="flex flex-col gap-2">
-        <UButton color="neutral" variant="soft" icon="i-lucide-shuffle"
-          @click="randomizeImages"
-          :style="isPetalTheme ? { '--ui-primary': `hsl(${defaultColor.h}, ${defaultColor.s}%, ${defaultColor.l}%)` } : {}">
-          Randomize Images
-        </UButton>
-        <UButton color="neutral" variant="soft" icon="i-lucide-arrow-up-down"
-          @click="randomizeItems"
-          :style="isPetalTheme ? { '--ui-primary': `hsl(${defaultColor.h}, ${defaultColor.s}%, ${defaultColor.l}%)` } : {}">
-          Randomize Order
-        </UButton>
+      <div class="flex flex-col gap-2 text-sm text-muted">
+        Images are compressed, with PII redacted, to prevent forgery / cloning. I am able to provide the original
+        copies of documents on request.
       </div>
     </template>
 
     <template #content>
-      <!-- Bento/Brick Grid Layout -->
-      <div class="bento-grid p-4">
-        <div v-for="(item, index) in filteredItems" :key="item.uniqueId"
-          :class="['bento-item', getBentoClass(index)]">
-          <UPopover :open="isPopoverOpen(item.uniqueId)"
-            :ui="{ content: 'w-80 p-0' }" class="w-full h-full"
-            :popper="{ placement: 'bottom' }"
-            @update:open="(val: boolean) => val ? openPopovers.push(item.uniqueId) : closePopover(item.uniqueId)">
-            <template #default>
-              <div
-                class="relative group overflow-hidden rounded-xl w-full h-full bg-[var(--ui-bg)] cardShadow clickable">
-                <img :src="item.imageUrl" :alt="item.name"
-                  class="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy" />
+      <!-- Featured Projects Grid -->
+      <div v-if="featuredItems.length > 0" class="mb-12">
+        <h2 class="mt-4 text-2xl font-bold mb-4 ml-8 varela text-[var(--ui-text)]">Featured</h2>
+        <div class="bentogrid featured">
+          <div v-for="item in featuredItems" :key="item.uniqueId" :data-bento="bentoSizes[item.uniqueId] || '1x1'">
+            <UPopover :open="isPopoverOpen(item.uniqueId)" :ui="{ content: 'w-80 p-0' }" class="w-full h-full"
+              :popper="{ placement: 'bottom' }"
+              @update:open="(val: boolean) => val ? openPopovers.push(item.uniqueId) : closePopover(item.uniqueId)">
+              <template #default>
                 <div
-                  class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
-                  <div class="absolute bottom-0 left-0 right-0 p-3">
-                    <p class="text-white font-bold text-sm truncate">{{
-                      item.name }}</p>
-                    <p class="text-white/80 text-xs">{{ formatDate(item) }}
-                    </p>
+                  class="relative group overflow-hidden rounded-xl w-full h-full bg-[var(--ui-bg)] cardShadow clickable">
+                  <img :src="item.imageUrl" :alt="item.name"
+                    class="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy" />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
+                    <div class="absolute bottom-0 left-0 right-0 p-3">
+                      <p class="text-white font-bold text-sm">{{ item.name }}</p>
+                      <p class="text-white/80 text-xs">{{ formatDate(item) }}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </template>
+              </template>
 
-            <template #content>
-              <UCard class="border-0 shadow-none">
-                <template #header>
-                  <div class="flex justify-between items-start gap-2">
-                    <div>
-                      <h3 class="font-bold text-lg varela">{{ item.name }}
-                      </h3>
-                      <p class="text-xs text-muted">{{ formatDate(item) }}</p>
+              <template #content>
+                <UCard class="border-0 shadow-none">
+                  <template #header>
+                    <div class="flex justify-between items-start gap-2">
+                      <div>
+                        <h3 class="font-bold text-lg varela">{{ item.name }}</h3>
+                        <p class="text-xs text-muted">{{ formatDate(item) }}</p>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <UBadge variant="soft" size="sm">
+                          {{ item.type === 'certificate' ? 'Certificate' : 'Project' }}
+                        </UBadge>
+                        <UButton variant="ghost" size="xs" icon="i-lucide-x" @click="closePopover(item.uniqueId)" />
+                      </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <UBadge variant="soft" size="sm">
-                        {{ item.type === 'certificate' ? 'Certificate' :
-                          'Project' }}
-                      </UBadge>
-                      <UButton variant="ghost" size="xs" icon="i-lucide-x"
-                        @click="closePopover(item.uniqueId)" />
-                    </div>
+                  </template>
+
+                  <p class="text-sm text-muted mb-3">{{ item.description }}</p>
+
+                  <div v-if="item.skills?.filter(s => s).length"
+                    class="flex flex-wrap gap-1 max-h-20 overflow-y-scroll">
+                    <UTooltip v-for="skill in item.skills.filter(s => s)" :key="skill" :text="skill">
+                      <nuxt-link :to="'/skill/' + skill.replaceAll(' ', '~')"
+                        class="text-xs px-2 py-1 rounded-full bg-[var(--ui-bg-elevated)] text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] transition-colors">
+                        {{ skill }}
+                      </nuxt-link>
+                    </UTooltip>
                   </div>
-                </template>
 
-                <p class="text-sm text-muted mb-3">{{ item.description }}</p>
-
-                <div v-if="item.skills?.filter(s => s).length"
-                  class="flex flex-wrap gap-1">
-                  <UTooltip v-for="skill in item.skills.filter(s => s)"
-                    :key="skill" :text="skill">
-                    <nuxt-link :to="'/skill/' + skill.replaceAll(' ', '~')"
-                      class="text-xs px-2 py-1 rounded-full bg-[var(--ui-bg-elevated)] text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] transition-colors">
-                      {{ skill }}
+                  <template #footer>
+                    <nuxt-link
+                      :to="(item.type === 'project' ? '/project/' : '/certificate/') + item.name.replaceAll(' ', '~')">
+                      <UButton variant="soft" color="primary" size="sm" class="w-full"
+                        trailing-icon="i-lucide-arrow-right">
+                        View {{ item.type === 'project' ? 'Project' : 'Certificate' }}
+                      </UButton>
                     </nuxt-link>
-                  </UTooltip>
-                </div>
+                  </template>
+                </UCard>
+              </template>
+            </UPopover>
+          </div>
+        </div>
+      </div>
 
-                <template #footer>
-                  <nuxt-link
-                    :to="(item.type === 'project' ? '/project/' : '/certificate/') + item.name.replaceAll(' ', '~')">
-                    <UButton variant="soft" color="primary" size="sm"
-                      class="w-full" trailing-icon="i-lucide-arrow-right">
-                      View {{ item.type === 'project' ? 'Project' :
-                        'Certificate' }}
-                    </UButton>
-                  </nuxt-link>
-                </template>
-              </UCard>
-            </template>
-          </UPopover>
+      <!-- Additional Work Grid -->
+      <div v-if="regularItems.length > 0" class="mb-12">
+        <h2 class="my-4 text-2xl font-bold mb-4 ml-8 varela text-[var(--ui-text)]">Additional Work</h2>
+        <div class="bentogrid regular">
+          <div v-for="item in regularItems" :key="item.uniqueId" :data-bento="bentoSizes[item.uniqueId] || '1x1'">
+            <UPopover :open="isPopoverOpen(item.uniqueId)" :ui="{ content: 'w-80 p-0' }" class="w-full h-full"
+              :popper="{ placement: 'bottom' }"
+              @update:open="(val: boolean) => val ? openPopovers.push(item.uniqueId) : closePopover(item.uniqueId)">
+              <template #default>
+                <div
+                  class="relative group overflow-hidden rounded-xl w-full h-full bg-[var(--ui-bg)] cardShadow clickable">
+                  <img :src="item.imageUrl" :alt="item.name"
+                    class="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy" />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
+                    <div class="absolute bottom-0 left-0 right-0 p-3">
+                      <p class="text-white font-bold text-sm truncate">{{ item.name }}</p>
+                      <p class="text-white/80 text-xs">{{ formatDate(item) }}</p>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <template #content>
+                <UCard class="border-0 shadow-none">
+                  <template #header>
+                    <div class="flex justify-between items-start gap-2">
+                      <div>
+                        <h3 class="font-bold text-lg varela">{{ item.name }}</h3>
+                        <p class="text-xs text-muted">{{ formatDate(item) }}</p>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <UBadge variant="soft" size="sm">
+                          {{ item.type === 'certificate' ? 'Certificate' : 'Project' }}
+                        </UBadge>
+                        <UButton variant="ghost" size="xs" icon="i-lucide-x" @click="closePopover(item.uniqueId)" />
+                      </div>
+                    </div>
+                  </template>
+
+                  <p class="text-sm text-muted mb-3">{{ item.description }}</p>
+
+                  <div v-if="item.skills?.filter(s => s).length"
+                    class="flex flex-wrap gap-1 max-h-20 overflow-y-scroll">
+                    <UTooltip v-for="skill in item.skills.filter(s => s)" :key="skill" :text="skill">
+                      <nuxt-link :to="'/skill/' + skill.replaceAll(' ', '~')"
+                        class="text-xs px-2 py-1 rounded-full bg-[var(--ui-bg-elevated)] text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] transition-colors">
+                        {{ skill }}
+                      </nuxt-link>
+                    </UTooltip>
+                  </div>
+
+                  <template #footer>
+                    <nuxt-link
+                      :to="(item.type === 'project' ? '/project/' : '/certificate/') + item.name.replaceAll(' ', '~')">
+                      <UButton variant="soft" color="primary" size="sm" class="w-full"
+                        trailing-icon="i-lucide-arrow-right">
+                        View {{ item.type === 'project' ? 'Project' : 'Certificate' }}
+                      </UButton>
+                    </nuxt-link>
+                  </template>
+                </UCard>
+              </template>
+            </UPopover>
+          </div>
         </div>
       </div>
     </template>
-
   </contentPanels>
 </template>
+
+<style lang="css">
+.bentogrid .bento-filler {
+  border-radius: calc(var(--ui-radius) * 3);
+  background-color: transparent;
+  pointer-events: none;
+  cursor: not-allowed !important;
+
+  &::before {
+    content: "Click on something to learn more!";
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1;
+    left: 1rem;
+    opacity: 0.4;
+    position: relative;
+  }
+}
+</style>

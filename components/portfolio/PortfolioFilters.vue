@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import SkillsInput from '~/components/skillsInput.vue'
 import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import type { TabsItem } from '@nuxt/ui'
@@ -12,6 +12,10 @@ const calendarVal = ref<{ start: CalendarDate | undefined, end: CalendarDate | u
 const df = new DateFormatter('en-US', {
   dateStyle: 'medium'
 })
+
+const randomizeItems = inject<Function>('randomizeItems')
+const isPetalTheme = inject<boolean>('isPetalTheme')
+const defaultColor = inject<{ h: number; s: number; l: number }>('defaultColor')
 
 const contributorsOptions = ref<TabsItem[]>([
   { label: 'All', value: 'all', icon: 'i-lucide-gallery-vertical-end' },
@@ -37,22 +41,19 @@ defineExpose({
 <template>
   <div class="flex flex-col items-start">
     <MazAnimatedElement direction="up" :duration="700" :delay="900">
-      <UTabs :content="false" :items="contributorsOptions" class="mx-auto w-fit"
-        style="--ui-primary: #4a5565" v-model="contributorsActive"
+      <UTabs :content="false" :items="contributorsOptions" class="mx-auto w-fit" style="--ui-primary: #4a5565"
+        v-model="contributorsActive"
         :ui="{ trigger: 'self-start', label: 'dark:text-[--primary]', leadingIcon: 'dark:text-[--primary]' }" />
     </MazAnimatedElement>
     <MazAnimatedElement direction="up" :duration="700" :delay="700">
-      <SkillsInput
-        @change="(e) => console.log(JSON.parse(JSON.stringify(e)))" />
+      <SkillsInput @change="(e) => console.log(JSON.parse(JSON.stringify(e)))" />
     </MazAnimatedElement>
     <MazAnimatedElement direction="up" :duration="700" :delay="800">
-      <UTabs :content="false" :items="certsOptions" class="mx-auto w-fit"
-        style="--ui-primary: #4a5565" orientation="vertical"
-        v-model="certsActive"
+      <UTabs :content="false" :items="certsOptions" class="mx-auto w-fit" style="--ui-primary: #4a5565"
+        orientation="vertical" v-model="certsActive"
         :ui="{ trigger: 'self-start', label: 'dark:text-[--primary]', leadingIcon: 'dark:text-[--primary]' }" />
     </MazAnimatedElement>
-    <MazAnimatedElement direction="up" :duration="700" :delay="950"
-      class="flex justify-center mt-4">
+    <MazAnimatedElement direction="up" :duration="700" :delay="950" class="flex justify-center mt-4">
       <UPopover>
         <UButton color="neutral" variant="soft" icon="i-lucide-calendar">
           <template v-if="calendarVal.start">
@@ -70,10 +71,15 @@ defineExpose({
           </template>
         </UButton>
         <template #content>
-          <UCalendar v-model="(calendarVal as any)" class="p-2" color="primary"
-            :number-of-months="2" range />
+          <UCalendar v-model="(calendarVal as any)" class="p-2" color="primary" :number-of-months="2" range />
         </template>
       </UPopover>
+    </MazAnimatedElement>
+    <MazAnimatedElement direction="up" :duration="700" :delay="950" class="flex justify-center mt-4">
+      <UButton color="neutral" variant="soft" icon="i-lucide-arrow-up-down" @click="randomizeItems"
+        :style="isPetalTheme ? { '--ui-primary': `hsl(${defaultColor.h}, ${defaultColor.s}%, ${defaultColor.l}%)` } : {}">
+        Randomize Order
+      </UButton>
     </MazAnimatedElement>
   </div>
 </template>

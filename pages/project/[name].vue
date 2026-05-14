@@ -147,34 +147,27 @@ const label = computed(() => (open.value ? 'Close' : 'Open') + ' details')
         <div id="lenis-content" class="" ref="LenisContent">
           <div class="w-full flex flex-row" data-lenis-prevent>
             <div class="w-full pt-4 px-4">
-              <UCard
-                class="opacity-80 cardShadow border border-[var(--ui-border)] m-2 md:m-4">
+              <UCard class="opacity-80 cardShadow border border-[var(--ui-border)] m-2 md:m-4">
                 <template #header>
                   <div class="flex items-center text-sm">
                     <UIcon name="i-lucide-images" class="mr-1.5 !size-4" />
                     <span>Gallery</span>
                   </div>
                 </template>
-                <Gallery v-if="project" :project="project"
-                  :images="project?.images || []" widthClass="w-full"
-                  heightClass="h-64 md:h-96" :horizontal="true" />
+                <MazGallery :images="project?.images" :height="256" />
               </UCard>
-              <UCard
-                class="opacity-80 cardShadow border border-[var(--ui-border)] m-2 md:m-4">
+              <UCard class="opacity-80 cardShadow border border-[var(--ui-border)] m-2 md:m-4">
                 <template #header>
-                  <nuxt-link
-                    :to="'https://github.com/' + '/blob/main/README.md'"
+                  <nuxt-link :to="'https://github.com/' + '/blob/main/README.md'"
                     class="!no-underline flex items-center !not-italic">
                     <UIcon name="i-lucide-book-open" class="mr-1.5 !size-4" />
                     <code>README.md</code>
-                    <UIcon name="i-lucide-arrow-up-right"
-                      class="!size-2 mb-1" />
+                    <UIcon name="i-lucide-arrow-up-right" class="!size-2 mb-1" />
                   </nuxt-link>
                 </template>
                 <div class="min-h-64">
-                  <MdPreview v-if="!loading" :theme="theme as Themes"
-                    previewTheme="github" codeTheme="github" language="en-US"
-                    class="!bg-transparent" :modelValue="readme" />
+                  <MdPreview v-if="!loading" :theme="theme as Themes" previewTheme="github" codeTheme="github"
+                    language="en-US" class="!bg-transparent" :modelValue="readme" />
                   <USkeleton v-else class="h-32" />
                 </div>
               </UCard>

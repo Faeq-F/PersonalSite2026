@@ -136,7 +136,8 @@ html.zTheme #vidBG {
 
 html.zTheme.dark #vidBG {
   filter: invert(1);
-  border-color: #cebea7; /* Inverted border color */
+  border-color: #cebea7;
+  /* Inverted border color */
 }
 
 /* Home page background fade using ::before pseudo-element */
@@ -289,11 +290,9 @@ html.petalTheme {
 }
 
 html.dark.petalTheme {
-  --primary-color: hsl(
-    calc(var(--primary-hue, 10) + 240),
-    var(--primary-sat, 39%),
-    var(--primary-lit, 46%)
-  );
+  --primary-color: hsl(calc(var(--primary-hue, 10) + 240),
+      var(--primary-sat, 39%),
+      var(--primary-lit, 46%));
   --ui-primary: var(--primary-color);
 }
 
@@ -354,6 +353,7 @@ html.dark:not(.zTheme, .mTheme, .aTheme) .bg-inverted {
     }
   }
 }
+
 .data-\[highlighted\]\:bg-primary\/20 {
   &[data-highlighted] {
     --ui-primary: var(--primary-color);
@@ -374,12 +374,14 @@ html:not(.zTheme, .mTheme, .aTheme) .data-\[selected\]\:bg-primary {
     --ui-primary: var(--primary-color);
   }
 }
+
 html.petalTheme .text-primary,
 html.petalTheme .bg-primary,
 html:not(.zTheme, .mTheme, .aTheme) .text-primary,
 html:not(.zTheme, .mTheme, .aTheme) .bg-primary {
   --ui-primary: var(--primary-color);
 }
+
 html.petalTheme .group-data-\[state\=active\]\:bg-primary,
 html:not(.zTheme, .mTheme, .aTheme) .group-data-\[state\=active\]\:bg-primary {
   &:is(:where(.group)[data-state="active"] *) {
@@ -397,6 +399,7 @@ html.dark:not(.zTheme, .mTheme, .aTheme) .hover\:not-data-\[selected\]\:bg-prima
     }
   }
 }
+
 html.dark.petalTheme .data-\[highlighted\]\:bg-primary\/20,
 html.dark:not(.zTheme, .mTheme, .aTheme) .data-\[highlighted\]\:bg-primary\/20 {
   &[data-highlighted] {
@@ -419,12 +422,14 @@ html.dark:not(.zTheme, .mTheme, .aTheme) .data-\[selected\]\:bg-primary {
     --ui-primary: var(--primary-color);
   }
 }
+
 html.dark.petalTheme .text-primary,
 html.dark.petalTheme .bg-primary,
 html.dark:not(.zTheme, .mTheme, .aTheme) .text-primary,
 html.dark:not(.zTheme, .mTheme, .aTheme) .bg-primary {
   --ui-primary: var(--primary-color);
 }
+
 html.dark.petalTheme .group-data-\[state\=active\]\:bg-primary,
 html.dark:not(.zTheme, .mTheme, .aTheme) .group-data-\[state\=active\]\:bg-primary {
   &:is(:where(.group)[data-state="active"] *) {
@@ -440,6 +445,7 @@ html:not(.zTheme, .mTheme, .aTheme) #navbar .navbar {
   box-shadow: none;
 }
 
+html.mTheme .bentogrid .bento-filler,
 html.mTheme .boxLink:hover,
 html.mTheme fieldset label,
 html.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
@@ -484,6 +490,7 @@ html.mTheme #HomeSocialButtonGroup {
   }
 }
 
+html.dark.mTheme .bentogrid .bento-filler,
 html.dark.mTheme .boxLink:hover,
 html.dark.mTheme fieldset label,
 html.dark.mTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
@@ -518,6 +525,8 @@ html.dark.mTheme #HomeSocialButtonGroup {
   }
 }
 
+html.zTheme .bentogrid .bento-filler,
+html.aTheme .bentogrid .bento-filler,
 html.aTheme .boxLink:hover,
 html.aTheme .cardShadow,
 html.zTheme .cardShadow {
@@ -544,6 +553,8 @@ html.zTheme .cardShadow {
   }
 }
 
+html.dark.zTheme .bentogrid .bento-filler,
+html.dark.aTheme .bentogrid .bento-filler,
 html.dark.aTheme .boxLink:hover,
 html.dark.aTheme .cardShadow,
 html.dark.zTheme .cardShadow {
@@ -606,6 +617,7 @@ html:not(.aTheme, .zTheme) #HomeSocialButtonGroup button svg {
 html.dark:not(.aTheme, .zTheme) #HomeSocialButtonGroup button svg {
   filter: brightness(1) contrast(0) grayscale(1) saturate(1);
   color: #fff;
+
   &:hover {
     filter: brightness(9) contrast(1) grayscale(1) saturate(1);
   }
@@ -624,6 +636,8 @@ html.mTheme #navbar .navbar .themeNavSection:hover {
   scale: 1.04;
   transform: translateX(-0.25rem);
 }
+
+html.petalTheme .bentogrid .bento-filler,
 html.petalTheme .boxLink:hover,
 html.petalTheme fieldset label,
 html.petalTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
@@ -648,6 +662,7 @@ html.petalTheme .glass-card {
     border-radius 200ms !important;
 }
 
+html.dark.petalTheme .bentogrid .bento-filler,
 html.dark.petalTheme .boxLink:hover,
 html.dark.petalTheme fieldset label,
 html.dark.petalTheme .navbar div[data-state="open"]:has(div[data-state="open"]),
@@ -674,6 +689,7 @@ html.dark.petalTheme .glass-card {
     border-radius 200ms !important;
 }
 
+html:not(.aTheme, .zTheme, .mTheme) .bentogrid .bento-filler,
 html:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
 html:not(.aTheme, .zTheme, .mTheme) fieldset label,
 html:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
@@ -698,6 +714,7 @@ html:not(.aTheme, .zTheme, .mTheme) .glass-card {
     border-radius 200ms !important;
 }
 
+html.dark:not(.aTheme, .zTheme, .mTheme) .bentogrid .bento-filler,
 html.dark:not(.aTheme, .zTheme, .mTheme) .boxLink:hover,
 html.dark:not(.aTheme, .zTheme, .mTheme) fieldset label,
 html.dark:not(.aTheme, .zTheme, .mTheme) .navbar div[data-state="open"]:has(div[data-state="open"]),
@@ -762,9 +779,11 @@ html.dark:not(.aTheme, .zTheme, .mTheme) #navbar .navbar .homeNavSection {
 
 html:not(.aTheme, .zTheme, .mTheme, .petalTheme) #credits span {
   background-color: #212121;
+
   html.dark & {
     background-color: #000;
   }
+
   /* copyleft symbol */
   & span,
   html.dark & span {
@@ -871,6 +890,7 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li a {
 
 html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-of-type(1) a {
   border-left: #eee 1px solid;
+
   html.dark & {
     border-left: #222 1px solid;
   }
@@ -878,6 +898,7 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
 
 html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-last-of-type(1) a {
   border-right: #eee 1px solid;
+
   html.dark & {
     border-right: #222 1px solid;
   }
@@ -890,11 +911,13 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
 
 /* Mobile height adjustments */
 @media (max-width: 768px) {
+
   /* Use dynamic viewport height to account for mobile browser chrome (URL bar) */
   #bodyPanel {
     padding: 0;
     border-radius: 0;
-    height: 100vh; /* Fallback for older browsers */
+    height: 100vh;
+    /* Fallback for older browsers */
     height: 100dvh;
   }
 
@@ -905,13 +928,15 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
   }
 
   #pageContent {
-    height: 100vh; /* Fallback for older browsers */
+    height: 100vh;
+    /* Fallback for older browsers */
     height: 100dvh;
   }
 
   #vidBG {
     width: 100vw;
-    height: 100vh; /* Fallback for older browsers */
+    height: 100vh;
+    /* Fallback for older browsers */
     height: 100dvh;
     border-radius: 0;
     position: fixed;
@@ -998,6 +1023,7 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
 
 /* Touch optimization */
 @media (max-width: 768px) {
+
   button,
   a,
   [role="button"] {
@@ -1016,6 +1042,7 @@ html:not(.aTheme, .zTheme, .mTheme, .petalTheme) .navbar .middleItems ul li:nth-
   html.zTheme #pageContent::before {
     background-position: left;
   }
+
   html.aTheme #pageContent::before {
     background-size: 100%;
     background-position-y: 70%;

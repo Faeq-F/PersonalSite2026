@@ -62,7 +62,7 @@ const sourceRows = [
   // Row 8
   [
     { url: 'https://unsplash.com/photos/soft-pink-cherry-blossoms-fill-the-frame-iQkLU7YgtYM', icon: 'i-lucide-flower-2', label: 'Petal theme image' },
-    { url: '', icon: '', label: '' },
+    { url: 'https://bentogrid.mariohamann.com/', icon: 'i-lucide-layout-panel-left', label: 'BentoGrid.js' },
     { url: '', icon: '', label: '' },
     { url: '', icon: '', label: '' },
   ]
@@ -92,21 +92,18 @@ const Rows = computed(() => {
 
 <template>
   <div class="rounded-2xl w-[110vw] md:w-full h-full mt-1 mb-2">
-    <div v-for="(row, rowIndex) in Rows" :key="rowIndex" class="flex"
-      :class="device.isMobile ? 'h-[10%]' : 'h-1/5'">
+    <div v-for="(row, rowIndex) in Rows" :key="rowIndex" class="flex" :class="device.isMobile ? 'h-[10%]' : 'h-1/5'">
       <template v-for="(item, itemIndex) in row" :key="itemIndex">
-        <Button :url="item.url" :icon="item.icon" :label="item.label"
-          :disabled="!item.label" :border="rowIndex === 0 && itemIndex === 0 ? 'border border-accented'
-            : rowIndex === Rows.length - 1 && itemIndex === 0 ? 'border-x border-b border-accented'
-              : rowIndex === Rows.length - 1 && itemIndex === row.length - 1 ? 'border-r border-b border-accented'
-                : rowIndex === 0 && itemIndex === row.length - 1 ? 'border-y border-r border-accented'
-                  : rowIndex === 0 ? 'border-r border-y border-accented'
-                    : itemIndex === 0 ? 'border-b border-x border-accented'
-                      : 'border-r border-b border-accented'"
-          :rounded="rowIndex === 0 && itemIndex === 0 ? 'rounded-tl-2xl'
-            : rowIndex === 0 && itemIndex === row.length - 1 ? 'rounded-tr-2xl'
-              : rowIndex === Rows.length - 1 && itemIndex === 0 ? 'rounded-bl-2xl'
-                : rowIndex === Rows.length - 1 && itemIndex === row.length - 1 ? 'rounded-br-2xl' : ''" />
+        <Button :url="item.url" :icon="item.icon" :label="item.label" :disabled="!item.label" :border="rowIndex === 0 && itemIndex === 0 ? 'border border-accented'
+          : rowIndex === Rows.length - 1 && itemIndex === 0 ? 'border-x border-b border-accented'
+            : rowIndex === Rows.length - 1 && itemIndex === row.length - 1 ? 'border-r border-b border-accented'
+              : rowIndex === 0 && itemIndex === row.length - 1 ? 'border-y border-r border-accented'
+                : rowIndex === 0 ? 'border-r border-y border-accented'
+                  : itemIndex === 0 ? 'border-b border-x border-accented'
+                    : 'border-r border-b border-accented'" :rounded="rowIndex === 0 && itemIndex === 0 ? 'rounded-tl-2xl'
+                      : rowIndex === 0 && itemIndex === row.length - 1 ? 'rounded-tr-2xl'
+                        : rowIndex === Rows.length - 1 && itemIndex === 0 ? 'rounded-bl-2xl'
+                          : rowIndex === Rows.length - 1 && itemIndex === row.length - 1 ? 'rounded-br-2xl' : ''" />
       </template>
     </div>
   </div>
