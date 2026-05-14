@@ -1,1 +1,0 @@
-import{l as s,d as r}from"./tiBqPDgh.js";import{u as a,f as o}from"./BA21VlZc.js";import{y as t,c as l,t as n,v as i,o as m}from"./Bv6l3dn-.js";const k=t({__name:"index",setup(p){let e=a(o(s(()=>r.skills.toArray())));return(c,f)=>(m(),l("div",null,n(i(e)),1))}});export{k as default};
